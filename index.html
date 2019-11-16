@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"
+    ></script>
+    <title>Spotify Web Playback SDK Quick Start Tutorial</title>
+  </head>
+
+  <body>
+    <h1>Spotify Web Playback SDK Quick Start Tutorial</h1>
+    <h2>
+      Open your console log: <code>View > Developer > JavaScript Console</code>
+    </h2>
+    <button id="play">
+      Play
+    </button>
+    <button id="pause">
+      Pause
+    </button>
+
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const token =
+          'BQBMEEEgyRvkUNTGrQIUpOds7X97P-7A7HEJJtNQNCe9Z-a7K0P8JP53ODLzaSSUL-OZpuNlnzsq0xfcl2meg0GkheqJ4PmvdZGWxorzz-5wwqmPBZrb0KvK3XynilITyAamQxgY70QxAFfsp3ITboQb9TrKBl2Uvy56';
+        const player = new Spotify.Player({
+          name: 'Web Playback SDK Quick Start Player',
+          getOAuthToken: cb => {
+            cb(token);
+          }
+        });
+
+        // Play a specified track on the Web Playback SDK's device ID
+        function play(device_id) {
+          $.ajax({
+            url:
+              'https://api.spotify.com/v1/me/player/play?device_id=' +
+              device_id,
+            type: 'PUT',
+            data: '{"uris": ["spotify:track:5ya2gsaIhTkAuWYEMB0nw5"]}',
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function(data) {
+              console.log(data);
+            }
+          });
+        }
+
+        // Error handling
+        player.addListener('initialization_error', ({ message }) => {
+          console.error(message);
+        });
+        player.addListener('authentication_error', ({ message }) => {
+          console.error(message);
+        });
+        player.addListener('account_error', ({ message }) => {
+          console.error(message);
+        });
+        player.addListener('playback_error', ({ message }) => {
+          console.error(message);
+        });
+
+        // Playback status updates
+        player.addListener('player_state_changed', state => {
+          console.log(state);
+        });
+
+        // play button
+        document.querySelector('#play').addEventListener('click', () => {
+          player.resume().then(() => {
+            console.log('Paused!');
+          });
+        });
+
+        // pause button
+        document.querySelector('#pause').addEventListener('click', () => {
+          player.pause().then(() => {
+            console.log('Paused!');
+          });
+        });
+
+        // Ready
+        player.addListener('ready', ({ device_id }) => {
+          // Play a track using our new device ID
+          console.log('Ready with Device ID', device_id);
+          play(device_id);
+        });
+
+        // Not Ready
+        player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+        });
+
+        // Connect to the player!
+        player.connect().then(success => {
+          if (success) {
+            console.log(
+              'The Web Playback SDK successfully connected to Spotify!'
+            );
+          }
+        });
+      };
+    </script>
+  </body>
+</html>
