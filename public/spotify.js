@@ -2,14 +2,13 @@
 /* eslint-disable camelcase */
 window.onSpotifyWebPlaybackSDKReady = () => {
   const token =
-    'BQC_Cx-cfjehYovjqKmvq2du2A9ke5gJEtYrPjN-BFP7GCyhJatkkR-HrYGmI0ZdbJjyOa9My1-MdoTGrus-Q9UMc9-EJBp_PUxDb6O28mxdVwj4QgkpM8Jsj97pVuj79OF5Ss8Pg9GFCwz8Qn84whpqGwkNfIsHhmGy&refresh_token=AQB6wQSthMX1efFbao79jY2wyImRwfNYbs9IYgUMN3TlByzRMaKXmQKjPbFEYCaFviS_n4Dkq6cocxH-f8g6u9dyalSUdFLTyG42igT_FuJA631n9focR_4nv0pw03V62QE';
+    'BQBpC-TV9o4_LLtRhaWgHzqIADCRjPo_g8QRBKN-5mgYbECEVrBa4ISp4Z4-7gzk5NlJZbrFPxw6QPJlDFIqULOqfOShsyI-ADg1_fbYhoHHF9R480w0hIW3Cqpo8kXELm1RZqkZE9vUU9ExlF-THNHeQr0ZDmMXje-c';
   const player = new Spotify.Player({
-    name: 'Web Playback SDK Quick Start Player',
+    name: 'Song Player',
     getOAuthToken: cb => {
       cb(token);
     }
   });
-
   // Play a specified track on the Web Playback SDK's device ID
   function play(device_id) {
     $.ajax({
@@ -27,6 +26,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   // Error handling
   player.addListener('initialization_error', ({ message }) => {
+    console.log('init error!!');
     console.error(message);
   });
   player.addListener('authentication_error', ({ message }) => {
