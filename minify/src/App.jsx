@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import $ from 'jquery';
 import './App.css';
 import * as helperJS from './helperJS';
+import * as _ from 'lodash';
 import { access } from 'fs';
 
 class App extends React.Component {
@@ -26,6 +27,8 @@ class App extends React.Component {
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
     this.resume = this.resume.bind(this);
     this.pause = this.pause.bind(this);
+    this.seek = this.seek.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.seekNext = this.seekNext.bind(this);
     this.seekPrevious = this.seekPrevious.bind(this);
     this.getNewAccessToken = this.getNewAccessToken.bind(this);
@@ -35,11 +38,17 @@ class App extends React.Component {
     // if user just logged in, get their access_token from the url
     const tokens = helperJS.getUrlVars();
     if (tokens.access_token && tokens.refresh_token) {
-      this.setState({
-        isAuthenticated: true,
-        access_token: tokens.access_token,
-        refresh_token: tokens.refresh_token
-      });
+      this.setState(
+        {
+          isAuthenticated: true,
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token
+        },
+        () => {
+          // get current song
+          this.getCurrentlyPlaying();
+        }
+      );
     }
   }
 
@@ -76,11 +85,16 @@ class App extends React.Component {
         );
       },
       success: data => {
-        this.setState({
-          item: JSON.stringify(data.item),
-          is_playing: JSON.stringify(data.is_playing),
-          progress_ms: JSON.stringify(data.progress_ms)
-        });
+        this.setState(
+          {
+            item: data.item,
+            is_playing: JSON.stringify(data.is_playing),
+            progress_ms: data.progress_ms
+          },
+          () => {
+            console.log(this.state);
+          }
+        );
       }
     });
   }
@@ -123,6 +137,40 @@ class App extends React.Component {
         console.log(err);
       }
     });
+  }
+
+  seek() {
+    const value = this.state.progress_ms;
+    console.log('seeking:', value);
+    // seek/scrub to part of song
+    _.debounce(() => {
+      $.ajax({
+        url: `https://api.spotify.com/v1/me/player/seek?position_ms=${value}`,
+        type: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        beforeSend: xhr => {
+          xhr.setRequestHeader(
+            'Authorization',
+            'Bearer ' + this.state.access_token
+          );
+        },
+        error: err => {
+          console.log(err);
+        }
+      });
+    }, 500)();
+  }
+
+  handleChange(event) {
+    this.setState({ progress_ms: event.target.value });
+    // console.log(value);
+    // _.debounce(() => {
+    //   this.seek(value);
+    // }, 50);
+    this.seek();
   }
 
   seekNext() {
@@ -185,6 +233,7 @@ class App extends React.Component {
 
   render() {
     const { user } = this.state;
+    const song = this.state.item || {};
     if (this.state.isAuthenticated) {
       return (
         <div className="App">
@@ -228,8 +277,23 @@ class App extends React.Component {
               id="obtain-new-token"
               onClick={this.getNewAccessToken}
             >
-              Obtain new token using the refresh token
+              Refresh Token
             </button>
+            <button
+              id="seek"
+              onClick={() => {
+                this.setState({ progress_ms: 25000 }, this.seek);
+              }}
+              className="btn btn-primary"
+            >
+              seek 25000
+            </button>
+            <input
+              type="range"
+              value={this.state.progress_ms}
+              onChange={this.handleChange}
+              max={song.duration_ms || 0}
+            />
             {/* <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
           <p>progress_ms: {this.state.progress_ms}</p> */}
