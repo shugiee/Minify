@@ -18,9 +18,11 @@ class App extends React.Component {
       progress_ms: 0
     };
 
+    this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
     this.resume = this.resume.bind(this);
     this.pause = this.pause.bind(this);
-    this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
+    this.seekNext = this.seekNext.bind(this);
+    this.seekPrevious = this.seekPrevious.bind(this);
   }
 
   getCurrentlyPlaying() {
@@ -84,6 +86,46 @@ class App extends React.Component {
     });
   }
 
+  seekNext() {
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/next',
+      type: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  seekPrevious() {
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/previous',
+      type: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
   render() {
     const { user } = this.state;
     return (
@@ -92,8 +134,6 @@ class App extends React.Component {
           <h1>minify</h1>
           <div>Welcome to minify!!</div>
           <h2>User: {user}</h2>
-          <p>Access token: {this.state.access_token}</p>
-          <p>Refresh token: {this.state.refresh_token}</p>
           <button
             id="currently playing"
             onClick={this.getCurrentlyPlaying}
@@ -107,9 +147,19 @@ class App extends React.Component {
           <button id="pause" onClick={this.pause} className="btn btn-primary">
             pause
           </button>
-          <p>item: {this.state.item}</p>
+          <button id="next" onClick={this.seekNext} className="btn btn-primary">
+            next
+          </button>
+          <button
+            id="previous"
+            onClick={this.seekPrevious}
+            className="btn btn-primary"
+          >
+            previous
+          </button>
+          {/* <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
-          <p>progress_ms: {this.state.progress_ms}</p>
+          <p>progress_ms: {this.state.progress_ms}</p> */}
         </div>
       </div>
     );
