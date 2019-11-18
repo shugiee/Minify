@@ -1,0 +1,16 @@
+{
+  "name": "minify_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Jonathan Olson",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "spotify-node-applescript": "^1.1.1"
+  }
+}

@@ -12,8 +12,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      plugins: true
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
@@ -31,14 +30,6 @@ function createWindow() {
     mainWindow = null;
   });
 }
-
-// You have to pass the filename of `widevinecdmadapter` here
-app.commandLine.appendSwitch(
-  'widevine-cdm-path',
-  '/HackReactor/MVP/minify/node_modules/electron-widevinecdm/widevine/darwin_x64/_platform_specific/mac_x64/widevinecdmadapter.plugin'
-);
-// The version of plugin can be got from `chrome://plugins` page in Chrome.
-app.commandLine.appendSwitch('widevine-cdm-version', '4.10.1582.2');
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
