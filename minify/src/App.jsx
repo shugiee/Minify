@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import $ from 'jquery';
 import './App.css';
+import * as helperJS from './helperJS';
+import { access } from 'fs';
 
 class App extends React.Component {
   constructor(props) {
@@ -26,6 +28,19 @@ class App extends React.Component {
     this.pause = this.pause.bind(this);
     this.seekNext = this.seekNext.bind(this);
     this.seekPrevious = this.seekPrevious.bind(this);
+    this.getNewAccessToken = this.getNewAccessToken.bind(this);
+  }
+
+  componentDidMount() {
+    // if user just logged in, get their access_token from the url
+    const tokens = helperJS.getUrlVars();
+    if (tokens.access_token && tokens.refresh_token) {
+      this.setState({
+        isAuthenticated: true,
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token
+      });
+    }
   }
 
   login() {
@@ -35,11 +50,16 @@ class App extends React.Component {
       error: err => {
         console.log(err);
       },
-      success: data => {
-        console.log('SUCCESS', data);
-        this.setState({
-          isAuthenticated: true
-        });
+      success: xhr => {
+        console.log('SUCCESS', xhr);
+        this.setState(
+          {
+            isAuthenticated: true
+          }
+          // () => {
+          //   res.redirect('http://localhost:3000');
+          // }
+        );
       }
     });
   }
@@ -145,6 +165,23 @@ class App extends React.Component {
     });
   }
 
+  // using the refresh token, get a new access token (I believe they last an hour)
+  getNewAccessToken() {
+    $.ajax({
+      url: `/refresh_token?${this.state.refresh_token}`,
+      type: 'GET',
+      error: err => {
+        console.log(err);
+      },
+      success: data => {
+        console.log('SUCCESS', data);
+        // this.setState({
+        //   access_token: data.access_token
+        // });
+      }
+    });
+  }
+
   render() {
     const { user } = this.state;
     if (this.state.isAuthenticated) {
@@ -154,9 +191,6 @@ class App extends React.Component {
             <h1>minify</h1>
             <div>Welcome to minify!!</div>
             <h2>User: {user}</h2>
-            <a href="/login" class="btn btn-primary">
-              Log in with Spotify
-            </a>
             <button
               id="currently playing"
               onClick={this.getCurrentlyPlaying}
@@ -188,6 +222,13 @@ class App extends React.Component {
             >
               previous
             </button>
+            <button
+              className="btn btn-default"
+              id="obtain-new-token"
+              onClick={this.getNewAccessToken}
+            >
+              Obtain new token using the refresh token
+            </button>
             {/* <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
           <p>progress_ms: {this.state.progress_ms}</p> */}
@@ -198,7 +239,7 @@ class App extends React.Component {
       return (
         <div className="container">
           <div id="login">
-            <h1>This is an example of the Authorization Code flow</h1>
+            <h1>Welcome to minify! Please login to Spotify below</h1>
             <a href="http://localhost:8888/login" className="btn btn-primary">
               Log in with Spotify
             </a>
@@ -206,9 +247,6 @@ class App extends React.Component {
           <div id="loggedin">
             <div id="user-profile"></div>
             <div id="oauth"></div>
-            <button className="btn btn-default" id="obtain-new-token">
-              Obtain new token using the refresh token
-            </button>
           </div>
         </div>
       );

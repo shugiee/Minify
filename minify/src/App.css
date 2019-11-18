@@ -23,5 +23,9 @@
 
 body {
   background-color: #222222;
-  color: rgb(115, 167, 254);
+  color: #1db954;
+}
+
+.btn {
+  background-color: #1db954;
 }

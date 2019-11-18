@@ -15,7 +15,8 @@ let cookieParser = require('cookie-parser');
 
 let client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 let client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
-let redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
+// let redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
+let redirect_uri = 'http://localhost:8888/callback';
 
 /**
  * Generates a random string containing numbers and letters
@@ -43,27 +44,29 @@ app
   .use(cookieParser());
 
 app.get('/login', function(req, res) {
-  console.log('logging in!');
-  const state = generateRandomString(16);
+  console.log('beginning login');
+  var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  let scope =
+  var scope =
     'user-follow-read user-read-recently-played user-library-read user-read-playback-state user-library-modify user-read-currently-playing user-modify-playback-state user-follow-modify playlist-read-collaborative playlist-modify-private playlist-modify-public user-read-email playlist-read-private user-top-read user-read-private app-remote-control';
   res.redirect(
-    `https://accounts.spotify.com/authorize?${querystring.stringify({
-      response_type: 'code',
-      client_id,
-      scope,
-      redirect_uri,
-      state
-    })}`
+    'https://accounts.spotify.com/authorize?' +
+      querystring.stringify({
+        response_type: 'code',
+        client_id: client_id,
+        scope: scope,
+        redirect_uri: redirect_uri,
+        state: state
+      })
   );
 });
 
 app.get('/callback', function(req, res) {
   // your application requests refresh and access tokens
   // after checking the state parameter
+  console.log('at callback');
 
   let code = req.query.code || null;
   let state = req.query.state || null;
@@ -71,35 +74,36 @@ app.get('/callback', function(req, res) {
 
   if (state === null || state !== storedState) {
     res.redirect(
-      `/#${querystring.stringify({
-        error: 'state_mismatch'
-      })}`
+      '/#' +
+        querystring.stringify({
+          error: 'state_mismatch'
+        })
     );
   } else {
     res.clearCookie(stateKey);
     let authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {
-        code,
-        redirect_uri,
+        code: code,
+        redirect_uri: redirect_uri,
         grant_type: 'authorization_code'
       },
       headers: {
-        Authorization: `Basic ${new Buffer(
-          client_id + ':' + client_secret
-        ).toString('base64')}`
+        Authorization:
+          'Basic ' +
+          new Buffer(client_id + ':' + client_secret).toString('base64')
       },
       json: true
     };
 
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
-        let { access_token } = body;
-        var { refresh_token } = body;
+        let access_token = body.access_token,
+          refresh_token = body.refresh_token;
 
         let options = {
           url: 'https://api.spotify.com/v1/me',
-          headers: { Authorization: `Bearer ${access_token}` },
+          headers: { Authorization: 'Bearer ' + access_token },
           json: true
         };
 
@@ -110,22 +114,25 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
-          `/#${querystring.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token
-          })}`
+          'http://localhost:3000/#' +
+            querystring.stringify({
+              access_token: access_token,
+              refresh_token: refresh_token
+            })
         );
       } else {
         res.redirect(
-          `/#${querystring.stringify({
-            error: 'invalid_token'
-          })}`
+          '/#' +
+            querystring.stringify({
+              error: 'invalid_token'
+            })
         );
       }
     });
   }
 });
 
+// TODO -- add this functionality to App.jsx
 app.get('/refresh_token', function(req, res) {
   // requesting access token from refresh token
   let { refresh_token } = req.query;
