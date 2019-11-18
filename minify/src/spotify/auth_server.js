@@ -132,8 +132,8 @@ app.get('/callback', function(req, res) {
   }
 });
 
-// TODO -- add this functionality to App.jsx
-app.get('/refresh_token', function(req, res) {
+// TODO -- allow cors on this! Currently app is getting cors error
+app.get('/refresh_token', cors(), function(req, res) {
   // requesting access token from refresh token
   let { refresh_token } = req.query;
   let authOptions = {

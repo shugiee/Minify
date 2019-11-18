@@ -168,17 +168,18 @@ class App extends React.Component {
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken() {
     $.ajax({
-      url: `/refresh_token?${this.state.refresh_token}`,
+      url: '/refresh_token',
       type: 'GET',
+      data: {
+        refresh_token: this.state.refresh_token
+      },
       error: err => {
         console.log(err);
-      },
-      success: data => {
-        console.log('SUCCESS', data);
-        // this.setState({
-        //   access_token: data.access_token
-        // });
       }
+    }).done(data => {
+      this.setState({
+        access_token: data.access_token
+      });
     });
   }
 

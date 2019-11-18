@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "author": "Jonathan Olson",
   "private": true,
+  "proxy": "http://localhost:8888",
   "dependencies": {
     "axios": "^0.19.0",
     "cookie-parser": "^1.4.4",
