@@ -19,6 +19,7 @@ class App extends React.Component {
     };
 
     this.resume = this.resume.bind(this);
+    this.pause = this.pause.bind(this);
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
   }
 
@@ -64,7 +65,23 @@ class App extends React.Component {
   }
 
   pause() {
-    // pause playback
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/pause',
+      type: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
   render() {
@@ -86,6 +103,9 @@ class App extends React.Component {
           </button>
           <button id="resume" onClick={this.resume} className="btn btn-primary">
             resume
+          </button>
+          <button id="pause" onClick={this.pause} className="btn btn-primary">
+            pause
           </button>
           <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
