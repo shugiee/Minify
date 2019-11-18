@@ -15,11 +15,12 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "start-react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-electron": "electron electron-main.js"
+    "start-react": "react-scripts start",
+    "start-electron": "electron electron-main.js",
+    "start-auth": "node src/spotify/auth_server"
   },
   "keywords": [
     "Electron",

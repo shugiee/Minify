@@ -43,6 +43,7 @@ app
   .use(cookieParser());
 
 app.get('/login', function(req, res) {
+  console.log('logging in!');
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 

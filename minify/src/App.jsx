@@ -8,6 +8,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      isAuthenticated: false,
       user: 'Hard Code Jonathan',
       access_token:
         'BQBeTr9b3iUHIbLppJJt9xJTchUkziSJCZtFJ4uWcM__QUwQjS4nMjSgVzqbjl7Ve36A1_4pDR_IMtfTWxlfX3YcaSkJxHw4J3TBQOcfrMbSrN2A8n5ZrSAn-GeKUnkLoaP9qR5gsn3oU9Ognsc14lA0YmQepMk1lMi38Z14H6o5qMr3Ol2SypKC499lIkE5jUAKo_9iep4AUqUZLOHsg-jisspLYBX1NZDBHtOqjzIiEqADCJftxo2MmeCrU5YIqs4hzRPkeexd',
@@ -18,11 +19,29 @@ class App extends React.Component {
       progress_ms: 0
     };
 
+    this.setState = this.setState.bind(this);
+    this.login = this.login.bind(this);
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
     this.resume = this.resume.bind(this);
     this.pause = this.pause.bind(this);
     this.seekNext = this.seekNext.bind(this);
     this.seekPrevious = this.seekPrevious.bind(this);
+  }
+
+  login() {
+    $.ajax({
+      url: '/login',
+      type: 'GET',
+      error: err => {
+        console.log(err);
+      },
+      success: data => {
+        console.log('SUCCESS', data);
+        this.setState({
+          isAuthenticated: true
+        });
+      }
+    });
   }
 
   getCurrentlyPlaying() {
@@ -128,41 +147,72 @@ class App extends React.Component {
 
   render() {
     const { user } = this.state;
-    return (
-      <div className="App">
-        <div className="container">
-          <h1>minify</h1>
-          <div>Welcome to minify!!</div>
-          <h2>User: {user}</h2>
-          <button
-            id="currently playing"
-            onClick={this.getCurrentlyPlaying}
-            className="btn btn-primary"
-          >
-            Get Current song
-          </button>
-          <button id="resume" onClick={this.resume} className="btn btn-primary">
-            resume
-          </button>
-          <button id="pause" onClick={this.pause} className="btn btn-primary">
-            pause
-          </button>
-          <button id="next" onClick={this.seekNext} className="btn btn-primary">
-            next
-          </button>
-          <button
-            id="previous"
-            onClick={this.seekPrevious}
-            className="btn btn-primary"
-          >
-            previous
-          </button>
-          {/* <p>item: {this.state.item}</p>
+    if (this.state.isAuthenticated) {
+      return (
+        <div className="App">
+          <div className="container">
+            <h1>minify</h1>
+            <div>Welcome to minify!!</div>
+            <h2>User: {user}</h2>
+            <a href="/login" class="btn btn-primary">
+              Log in with Spotify
+            </a>
+            <button
+              id="currently playing"
+              onClick={this.getCurrentlyPlaying}
+              className="btn btn-primary"
+            >
+              Get Current song
+            </button>
+            <button
+              id="resume"
+              onClick={this.resume}
+              className="btn btn-primary"
+            >
+              resume
+            </button>
+            <button id="pause" onClick={this.pause} className="btn btn-primary">
+              pause
+            </button>
+            <button
+              id="next"
+              onClick={this.seekNext}
+              className="btn btn-primary"
+            >
+              next
+            </button>
+            <button
+              id="previous"
+              onClick={this.seekPrevious}
+              className="btn btn-primary"
+            >
+              previous
+            </button>
+            {/* <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
           <p>progress_ms: {this.state.progress_ms}</p> */}
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="container">
+          <div id="login">
+            <h1>This is an example of the Authorization Code flow</h1>
+            <a href="http://localhost:8888/login" className="btn btn-primary">
+              Log in with Spotify
+            </a>
+          </div>
+          <div id="loggedin">
+            <div id="user-profile"></div>
+            <div id="oauth"></div>
+            <button className="btn btn-default" id="obtain-new-token">
+              Obtain new token using the refresh token
+            </button>
+          </div>
+        </div>
+      );
+    }
   }
 }
 
