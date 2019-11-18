@@ -4,7 +4,7 @@
   "description": "A Spotify Mini-Player",
   "main": "main.js",
   "scripts": {
-    "start": "electron public/main.js"
+    "start-electron": "electron public/electron-main.js"
   },
   "repository": "https://github.com/MyNameIsJonathan/hrsf123-mvp",
   "keywords": [
