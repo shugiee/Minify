@@ -154,6 +154,8 @@ class App extends React.Component {
       error: err => {
         if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
+        } else if (err.status === 401) {
+          this.getNewAccessToken();
         }
         console.log(err);
       }
@@ -182,6 +184,8 @@ class App extends React.Component {
         this.clearInterval();
         if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
+        } else if (err.status === 401) {
+          this.getNewAccessToken();
         }
         console.log(err);
       }
@@ -322,18 +326,18 @@ class App extends React.Component {
       data: {
         refresh_token: this.state.refresh_token
       },
+      success: data => {
+        console.log(data);
+        this.setState(
+          { access_token: data.access_token },
+          setTimeout(() => {
+            this.getNewAccessToken();
+          }, 3500)
+        );
+      },
       error: err => {
         console.log(err);
       }
-    }).done(data => {
-      this.setState(
-        {
-          access_token: data.access_token
-        },
-        setTimeout(() => {
-          this.getNewAccessToken();
-        }, 3500)
-      );
     });
   }
 
@@ -351,69 +355,68 @@ class App extends React.Component {
           >
             Refresh Token
           </button> */}
-          <div className='container'>
-            <div className='d-inline-flex justify-content-center'>
-              <div className='player-grid'>
-                {/* <div className='logo-container-outer d-flex align-items-center justify-content-center'>
+          <div className='d-inline-flex justify-content-center'>
+            <div className='player-grid'>
+              {/* <div className='logo-container-outer d-flex align-items-center justify-content-center'>
                   <div className="logo-container-inner d-flex align-items-center justify-content-center'">
                     <img id='logo' src='/logo.png' alt='Spotify Logo' />
                   </div>
                 </div> */}
-                <div className='artwork-container'>
-                  <img
-                    id='artwork'
-                    src={item.album.images[1].url}
-                    alt='Album artwork'
-                  ></img>
-                </div>
-                <div className='song-name-container'>
-                  <span id='song-name'>Warm Foothills</span>
-                </div>
-                <div className='artist-name-container'>
-                  <div id='artist-name'>alt-J</div>
-                </div>
-                <div className='like-container d-flex align-items-center justify-content-center'>
-                  <span id='like' className='icon'></span>
-                </div>
-                <div className='playback-slider-container'>
-                  <input
-                    type='range'
-                    value={progress_ms}
-                    onChange={this.handleSliderChange}
-                    max={item.duration_ms || 0}
-                    id='playback-slider'
-                    style={{
-                      background: `linear-gradient(
+              <div className='artwork-container'>
+                <img
+                  id='artwork'
+                  src={item.album.images[1].url}
+                  alt='Album artwork'
+                ></img>
+              </div>
+              <div className='song-name-container'>
+                <span id='song-name'>Warm Foothills</span>
+              </div>
+              <div className='artist-name-container'>
+                <div id='artist-name'>alt-J</div>
+              </div>
+              <div className='like-container d-flex align-items-center justify-content-center'>
+                <span id='like' className='icon'></span>
+              </div>
+              <div className='playback-slider-container'>
+                <input
+                  type='range'
+                  value={progress_ms}
+                  onChange={this.handleSliderChange}
+                  max={item.duration_ms || 0}
+                  id='playback-slider'
+                  style={{
+                    background: `linear-gradient(
                       90deg, 
                       #ffffff ${(progress_ms / item.duration_ms) * 100}%, 
                       #666666 0%)`
-                    }}
-                  />
-                </div>
-                <div className='shuffle-container d-flex align-items-center justify-content-center'>
-                  <span id='shuffle' className='icon'></span>
-                </div>
-                <div
-                  className='previous-container d-flex align-items-center justify-content-center'
-                  onClick={this.seekNext}
-                >
-                  <span id='previous' className='icon'></span>
-                </div>
-                <PlayPause
-                  is_playing={is_playing}
-                  resume={this.resume}
-                  pause={this.pause}
+                  }}
                 />
-                <div
-                  className='next-container d-flex align-items-center justify-content-center'
-                  onClick={this.seekPrevious}
-                >
-                  <span id='next' className='icon'></span>
-                </div>
-                <div className='repeat-container d-flex align-items-center justify-content-center'>
-                  <span id='repeat' className='icon'></span>
-                </div>
-                {/* <input
+              </div>
+              <div className='shuffle-container d-flex align-items-center justify-content-center'>
+                <span id='shuffle' className='icon'></span>
+              </div>
+              <div
+                className='previous-container d-flex align-items-center justify-content-center'
+                onClick={this.seekNext}
+              >
+                <span id='previous' className='icon'></span>
+              </div>
+              <PlayPause
+                is_playing={is_playing}
+                resume={this.resume}
+                pause={this.pause}
+              />
+              <div
+                className='next-container d-flex align-items-center justify-content-center'
+                onClick={this.seekPrevious}
+              >
+                <span id='next' className='icon'></span>
+              </div>
+              <div className='repeat-container d-flex align-items-center justify-content-center'>
+                <span id='repeat' className='icon'></span>
+              </div>
+              {/* <input
             type='text'
             id='song-search'
             value={this.state.query}
@@ -443,7 +446,6 @@ class App extends React.Component {
             );
             })}
             </div> */}
-              </div>
             </div>
           </div>
         </div>

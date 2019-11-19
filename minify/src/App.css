@@ -29,8 +29,6 @@ body {
   display: inline-grid;
   grid-template-columns: [player-col-1] 5px [player-col-2] 20px [player-col-3] 20px [player-col-4] 25px [player-col-5] 10px [player-col-6] 50px [player-col-7] 10px [player-col-8] 25px [player-col-9] 20px [player-col-10] 20px [player-col-11] 5px [player-col-end] 0px;
   grid-template-rows: [player-row-1] 10px [player-row-2] 10px [player-row-3] 210px [player-row-4] 25px [player-row-5] 20px [player-row-6] 20px [player-row-7] 5px [player-row-8] 35px;
-  width: 200px;
-  height: 350px;
 }
 
 .icon {
