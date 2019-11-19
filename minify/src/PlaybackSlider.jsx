@@ -1,6 +1,7 @@
 import React from 'react';
 
 const PlaybackSlider = props => {
+  // console.log(props.progress_ms, props.duration_ms);
   return (
     <div className='playback-slider-container'>
       <input
@@ -11,9 +12,8 @@ const PlaybackSlider = props => {
         id='playback-slider'
         style={{
           background: `linear-gradient(
-                      90deg, 
-                      #ffffff ${(props.progress_ms / props.duration_ms) *
-                        100}%, 
+                      90deg,
+                      #ffffff ${(props.progress_ms / props.duration_ms) * 100}%,
                       #666666 0%)`
         }}
       />

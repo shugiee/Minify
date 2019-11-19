@@ -10,8 +10,8 @@
   height: 40vmin;
 }
 
-.App-header {
-  background-color: #282c34;
+/* .App-header {
+  background-color: #1db954;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -19,10 +19,10 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
 .App-link {
-  color: #09d3ac;
+  color: #1db954;
 }
 
 body {
@@ -30,10 +30,19 @@ body {
   -webkit-app-region: drag;
 }
 
+::placeholder {
+  font-size: 0.75rem;
+  padding-left: 5px;
+}
+
+input:focus {
+  outline: none;
+}
+
 .player-grid {
   display: inline-grid;
   grid-template-columns: [player-col-1] 5px [player-col-2] 20px [player-col-3] 20px [player-col-4] 25px [player-col-5] 10px [player-col-6] 50px [player-col-7] 10px [player-col-8] 25px [player-col-9] 20px [player-col-10] 20px [player-col-11] 5px [player-col-end] 0px;
-  grid-template-rows: [player-row-1] 20px [player-row-2] 10px [player-row-3] 210px [player-row-4] 25px [player-row-5] 20px [player-row-6] 20px [player-row-7] 5px [player-row-8] 35px;
+  grid-template-rows: [player-row-1] 20px [player-row-2] 10px [player-row-3] 210px [player-row-4] 25px [player-row-5] 20px [player-row-6] 20px [player-row-7] 5px [player-row-8] 35px [player-row-9] 20px [player-row-10] 35px;
 }
 
 .icon {
@@ -55,13 +64,13 @@ body {
 }
 
 .minify-container {
-  background-color: #09d3ac;
+  background-color: #1db954;
   border-radius: 5px;
   text-align: center;
 }
 
 #login-button {
-  background-color: #09d3ac;
+  background-color: #1db954;
   color: #191414;
   border-radius: 50%;
   height: 25px;
@@ -70,18 +79,10 @@ body {
 }
 
 #login-button-container {
-  background-color: #09d3ac;
+  background-color: #1db954;
   margin-top: 50px;
   border-radius: 10px;
   text-align: center;
-}
-
-#search {
-  background-image: url('http://localhost:3000/search-button.svg');
-  width: 13px;
-  height: 13px;
-  display: block;
-  margin-top: 10px;
 }
 
 #artwork {
@@ -105,6 +106,29 @@ body {
   font-size: 0.8rem;
 }
 
+#playback-slider {
+  -webkit-appearance: none; /* Override default CSS styles */
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  transform: translate(0, -10px);
+}
+
+#search {
+  background-image: url('http://localhost:3000/search-button.svg');
+  width: 13px;
+  height: 13px;
+  display: block;
+  margin-top: 10px;
+}
+
+#search-bar {
+  display: inline-grid;
+  background-color: transparent;
+  border: 1px solid #999999;
+  border-radius: 5px;
+}
+
 #like-true {
   background-image: url('http://localhost:3000/like-button-full.svg');
   width: 13px;
@@ -118,14 +142,6 @@ body {
   width: 13px;
   height: 13px;
   display: block;
-}
-
-#playback-slider {
-  -webkit-appearance: none; /* Override default CSS styles */
-  appearance: none;
-  width: 100%;
-  height: 2px;
-  transform: translate(0, -10px);
 }
 
 #resume {
@@ -280,6 +296,27 @@ body {
   display: inline-block;
 }
 
+.search-bar-container {
+  grid-column-start: player-col-1;
+  grid-column-end: player-col-end;
+  grid-row-start: player-row-10;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+
+.search-results-container {
+  grid-column-start: player-col-1;
+  grid-column-end: player-col-end;
+  grid-row-start: player-row-11;
+  color: #ffffff;
+  font-size: 0.6rem;
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
@@ -287,6 +324,10 @@ input[type='range']::-webkit-slider-thumb {
   width: 7px;
   background-color: #ffffff;
   border-radius: 40%;
+}
+
+.hidden {
+  display: none;
 }
 
 .filter-green {

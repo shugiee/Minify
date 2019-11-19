@@ -6,6 +6,8 @@ import Like from './Like.jsx';
 import PlaybackSlider from './PlaybackSlider.jsx';
 import Shuffle from './Shuffle.jsx';
 import Repeat from './Repeat.jsx';
+import SearchBar from './SearchBar.jsx';
+import SearchResult from './SearchResult.jsx';
 import * as helperJS from './helperJS';
 import _ from 'lodash';
 
@@ -28,7 +30,8 @@ class App extends React.Component {
         'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
       query: '',
       queryResults: { tracks: {} },
-      likesCurrentSong: false
+      likesCurrentSong: false,
+      manual_progress: 0
     };
 
     this.setState = this.setState.bind(this);
@@ -107,7 +110,8 @@ class App extends React.Component {
         }
         this.setState(
           {
-            playState: data
+            playState: data,
+            manual_progress: data.progress_ms
           },
           this.checkLikeStatus
         );
@@ -225,10 +229,10 @@ class App extends React.Component {
   }
 
   seek() {
-    const value = this.state.item.progress_ms;
+    const { manual_progress } = this.state;
     // seek/scrub to part of song
     $.ajax({
-      url: `https://api.spotify.com/v1/me/player/seek?position_ms=${value}`,
+      url: `https://api.spotify.com/v1/me/player/seek?position_ms=${manual_progress}`,
       type: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -240,18 +244,14 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
-      success: () => {
-        this.setState(
-          state => {
-            state.playState.item.progress_ms = parseInt(value);
-            return {
-              playState: state.playState
-            };
-          },
-          () => {
-            console.log(this.state);
-          }
-        );
+      success: result => {
+        this.setState(state => {
+          state.playState.item.progress_ms = parseInt(result);
+          return {
+            playState: state.playState,
+            manual_progress
+          };
+        });
       },
       error: err => {
         console.log(err);
@@ -260,12 +260,11 @@ class App extends React.Component {
   }
 
   handleSliderChange(event) {
-    console.log('handling slider change!');
-    const { playState } = this.state;
-    console.log(playState);
-    playState.progress_ms = event.target.value;
-    this.setState({ playState });
-    this.seekThrottle();
+    console.log(event.target);
+    // this.setState(state => {
+    //   state.playState.progress_ms = event.target.value;
+    //   return { playState: state.playState.progress_ms };
+    // }, this.seekThrottle);
   }
 
   seekNext() {
@@ -467,10 +466,13 @@ class App extends React.Component {
   incrementProgress() {
     this.setState(state => {
       state.playState.progress_ms += 1000;
-      if (state.playState.duration_ms - state.playState.progress_ms < 1000) {
+      if (
+        state.playState.item.duration_ms - state.playState.progress_ms <
+        2000
+      ) {
         setTimeout(() => {
           this.getCurrentlyPlaying();
-        }, 1200);
+        }, 2000);
       }
       return { playState: state.playState };
     });
@@ -510,15 +512,15 @@ class App extends React.Component {
   }
 
   render() {
-    const { queryResults, likesCurrentSong, playState } = this.state;
     const {
-      is_playing,
-      progress_ms,
-      item,
-      shuffle_state,
-      repeat_state,
-      duration_ms
-    } = playState;
+      queryResults,
+      likesCurrentSong,
+      playState,
+      manual_progress
+    } = this.state;
+    const { is_playing, item, shuffle_state, repeat_state } = playState;
+    const { progress_ms } = playState;
+    const { duration_ms } = playState.item || 0;
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
@@ -530,9 +532,19 @@ class App extends React.Component {
           >
             Refresh Token
           </button> */}
-          <div className='d-inline-flex justify-content-center'>
+          <div
+            className='d-inline-flex justify-content-center'
+            id='player-front'
+          >
             <div className='player-grid'>
-              <div className='search-container d-flex align-items-center justify-content-center'>
+              <div
+                className='search-container d-flex align-items-center justify-content-center'
+                onClick={() => {
+                  this.setState(state => {
+                    return { showSearchBar: !state.showSearchBar };
+                  });
+                }}
+              >
                 <span id='search' className='icon'></span>
               </div>
 
@@ -598,6 +610,18 @@ class App extends React.Component {
                 repeat_state={repeat_state}
                 toggleRepeat={this.toggleRepeat}
               />
+              <SearchBar
+                showSearchBar={this.state.showSearchBar}
+                query={this.state.query}
+                handleQueryChange={this.handleQueryChange}
+              />
+              <div className='search-results-container'>
+                {queryResults.tracks.items.map(song => {
+                  return (
+                    <SearchResult result={song} playSong={this.playSong} />
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
