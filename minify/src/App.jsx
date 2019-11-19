@@ -27,6 +27,7 @@ class App extends React.Component {
     this.setState = this.setState.bind(this);
     this.login = this.login.bind(this);
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
+    this.playSong = this.playSong.bind(this);
     this.resume = this.resume.bind(this);
     this.pause = this.pause.bind(this);
     this.seek = this.seek.bind(this);
@@ -102,6 +103,35 @@ class App extends React.Component {
             console.log(this.state);
           }
         );
+      }
+    });
+  }
+
+  playSong(context_uri, song_number) {
+    console.log(context_uri);
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/play',
+      type: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      // data: JSON.stringify({context_uri}),
+      data: JSON.stringify({
+        context_uri: context_uri,
+        offset: {
+          position: song_number - 1
+        },
+        position_ms: 0
+      }),
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      error: err => {
+        console.log(err);
       }
     });
   }
@@ -336,7 +366,13 @@ class App extends React.Component {
               {queryResults.tracks.items.map(song => {
                 return (
                   <div className='search-result'>
-                    <p>Song Name: {song.name}</p>
+                    <a
+                      onClick={() => {
+                        this.playSong(song.album.uri, song.track_number);
+                      }}
+                    >
+                      Song Name: {song.name}
+                    </a>
                     <p>
                       Artist:{' '}
                       {song.artists
@@ -349,9 +385,6 @@ class App extends React.Component {
                 );
               })}
             </div>
-            {/* <p>item: {this.state.item}</p>
-          <p>is_playing {this.state.is_playing}</p>
-          <p>progress_ms: {this.state.progress_ms}</p> */}
           </div>
         </div>
       );
