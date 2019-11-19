@@ -69,7 +69,20 @@ body {
   font-size: 0.8rem;
 }
 
-#like {
+#like-true {
+  background-image: url('http://localhost:3000/like-button-full.svg');
+  width: 13px;
+  height: 13px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.filter-green {
+  filter: brightness(0) saturate(100%) invert(79%) sepia(46%) saturate(4008%)
+    hue-rotate(116deg) brightness(92%) contrast(93%) !important;
+}
+
+#like-false {
   background-image: url('http://localhost:3000/like-button-clear.svg');
   width: 13px;
   height: 13px;

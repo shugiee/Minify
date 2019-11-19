@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import './App.css';
 import PlayPause from './PlayPause.jsx';
+import Like from './Like.jsx';
 import * as helperJS from './helperJS';
 import _ from 'lodash';
 
@@ -384,7 +385,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { queryResults } = this.state;
+    const { queryResults, likesCurrentSong } = this.state;
     const { is_playing, progress_ms, item } = this.state.playState;
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
@@ -425,9 +426,7 @@ class App extends React.Component {
                 </div>
               </div>
 
-              <div className='like-container d-flex align-items-center justify-content-center'>
-                <span id='like' className='icon'></span>
-              </div>
+              <Like likesCurrentSong={likesCurrentSong} />
 
               <div className='playback-slider-container'>
                 <input
