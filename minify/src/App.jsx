@@ -23,7 +23,8 @@ class App extends React.Component {
         'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
       progress_ms: 0,
       query: '',
-      queryResults: { tracks: {} }
+      queryResults: { tracks: {} },
+      likesCurrentSong: false
     };
 
     this.setState = this.setState.bind(this);
@@ -97,11 +98,34 @@ class App extends React.Component {
         if (data.is_playing) {
           this.startInterval();
         }
-        this.setState({
-          playState: data
-        });
+        this.setState(
+          {
+            playState: data
+          },
+          this.checkLikeStatus
+        );
       }
     });
+  }
+
+  checkLikeStatus() {
+    if (this.state.playState.item.id) {
+      $.ajax({
+        url: `https://api.spotify.com/v1/me/tracks/contains?ids=${this.state.playState.item.id}`,
+        type: 'GET',
+        beforeSend: xhr => {
+          xhr.setRequestHeader(
+            'Authorization',
+            'Bearer ' + this.state.access_token
+          );
+        },
+        success: response => {
+          this.setState({
+            likesCurrentSong: response[0]
+          });
+        }
+      });
+    }
   }
 
   playSong(context_uri, song_number) {
@@ -129,6 +153,7 @@ class App extends React.Component {
       success: () => {
         this.startInterval();
         this.getCurrentlyPlaying();
+        this.checkLikeStatus();
       },
       error: err => {
         console.log(err);
