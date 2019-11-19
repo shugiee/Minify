@@ -1,10 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
 import $ from 'jquery';
 import './App.css';
 import * as helperJS from './helperJS';
 import * as _ from 'lodash';
-import { access } from 'fs';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,7 +10,7 @@ class App extends React.Component {
 
     this.state = {
       isAuthenticated: false,
-      user: 'Hard Code Jonathan',
+      // user: 'Hard Code Jonathan',
       access_token:
         'BQBeTr9b3iUHIbLppJJt9xJTchUkziSJCZtFJ4uWcM__QUwQjS4nMjSgVzqbjl7Ve36A1_4pDR_IMtfTWxlfX3YcaSkJxHw4J3TBQOcfrMbSrN2A8n5ZrSAn-GeKUnkLoaP9qR5gsn3oU9Ognsc14lA0YmQepMk1lMi38Z14H6o5qMr3Ol2SypKC499lIkE5jUAKo_9iep4AUqUZLOHsg-jisspLYBX1NZDBHtOqjzIiEqADCJftxo2MmeCrU5YIqs4hzRPkeexd',
       refresh_token:
@@ -83,28 +81,28 @@ class App extends React.Component {
 
   getCurrentlyPlaying() {
     // Make a call using the token
-    $.ajax({
-      url: 'https://api.spotify.com/v1/me/player',
-      type: 'GET',
-      beforeSend: xhr => {
-        xhr.setRequestHeader(
-          'Authorization',
-          'Bearer ' + this.state.access_token
-        );
-      },
-      success: data => {
-        this.setState(
-          {
-            item: data.item,
-            is_playing: JSON.stringify(data.is_playing),
-            progress_ms: data.progress_ms
-          },
-          () => {
-            console.log(this.state);
-          }
-        );
-      }
-    });
+    // $.ajax({
+    //   url: 'https://api.spotify.com/v1/me/player',
+    //   type: 'GET',
+    //   beforeSend: xhr => {
+    //     xhr.setRequestHeader(
+    //       'Authorization',
+    //       'Bearer ' + this.state.access_token
+    //     );
+    //   },
+    //   success: data => {
+    //     this.setState(
+    //       {
+    //         item: data.item,
+    //         is_playing: JSON.stringify(data.is_playing),
+    //         progress_ms: data.progress_ms
+    //       },
+    //       () => {
+    //         console.log(this.state);
+    //       }
+    //     );
+    //   }
+    // });
   }
 
   playSong(context_uri, song_number) {
@@ -292,108 +290,130 @@ class App extends React.Component {
   }
 
   render() {
-    const { user, queryResults } = this.state;
+    const { queryResults } = this.state;
     const song = this.state.item || {};
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
         <div className='App'>
           <div className='container'>
-            <div className='player-grid'>
-              <h1>minify</h1>
-              <span>Welcome to minify!!</span>
-              <h2>User: {user}</h2>
-              <button
-                id='currently playing'
-                onClick={this.getCurrentlyPlaying}
-                className='btn btn-primary'
-              >
-                Get Current song
-              </button>
-              <div className='previous-container' onClick={this.seekNext}>
-                <span id='previous' className='icon'></span>
-              </div>
-              <div className='resume-container' onClick={this.resume}>
-                <span id='resume' className='icon'></span>
-              </div>
-              <div className='pause-container' onClick={this.pause}>
-                <span id='pause' className='icon'></span>
-              </div>
-              <div className='next-container' onClick={this.seekPrevious}>
-                <span id='next' className='icon'></span>
-              </div>
-              {/* <button
-                id='pause'
-                onClick={this.pause}
-                className='btn btn-primary'
-              >
-                pause
-              </button>
-              <button
-                id='next'
-                onClick={this.seekNext}
-                className='btn btn-primary'
-              >
-                next
-              </button>
-              <button
-                id='previous'
-                onClick={this.seekPrevious}
-                className='btn btn-primary'
-              >
-                previous
-              </button> */}
-              <button
-                className='btn btn-default'
-                id='obtain-new-token'
-                onClick={this.getNewAccessToken}
-              >
-                Refresh Token
-              </button>
-              <button
-                id='seek'
-                onClick={() => {
-                  this.setState({ progress_ms: 25000 }, this.seek);
-                }}
-                className='btn btn-primary'
-              >
-                seek 25000
-              </button>
-              <input
-                type='range'
-                value={this.state.progress_ms}
-                onChange={this.handleSliderChange}
-                max={song.duration_ms || 0}
-              />
-              <input
-                type='text'
-                id='song-search'
-                value={this.state.query}
-                onChange={this.handleQueryChange}
-              />
-              <div>
-                {console.log(queryResults.tracks)}
-                {queryResults.tracks.items.map(song => {
-                  return (
-                    <div className='search-result'>
-                      <a
-                        onClick={() => {
-                          this.playSong(song.album.uri, song.track_number);
-                        }}
-                      >
-                        Song Name: {song.name}
-                      </a>
-                      <p>
-                        Artist:{' '}
-                        {song.artists
-                          .map(artist => {
-                            return artist.name;
-                          })
-                          .join(' & ')}
-                      </p>
-                    </div>
-                  );
-                })}
+            <div className='d-inline-flex justify-content-center'>
+              <div className='player-grid'>
+                <div className='title-container d-inline-flex justify-content-center'>
+                  <h1>minify</h1>
+                </div>
+                {/* <div className='artwork-container d-inline-flex justify-content-center'>
+                  <img src={this.state.}></img>
+                </div> */}
+                {/* <span>Welcome to minify!!</span>
+            <h2>User: {user}</h2>
+            <button
+            id='currently playing'
+            onClick={this.getCurrentlyPlaying}
+            className='btn btn-primary'
+            >
+            Get Current song
+            </button> */}
+                <div
+                  className='previous-container d-flex align-items-center justify-content-center'
+                  onClick={this.seekNext}
+                >
+                  <span id='previous' className='icon'></span>
+                </div>
+                <div
+                  className='resume-container d-flex align-items-center justify-content-center'
+                  onClick={this.resume}
+                >
+                  <span id='resume' className='icon'></span>
+                </div>
+                <div
+                  className='pause-container d-flex align-items-center justify-content-center'
+                  onClick={this.pause}
+                >
+                  <span id='pause' className='icon'></span>
+                </div>
+                <div
+                  className='next-container d-flex align-items-center justify-content-center'
+                  onClick={this.seekPrevious}
+                >
+                  <span id='next' className='icon'></span>
+                </div>
+                {/* <button
+            id='pause'
+            onClick={this.pause}
+            className='btn btn-primary'
+            >
+            pause
+            </button>
+            <button
+            id='next'
+            onClick={this.seekNext}
+            className='btn btn-primary'
+            >
+            next
+            </button>
+            <button
+            id='previous'
+            onClick={this.seekPrevious}
+            className='btn btn-primary'
+            >
+            previous
+            </button> */}
+                {/* <button
+            className='btn btn-default'
+            id='obtain-new-token'
+            onClick={this.getNewAccessToken}
+            >
+            Refresh Token
+            </button>
+            <button
+            id='seek'
+            onClick={() => {
+            this.setState({ progress_ms: 25000 }, this.seek);
+            }}
+            className='btn btn-primary'
+            >
+            seek 25000
+            </button> */}
+                <div className='playback-slider-container'>
+                  <input
+                    type='range'
+                    value={this.state.progress_ms}
+                    onChange={this.handleSliderChange}
+                    max={song.duration_ms || 0}
+                    id='playback-slider'
+                  />
+                </div>
+                {/* <input
+            type='text'
+            id='song-search'
+            value={this.state.query}
+            onChange={this.handleQueryChange}
+            />
+            <div>
+            {console.log(queryResults.tracks)}
+            {queryResults.tracks.items.map(song => {
+            return (
+            <div className='search-result'>
+            <a
+            onClick={() => {
+            this.playSong(song.album.uri, song.track_number);
+            }}
+            >
+            Song Name: {song.name}
+            </a>
+            <p>
+            Artist:{' '}
+            {song.artists
+            .map(artist => {
+            return artist.name;
+            })
+            .join(' & ')}
+            </p>
+            </div>
+            );
+            })}
+            </div> */}
               </div>
             </div>
           </div>
