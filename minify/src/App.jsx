@@ -228,7 +228,8 @@ class App extends React.Component {
   }
 
   handleSliderChange(event) {
-    this.setState({ progress_ms: event.target.value }, this.seekThrottle);
+    this.setState({ progress_ms: event.target.value });
+    this.seekThrottle();
   }
 
   seekNext() {
@@ -247,6 +248,11 @@ class App extends React.Component {
       },
       success: this.getCurrentlyPlaying,
       error: err => {
+        if (err.status === 403 || err.status === 404) {
+          this.getCurrentlyPlaying();
+        } else if (err.status === 401) {
+          this.getNewAccessToken();
+        }
         console.log(err);
       }
     });
@@ -268,6 +274,11 @@ class App extends React.Component {
       },
       success: this.getCurrentlyPlaying,
       error: err => {
+        if (err.status === 403 || err.status === 404) {
+          this.getCurrentlyPlaying();
+        } else if (err.status === 401) {
+          this.getNewAccessToken();
+        }
         console.log(err);
       }
     });
@@ -303,9 +314,15 @@ class App extends React.Component {
   }
 
   incrementProgress() {
-    const state = this.state;
-    state.playState.progress_ms += 250;
-    this.setState({ playState: state.playState });
+    this.setState(state => {
+      state.playState.progress_ms += 250;
+      if (state.playState.duration_ms - state.playState.progress_ms < 500) {
+        setTimeout(() => {
+          this.getCurrentlyPlaying();
+        }, 650);
+      }
+      return { playState: state.playState };
+    });
   }
 
   startInterval() {
@@ -357,6 +374,10 @@ class App extends React.Component {
           </button> */}
           <div className='d-inline-flex justify-content-center'>
             <div className='player-grid'>
+              <div className='search-container d-flex align-items-center justify-content-center'>
+                <span id='search' className='icon'></span>
+              </div>
+
               <div className='artwork-container'>
                 <img
                   id='artwork'
@@ -364,9 +385,11 @@ class App extends React.Component {
                   alt='Album artwork'
                 ></img>
               </div>
+
               <div className='song-name-container'>
                 <span id='song-name'>{item.name}</span>
               </div>
+
               <div className='artist-name-container'>
                 <div id='artist-name'>
                   {item.album.artists
@@ -376,9 +399,11 @@ class App extends React.Component {
                     .join(' & ')}
                 </div>
               </div>
+
               <div className='like-container d-flex align-items-center justify-content-center'>
                 <span id='like' className='icon'></span>
               </div>
+
               <div className='playback-slider-container'>
                 <input
                   type='range'
@@ -394,59 +419,34 @@ class App extends React.Component {
                   }}
                 />
               </div>
+
               <div className='shuffle-container d-flex align-items-center justify-content-center'>
                 <span id='shuffle' className='icon'></span>
               </div>
+
               <div
                 className='previous-container d-flex align-items-center justify-content-center'
-                onClick={this.seekNext}
+                onClick={this.seekPrevious}
               >
                 <span id='previous' className='icon'></span>
               </div>
+
               <PlayPause
                 is_playing={is_playing}
                 resume={this.resume}
                 pause={this.pause}
               />
+
               <div
                 className='next-container d-flex align-items-center justify-content-center'
-                onClick={this.seekPrevious}
+                onClick={this.seekNext}
               >
                 <span id='next' className='icon'></span>
               </div>
+
               <div className='repeat-container d-flex align-items-center justify-content-center'>
                 <span id='repeat' className='icon'></span>
               </div>
-              {/* <input
-            type='text'
-            id='song-search'
-            value={this.state.query}
-            onChange={this.handleQueryChange}
-            />
-            <div>
-            {console.log(queryResults.tracks)}
-            {queryResults.tracks.items.map(song => {
-            return (
-            <div className='search-result'>
-            <a
-            onClick={() => {
-            this.playSong(item.album.uri, item.track_number);
-            }}
-            >
-            Song Name: {item.name}
-            </a>
-            <p>
-            Artist:{' '}
-            {item.artists
-            .map(artist => {
-            return artist.name;
-            })
-            .join(' & ')}
-            </p>
-            </div>
-            );
-            })}
-            </div> */}
             </div>
           </div>
         </div>

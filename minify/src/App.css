@@ -40,6 +40,14 @@ body {
   filter: brightness(0) invert(1);
 }
 
+#search {
+  background-image: url('http://localhost:3000/search-button.svg');
+  width: 13px;
+  height: 13px;
+  display: block;
+  margin-top: 10px;
+}
+
 #artwork {
   width: 100%;
   display: block;
@@ -118,6 +126,16 @@ body {
   display: block;
 }
 
+.search-container {
+  grid-column-start: player-col-10;
+  grid-column-end: player-col-11;
+  grid-row-start: player-row-1;
+  grid-row-end: player-row-2;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+
 .artwork-container {
   grid-column-start: player-col-2;
   grid-column-end: player-col-11;
@@ -127,22 +145,24 @@ body {
 
 .song-name-container {
   grid-column-start: player-col-1;
-  grid-column-end: player-col-10;
+  grid-column-end: player-col-9;
   grid-row-start: player-row-4;
   width: 100%;
   height: 100%;
   display: inline-block;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
 .artist-name-container {
   grid-column-start: player-col-1;
-  grid-column-end: player-col-10;
+  grid-column-end: player-col-9;
   grid-row-start: player-row-5;
   width: 100%;
   height: 100%;
   display: inline-block;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
