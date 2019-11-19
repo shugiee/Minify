@@ -40,6 +40,38 @@ body {
   filter: brightness(0) invert(1);
 }
 
+#minify-top {
+  margin-top: 55px;
+}
+
+.intro {
+  color: #ffffff;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.minify-container {
+  background-color: #09d3ac;
+  border-radius: 5px;
+  text-align: center;
+}
+
+#login-button {
+  background-color: #09d3ac;
+  color: #191414;
+  border-radius: 50%;
+  height: 25px;
+  font-size: 0.7em;
+  font-weight: 900;
+}
+
+#login-button-container {
+  background-color: #09d3ac;
+  margin-top: 50px;
+  border-radius: 10px;
+  text-align: center;
+}
+
 #search {
   background-image: url('http://localhost:3000/search-button.svg');
   width: 13px;

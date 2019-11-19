@@ -604,12 +604,24 @@ class App extends React.Component {
       );
     } else {
       return (
-        <div className='container'>
+        <div className='container d-flex align-items-center justify-content-center'>
           <div id='login'>
-            <h1>Welcome to minify! Please login to Spotify below</h1>
-            <a href='http://localhost:8888/login' className='btn btn-primary'>
-              Log in with Spotify
-            </a>
+            <h1 className='intro' id='minify-top'>
+              Welcome to
+            </h1>
+            <div className='minify-container'>
+              <h1 className='minify'>minify</h1>
+            </div>
+            <h1 className='intro'>Please login to Spotify below</h1>
+            <div id='login-button-container'>
+              <a
+                href='http://localhost:8888/login'
+                id='login-button'
+                className='d-flex align-items-center justify-content-center'
+              >
+                LOG IN WITH SPOTIFY
+              </a>
+            </div>
           </div>
           <div id='loggedin'>
             <div id='user-profile'></div>
