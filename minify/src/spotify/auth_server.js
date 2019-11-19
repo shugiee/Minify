@@ -44,7 +44,6 @@ app
   .use(cookieParser());
 
 app.get('/login', function(req, res) {
-  console.log('beginning login');
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -66,7 +65,6 @@ app.get('/login', function(req, res) {
 app.get('/callback', function(req, res) {
   // your application requests refresh and access tokens
   // after checking the state parameter
-  console.log('at callback');
 
   let code = req.query.code || null;
   let state = req.query.state || null;
@@ -108,9 +106,7 @@ app.get('/callback', function(req, res) {
         };
 
         // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
+        request.get(options, function(error, response, body) {});
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(

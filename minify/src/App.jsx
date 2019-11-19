@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = {
       playState: {
         device: { is_active: false },
-        item: { album: { images: ['', '', ''] } },
+        item: { album: { images: ['', '', ''], artists: [] } },
         progress_ms: 0
       },
       isAuthenticated: false,
@@ -357,11 +357,6 @@ class App extends React.Component {
           </button> */}
           <div className='d-inline-flex justify-content-center'>
             <div className='player-grid'>
-              {/* <div className='logo-container-outer d-flex align-items-center justify-content-center'>
-                  <div className="logo-container-inner d-flex align-items-center justify-content-center'">
-                    <img id='logo' src='/logo.png' alt='Spotify Logo' />
-                  </div>
-                </div> */}
               <div className='artwork-container'>
                 <img
                   id='artwork'
@@ -370,10 +365,16 @@ class App extends React.Component {
                 ></img>
               </div>
               <div className='song-name-container'>
-                <span id='song-name'>Warm Foothills</span>
+                <span id='song-name'>{item.name}</span>
               </div>
               <div className='artist-name-container'>
-                <div id='artist-name'>alt-J</div>
+                <div id='artist-name'>
+                  {item.album.artists
+                    .map(artist => {
+                      return artist.name;
+                    })
+                    .join(' & ')}
+                </div>
               </div>
               <div className='like-container d-flex align-items-center justify-content-center'>
                 <span id='like' className='icon'></span>
