@@ -359,22 +359,40 @@ class App extends React.Component {
                     <img id='logo' src='/logo.png' alt='Spotify Logo' />
                   </div>
                 </div> */}
-                <div className='artwork-container d-flex align-items-center justify-content-center'>
+                <div className='artwork-container'>
                   <img
                     id='artwork'
                     src={item.album.images[1].url}
                     alt='Album artwork'
                   ></img>
                 </div>
-                {/* <span>Welcome to minify!!</span>
-            <h2>User: {user}</h2>
-            <button
-            id='currently playing'
-            onClick={this.getCurrentlyPlaying}
-            className='btn btn-primary'
-            >
-            Get Current song
-            </button> */}
+                <div className='song-name-container'>
+                  <span id='song-name'>Warm Foothills</span>
+                </div>
+                <div className='artist-name-container'>
+                  <div id='artist-name'>alt-J</div>
+                </div>
+                <div className='like-container d-flex align-items-center justify-content-center'>
+                  <span id='like' className='icon'></span>
+                </div>
+                <div className='playback-slider-container'>
+                  <input
+                    type='range'
+                    value={progress_ms}
+                    onChange={this.handleSliderChange}
+                    max={item.duration_ms || 0}
+                    id='playback-slider'
+                    style={{
+                      background: `linear-gradient(
+                      90deg, 
+                      #ffffff ${(progress_ms / item.duration_ms) * 100}%, 
+                      #666666 0%)`
+                    }}
+                  />
+                </div>
+                <div className='shuffle-container d-flex align-items-center justify-content-center'>
+                  <span id='shuffle' className='icon'></span>
+                </div>
                 <div
                   className='previous-container d-flex align-items-center justify-content-center'
                   onClick={this.seekNext}
@@ -392,20 +410,8 @@ class App extends React.Component {
                 >
                   <span id='next' className='icon'></span>
                 </div>
-                <div className='playback-slider-container'>
-                  <input
-                    type='range'
-                    value={progress_ms}
-                    onChange={this.handleSliderChange}
-                    max={item.duration_ms || 0}
-                    id='playback-slider'
-                    style={{
-                      background: `linear-gradient(
-                      90deg, 
-                      #ffffff ${(progress_ms / item.duration_ms) * 100}%, 
-                      #666666 0%)`
-                    }}
-                  />
+                <div className='repeat-container d-flex align-items-center justify-content-center'>
+                  <span id='repeat' className='icon'></span>
                 </div>
                 {/* <input
             type='text'
