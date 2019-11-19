@@ -3,7 +3,7 @@ import $ from 'jquery';
 import './App.css';
 import PlayPause from './PlayPause.jsx';
 import * as helperJS from './helperJS';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,7 +12,8 @@ class App extends React.Component {
     this.state = {
       playState: {
         device: { is_active: false },
-        item: { album: { images: ['', '', ''] } }
+        item: { album: { images: ['', '', ''] } },
+        progress_ms: 0
       },
       isAuthenticated: false,
       // user: 'Hard Code Jonathan',
@@ -37,6 +38,9 @@ class App extends React.Component {
     this.seekPrevious = this.seekPrevious.bind(this);
     this.searchSpotify = this.searchSpotify.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.incrementProgress = this.incrementProgress.bind(this);
+    this.startInterval = this.startInterval.bind(this);
+    this.clearInterval = this.clearInterval.bind(this);
     this.getNewAccessToken = this.getNewAccessToken.bind(this);
 
     this.seekThrottle = _.throttle(this.seek, 500);
@@ -90,6 +94,9 @@ class App extends React.Component {
         );
       },
       success: data => {
+        if (data.is_playing) {
+          this.startInterval();
+        }
         this.setState({
           playState: data
         });
@@ -119,7 +126,10 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
-      success: this.getCurrentlyPlaying,
+      success: () => {
+        this.startInterval();
+        this.getCurrentlyPlaying();
+      },
       error: err => {
         console.log(err);
       }
@@ -164,7 +174,10 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
-      success: this.getCurrentlyPlaying,
+      success: () => {
+        this.clearInterval();
+        this.getCurrentlyPlaying();
+      },
       error: err => {
         if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
@@ -284,6 +297,22 @@ class App extends React.Component {
     this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
   }
 
+  incrementProgress() {
+    const state = this.state;
+    state.playState.progress_ms += 250;
+    this.setState({ playState: state.playState });
+  }
+
+  startInterval() {
+    const intervalID = setInterval(this.incrementProgress, 250);
+    this.setState({ intervalID });
+  }
+
+  clearInterval() {
+    this.clearInterval(this.state.intervalID);
+    this.setState({ intervalID: null });
+  }
+
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken() {
     $.ajax({
@@ -311,7 +340,6 @@ class App extends React.Component {
     const { queryResults } = this.state;
     const { is_playing, progress_ms } = this.state.playState;
     const song = this.state.playState.item || {};
-    console.log('percent:', (progress_ms / song.duration_ms) * 100);
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
