@@ -309,7 +309,7 @@ class App extends React.Component {
   }
 
   clearInterval() {
-    this.clearInterval(this.state.intervalID);
+    clearInterval(this.state.intervalID);
     this.setState({ intervalID: null });
   }
 
@@ -360,7 +360,11 @@ class App extends React.Component {
                   </div>
                 </div>
                 <div className='artwork-container d-flex align-items-center justify-content-center'>
-                  <img id='artwork' src={song.album.images[1].url}></img>
+                  <img
+                    id='artwork'
+                    src={song.album.images[1].url}
+                    alt='Album artwork'
+                  ></img>
                 </div>
                 {/* <span>Welcome to minify!!</span>
             <h2>User: {user}</h2>
