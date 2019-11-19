@@ -179,6 +179,7 @@ class App extends React.Component {
         this.getCurrentlyPlaying();
       },
       error: err => {
+        this.clearInterval();
         if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
         }
@@ -338,8 +339,7 @@ class App extends React.Component {
 
   render() {
     const { queryResults } = this.state;
-    const { is_playing, progress_ms } = this.state.playState;
-    const song = this.state.playState.item || {};
+    const { is_playing, progress_ms, item } = this.state.playState;
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
@@ -354,15 +354,15 @@ class App extends React.Component {
           <div className='container'>
             <div className='d-inline-flex justify-content-center'>
               <div className='player-grid'>
-                <div className='logo-container-outer d-flex align-items-center justify-content-center'>
+                {/* <div className='logo-container-outer d-flex align-items-center justify-content-center'>
                   <div className="logo-container-inner d-flex align-items-center justify-content-center'">
                     <img id='logo' src='/logo.png' alt='Spotify Logo' />
                   </div>
-                </div>
+                </div> */}
                 <div className='artwork-container d-flex align-items-center justify-content-center'>
                   <img
                     id='artwork'
-                    src={song.album.images[1].url}
+                    src={item.album.images[1].url}
                     alt='Album artwork'
                   ></img>
                 </div>
@@ -397,13 +397,13 @@ class App extends React.Component {
                     type='range'
                     value={progress_ms}
                     onChange={this.handleSliderChange}
-                    max={song.duration_ms || 0}
+                    max={item.duration_ms || 0}
                     id='playback-slider'
                     style={{
                       background: `linear-gradient(
                       90deg, 
-                      #ffffff ${(progress_ms / song.duration_ms) * 100}%, 
-                      #000000 0%)`
+                      #ffffff ${(progress_ms / item.duration_ms) * 100}%, 
+                      #666666 0%)`
                     }}
                   />
                 </div>
@@ -420,14 +420,14 @@ class App extends React.Component {
             <div className='search-result'>
             <a
             onClick={() => {
-            this.playSong(song.album.uri, song.track_number);
+            this.playSong(item.album.uri, item.track_number);
             }}
             >
-            Song Name: {song.name}
+            Song Name: {item.name}
             </a>
             <p>
             Artist:{' '}
-            {song.artists
+            {item.artists
             .map(artist => {
             return artist.name;
             })
