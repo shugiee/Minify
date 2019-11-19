@@ -43,6 +43,9 @@ class App extends React.Component {
     this.seekPrevious = this.seekPrevious.bind(this);
     this.searchSpotify = this.searchSpotify.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.toggleShuffle = this.toggleShuffle.bind(this);
+    this.toggleLike = this.toggleLike.bind(this);
+    this.toggleRepeat = this.toggleRepeat.bind(this);
     this.incrementProgress = this.incrementProgress.bind(this);
     this.startInterval = this.startInterval.bind(this);
     this.clearInterval = this.clearInterval.bind(this);
@@ -346,6 +349,121 @@ class App extends React.Component {
     this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
   }
 
+  toggleShuffle() {
+    console.log('toggling shuffle!!');
+    $.ajax({
+      url: `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state
+        .playState.shuffle_state}`,
+      type: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      success: this.getCurrentlyPlaying,
+      error: err => {
+        if (err.status === 403 || err.status === 404) {
+          this.getCurrentlyPlaying();
+        } else if (err.status === 401) {
+          this.getNewAccessToken();
+        }
+        console.log(err);
+      }
+    });
+  }
+
+  toggleLike() {
+    console.log('toggling like!!');
+    if (this.state.likesCurrentSong) {
+      $.ajax({
+        url: `https://api.spotify.com/v1/me/tracks?ids=${this.state.playState.item.id}`,
+        type: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        beforeSend: xhr => {
+          xhr.setRequestHeader(
+            'Authorization',
+            'Bearer ' + this.state.access_token
+          );
+        },
+        success: this.getCurrentlyPlaying,
+        error: err => {
+          if (err.status === 403 || err.status === 404) {
+            this.getCurrentlyPlaying();
+          } else if (err.status === 401) {
+            this.getNewAccessToken();
+          }
+          console.log(err);
+        }
+      });
+    } else {
+      $.ajax({
+        url: `https://api.spotify.com/v1/me/tracks?ids=${this.state.playState.item.id}`,
+        type: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        beforeSend: xhr => {
+          xhr.setRequestHeader(
+            'Authorization',
+            'Bearer ' + this.state.access_token
+          );
+        },
+        success: this.getCurrentlyPlaying,
+        error: err => {
+          if (err.status === 403 || err.status === 404) {
+            this.getCurrentlyPlaying();
+          } else if (err.status === 401) {
+            this.getNewAccessToken();
+          }
+          console.log(err);
+        }
+      });
+    }
+  }
+
+  toggleRepeat() {
+    let repeat_state;
+    if (this.state.playState.repeat_state === 'context') {
+      repeat_state = 'off';
+    } else {
+      repeat_state = 'context';
+    }
+    console.log('toggling repeat!!');
+    $.ajax({
+      url: `https://api.spotify.com/v1/me/player/repeat?state=${repeat_state}`,
+      type: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      success: this.getCurrentlyPlaying,
+      error: err => {
+        this.clearInterval();
+        if (err.status === 403 || err.status === 404) {
+          this.getCurrentlyPlaying();
+        } else if (err.status === 401) {
+          this.getNewAccessToken();
+        }
+        console.log(err);
+      }
+    });
+  }
+
   incrementProgress() {
     this.setState(state => {
       state.playState.progress_ms += 1000;
@@ -440,7 +558,10 @@ class App extends React.Component {
                 </div>
               </div>
 
-              <Like likesCurrentSong={likesCurrentSong} />
+              <Like
+                likesCurrentSong={likesCurrentSong}
+                toggleLike={this.toggleLike}
+              />
 
               <PlaybackSlider
                 handleSliderChange={this.handleSliderChange}
@@ -448,7 +569,10 @@ class App extends React.Component {
                 duration_ms={duration_ms}
               />
 
-              <Shuffle shuffle_state={shuffle_state} />
+              <Shuffle
+                shuffle_state={shuffle_state}
+                toggleShuffle={this.toggleShuffle}
+              />
 
               <div
                 className='previous-container d-flex align-items-center justify-content-center'
@@ -470,7 +594,10 @@ class App extends React.Component {
                 <span id='next' className='icon'></span>
               </div>
 
-              <Repeat repeat_state={repeat_state} />
+              <Repeat
+                repeat_state={repeat_state}
+                toggleRepeat={this.toggleRepeat}
+              />
             </div>
           </div>
         </div>

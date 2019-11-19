@@ -4,13 +4,21 @@ const Shuffle = props => {
   if (props.shuffle_state) {
     return (
       <div className='shuffle-container d-flex align-items-center justify-content-center'>
-        <span id='shuffle' className='icon filter-green'></span>
+        <span
+          id='shuffle'
+          className='icon filter-green'
+          onClick={props.toggleShuffle}
+        ></span>
       </div>
     );
   } else {
     return (
       <div className='shuffle-container d-flex align-items-center justify-content-center'>
-        <span id='shuffle' className='icon'></span>
+        <span
+          id='shuffle'
+          className='icon'
+          onClick={props.toggleShuffle}
+        ></span>
       </div>
     );
   }
