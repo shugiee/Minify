@@ -22,10 +22,81 @@
 }
 
 body {
-  background-color: #222222;
+  background-color: #191414;
   color: #1db954;
+}
+
+.player-grid {
+  display: inline-grid;
+  grid-template-columns: [player-col-1] 40px [player-col-2] 20px [player-col-3] 40px [player-col-4] 20px;
+  grid-template-rows: [player-row-1] 100px [player-row-2] 20px;
+  width: 100%;
 }
 
 .btn {
   background-color: #1db954;
+}
+
+.icon {
+  filter: brightness(0) invert(1);
+}
+
+#resume {
+  background-image: url('http://localhost:3000/play-button.svg');
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#pause {
+  background-image: url('http://localhost:3000/pause-button.svg');
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#next {
+  background-image: url('http://localhost:3000/next-button.svg');
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#previous {
+  background-image: url('http://localhost:3000/previous-button.svg');
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.resume-container {
+  grid-column-start: player-col-2;
+  grid-column-end: player-col-3;
+  grid-row-start: player-row-2;
+  width: 25px;
+  height: 25px;
+}
+
+.pause-container {
+  grid-column-start: player-col-2;
+  grid-column-end: player-col-3;
+  grid-row-start: player-row-2;
+  width: 25px;
+  height: 25px;
+}
+
+.previous-container {
+  grid-column-start: player-col-1;
+  grid-column-end: player-col-2;
+  grid-row-start: player-row-2;
+  width: 20px;
+  height: 20px;
+}
+
+.next-container {
+  grid-column-start: player-col-3;
+  grid-column-end: player-col-4;
+  grid-row-start: player-row-2;
+  width: 20px;
+  height: 20px;
 }

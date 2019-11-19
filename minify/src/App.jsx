@@ -299,91 +299,102 @@ class App extends React.Component {
       return (
         <div className='App'>
           <div className='container'>
-            <h1>minify</h1>
-            <div>Welcome to minify!!</div>
-            <h2>User: {user}</h2>
-            <button
-              id='currently playing'
-              onClick={this.getCurrentlyPlaying}
-              className='btn btn-primary'
-            >
-              Get Current song
-            </button>
-            <button
-              id='resume'
-              onClick={this.resume}
-              className='btn btn-primary'
-            >
-              resume
-            </button>
-            <button id='pause' onClick={this.pause} className='btn btn-primary'>
-              pause
-            </button>
-            <button
-              id='next'
-              onClick={this.seekNext}
-              className='btn btn-primary'
-            >
-              next
-            </button>
-            <button
-              id='previous'
-              onClick={this.seekPrevious}
-              className='btn btn-primary'
-            >
-              previous
-            </button>
-            <button
-              className='btn btn-default'
-              id='obtain-new-token'
-              onClick={this.getNewAccessToken}
-            >
-              Refresh Token
-            </button>
-            <button
-              id='seek'
-              onClick={() => {
-                this.setState({ progress_ms: 25000 }, this.seek);
-              }}
-              className='btn btn-primary'
-            >
-              seek 25000
-            </button>
-            <input
-              type='range'
-              value={this.state.progress_ms}
-              onChange={this.handleSliderChange}
-              max={song.duration_ms || 0}
-            />
-            <input
-              type='text'
-              id='song-search'
-              value={this.state.query}
-              onChange={this.handleQueryChange}
-            />
-            <div>
-              {console.log(queryResults.tracks)}
-              {queryResults.tracks.items.map(song => {
-                return (
-                  <div className='search-result'>
-                    <a
-                      onClick={() => {
-                        this.playSong(song.album.uri, song.track_number);
-                      }}
-                    >
-                      Song Name: {song.name}
-                    </a>
-                    <p>
-                      Artist:{' '}
-                      {song.artists
-                        .map(artist => {
-                          return artist.name;
-                        })
-                        .join(' & ')}
-                    </p>
-                  </div>
-                );
-              })}
+            <div className='player-grid'>
+              <h1>minify</h1>
+              <span>Welcome to minify!!</span>
+              <h2>User: {user}</h2>
+              <button
+                id='currently playing'
+                onClick={this.getCurrentlyPlaying}
+                className='btn btn-primary'
+              >
+                Get Current song
+              </button>
+              <div className='previous-container' onClick={this.seekNext}>
+                <span id='previous' className='icon'></span>
+              </div>
+              <div className='resume-container' onClick={this.resume}>
+                <span id='resume' className='icon'></span>
+              </div>
+              <div className='pause-container' onClick={this.pause}>
+                <span id='pause' className='icon'></span>
+              </div>
+              <div className='next-container' onClick={this.seekPrevious}>
+                <span id='next' className='icon'></span>
+              </div>
+              {/* <button
+                id='pause'
+                onClick={this.pause}
+                className='btn btn-primary'
+              >
+                pause
+              </button>
+              <button
+                id='next'
+                onClick={this.seekNext}
+                className='btn btn-primary'
+              >
+                next
+              </button>
+              <button
+                id='previous'
+                onClick={this.seekPrevious}
+                className='btn btn-primary'
+              >
+                previous
+              </button> */}
+              <button
+                className='btn btn-default'
+                id='obtain-new-token'
+                onClick={this.getNewAccessToken}
+              >
+                Refresh Token
+              </button>
+              <button
+                id='seek'
+                onClick={() => {
+                  this.setState({ progress_ms: 25000 }, this.seek);
+                }}
+                className='btn btn-primary'
+              >
+                seek 25000
+              </button>
+              <input
+                type='range'
+                value={this.state.progress_ms}
+                onChange={this.handleSliderChange}
+                max={song.duration_ms || 0}
+              />
+              <input
+                type='text'
+                id='song-search'
+                value={this.state.query}
+                onChange={this.handleQueryChange}
+              />
+              <div>
+                {console.log(queryResults.tracks)}
+                {queryResults.tracks.items.map(song => {
+                  return (
+                    <div className='search-result'>
+                      <a
+                        onClick={() => {
+                          this.playSong(song.album.uri, song.track_number);
+                        }}
+                      >
+                        Song Name: {song.name}
+                      </a>
+                      <p>
+                        Artist:{' '}
+                        {song.artists
+                          .map(artist => {
+                            return artist.name;
+                          })
+                          .join(' & ')}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
