@@ -46,12 +46,14 @@ class App extends React.Component {
     this.seekPrevious = this.seekPrevious.bind(this);
     this.searchSpotify = this.searchSpotify.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
     this.toggleShuffle = this.toggleShuffle.bind(this);
     this.toggleLike = this.toggleLike.bind(this);
     this.toggleRepeat = this.toggleRepeat.bind(this);
     this.incrementProgress = this.incrementProgress.bind(this);
     this.startInterval = this.startInterval.bind(this);
     this.clearInterval = this.clearInterval.bind(this);
+    this.clearInput = this.clearInput.bind(this);
     this.getNewAccessToken = this.getNewAccessToken.bind(this);
 
     this.seekThrottle = _.throttle(this.seek, 500);
@@ -162,6 +164,7 @@ class App extends React.Component {
         );
       },
       success: () => {
+        this.clearInput();
         this.startInterval();
         this.getCurrentlyPlaying();
         this.checkLikeStatus();
@@ -348,6 +351,23 @@ class App extends React.Component {
     this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
   }
 
+  handleSearchButtonClick() {
+    if (this.state.showSearchBar) {
+      this.setState(state => {
+        return {
+          showSearchBar: !state.showSearchBar,
+          showSearchBar: false
+        };
+      });
+    } else {
+      this.setState(state => {
+        return {
+          showSearchBar: !state.showSearchBar
+        };
+      });
+    }
+  }
+
   toggleShuffle() {
     console.log('toggling shuffle!!');
     $.ajax({
@@ -488,6 +508,10 @@ class App extends React.Component {
     this.setState({ intervalID: null });
   }
 
+  clearInput() {
+    this.setState({ query: '', queryResults: { tracks: {} } });
+  }
+
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken() {
     $.ajax({
@@ -512,12 +536,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {
-      queryResults,
-      likesCurrentSong,
-      playState,
-      manual_progress
-    } = this.state;
+    const { queryResults, likesCurrentSong, playState } = this.state;
     const { is_playing, item, shuffle_state, repeat_state } = playState;
     const { progress_ms } = playState;
     const { duration_ms } = playState.item || 0;
@@ -539,11 +558,7 @@ class App extends React.Component {
             <div className='player-grid'>
               <div
                 className='search-container d-flex align-items-center justify-content-center'
-                onClick={() => {
-                  this.setState(state => {
-                    return { showSearchBar: !state.showSearchBar };
-                  });
-                }}
+                onClick={this.handleSearchButtonClick}
               >
                 <span id='search' className='icon'></span>
               </div>
@@ -551,13 +566,13 @@ class App extends React.Component {
               <div className='artwork-container'>
                 <img
                   id='artwork'
-                  src={item.album.images[1].url}
+                  src={item ? item.album.images[1].url : ''}
                   alt='Album artwork'
                 ></img>
               </div>
 
               <div className='song-name-container'>
-                <span id='song-name'>{item.name}</span>
+                <span id='song-name'>{item ? item.name : ''}</span>
               </div>
 
               <div className='artist-name-container'>
@@ -630,11 +645,20 @@ class App extends React.Component {
       return (
         <div className='container d-flex align-items-center justify-content-center'>
           <div id='login'>
+            <div className='spotify-logo-container d-flex align-items-center justify-content-center'>
+              <img
+                src='http://localhost:3000/spotify-icon.png'
+                id='spotify-logo'
+              ></img>
+            </div>
             <h1 className='intro' id='minify-top'>
               Welcome to
             </h1>
             <div className='minify-container'>
-              <h1 className='minify'>minify</h1>
+              <h1 className='minify'>Minify</h1>
+            </div>
+            <div className='spotify-logo-container'>
+              <p className='subtle'>A Spotify Mini-Player</p>
             </div>
             <h1 className='intro'>Please login to Spotify below</h1>
             <div id='login-button-container'>

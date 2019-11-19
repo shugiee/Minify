@@ -33,10 +33,16 @@ body {
 ::placeholder {
   font-size: 0.75rem;
   padding-left: 5px;
+  color: #cccccc;
 }
 
 input:focus {
   outline: none;
+}
+
+#player-front {
+  overflow: auto;
+  overflow-y: hidden;
 }
 
 .player-grid {
@@ -54,19 +60,42 @@ input:focus {
 }
 
 #minify-top {
-  margin-top: 55px;
 }
 
 .intro {
   color: #ffffff;
-  font-size: 1.5em;
+  font-size: 1.25em;
   text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .minify-container {
   background-color: #1db954;
   border-radius: 5px;
   text-align: center;
+  padding: 7px 0;
+  margin-bottom: 20px;
+}
+
+.spotify-logo-container {
+  width: 100%;
+  display: inline-block;
+}
+
+.subtle {
+  color: #999999;
+  text-align: center;
+}
+
+#login {
+  margin-top: 25px;
+}
+
+#spotify-logo {
+  /* background-image: url('http://localhost:3000/spotify-icon.png'); */
+  width: 50px;
+  height: 50px;
 }
 
 #login-button {
@@ -80,7 +109,7 @@ input:focus {
 
 #login-button-container {
   background-color: #1db954;
-  margin-top: 50px;
+  margin-top: 20px;
   border-radius: 10px;
   text-align: center;
 }
@@ -125,8 +154,13 @@ input:focus {
 #search-bar {
   display: inline-grid;
   background-color: transparent;
-  border: 1px solid #999999;
+  border: 1px solid #ffffff;
   border-radius: 5px;
+  color: #ffffff;
+  padding-left: 5px;
+  font-size: 0.75rem;
+  height: 25px;
+  width: 100%;
 }
 
 #like-true {
