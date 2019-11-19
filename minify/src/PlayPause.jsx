@@ -1,7 +1,6 @@
 import React from 'react';
 
 const PlayPause = props => {
-  console.log(props);
   if (props.is_playing) {
     return (
       <div

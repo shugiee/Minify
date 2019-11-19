@@ -10,14 +10,16 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      playState: { device: { is_active: false } },
+      playState: {
+        device: { is_active: false },
+        item: { album: { images: ['', '', ''] } }
+      },
       isAuthenticated: false,
       // user: 'Hard Code Jonathan',
       access_token:
         'BQBeTr9b3iUHIbLppJJt9xJTchUkziSJCZtFJ4uWcM__QUwQjS4nMjSgVzqbjl7Ve36A1_4pDR_IMtfTWxlfX3YcaSkJxHw4J3TBQOcfrMbSrN2A8n5ZrSAn-GeKUnkLoaP9qR5gsn3oU9Ognsc14lA0YmQepMk1lMi38Z14H6o5qMr3Ol2SypKC499lIkE5jUAKo_9iep4AUqUZLOHsg-jisspLYBX1NZDBHtOqjzIiEqADCJftxo2MmeCrU5YIqs4hzRPkeexd',
       refresh_token:
         'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
-      item: '',
       progress_ms: 0,
       query: '',
       queryResults: { tracks: {} }
@@ -290,27 +292,27 @@ class App extends React.Component {
   render() {
     const { queryResults } = this.state;
     const { is_playing } = this.state.playState;
-    const song = this.state.item || {};
+    const song = this.state.playState.item || {};
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
         <div className='App'>
-          <button
+          {/* <button
             className='btn btn-default'
             id='obtain-new-token'
             onClick={this.getNewAccessToken}
           >
             Refresh Token
-          </button>
+          </button> */}
           <div className='container'>
             <div className='d-inline-flex justify-content-center'>
               <div className='player-grid'>
                 <div className='title-container d-inline-flex justify-content-center'>
                   <h1>minify</h1>
                 </div>
-                {/* <div className='artwork-container d-inline-flex justify-content-center'>
-                  <img src={this.state.}></img>
-                </div> */}
+                <div className='artwork-container  d-flex align-items-center justify-content-center'>
+                  <img id='artwork' src={song.album.images[1].url}></img>
+                </div>
                 {/* <span>Welcome to minify!!</span>
             <h2>User: {user}</h2>
             <button
