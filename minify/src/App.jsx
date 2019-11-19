@@ -19,7 +19,8 @@ class App extends React.Component {
         'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
       item: '',
       is_playing: '',
-      progress_ms: 0
+      progress_ms: 0,
+      query: ''
     };
 
     this.setState = this.setState.bind(this);
@@ -28,10 +29,15 @@ class App extends React.Component {
     this.resume = this.resume.bind(this);
     this.pause = this.pause.bind(this);
     this.seek = this.seek.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleSliderChange = this.handleSliderChange.bind(this);
     this.seekNext = this.seekNext.bind(this);
     this.seekPrevious = this.seekPrevious.bind(this);
+    this.searchSpotify = this.searchSpotify.bind(this);
+    this.handleQueryChange = this.handleQueryChange.bind(this);
     this.getNewAccessToken = this.getNewAccessToken.bind(this);
+
+    this.seekThrottle = _.throttle(this.seek, 500);
+    this.searchSpotifyThrottle = _.throttle(this.searchSpotify, 500);
   }
 
   componentDidMount() {
@@ -143,34 +149,27 @@ class App extends React.Component {
     const value = this.state.progress_ms;
     console.log('seeking:', value);
     // seek/scrub to part of song
-    _.debounce(() => {
-      $.ajax({
-        url: `https://api.spotify.com/v1/me/player/seek?position_ms=${value}`,
-        type: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        beforeSend: xhr => {
-          xhr.setRequestHeader(
-            'Authorization',
-            'Bearer ' + this.state.access_token
-          );
-        },
-        error: err => {
-          console.log(err);
-        }
-      });
-    }, 500)();
+    $.ajax({
+      url: `https://api.spotify.com/v1/me/player/seek?position_ms=${value}`,
+      type: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
-  handleChange(event) {
-    this.setState({ progress_ms: event.target.value });
-    // console.log(value);
-    // _.debounce(() => {
-    //   this.seek(value);
-    // }, 50);
-    this.seek();
+  handleSliderChange(event) {
+    this.setState({ progress_ms: event.target.value }, this.seekThrottle);
   }
 
   seekNext() {
@@ -213,6 +212,35 @@ class App extends React.Component {
     });
   }
 
+  searchSpotify() {
+    const { query } = this.state;
+    const joinedQuery = query.replace(' ', '%20') + '&type=track';
+    $.ajax({
+      url: `https://api.spotify.com/v1/search?q=${joinedQuery}`,
+      type: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      success: data => {
+        console.log(data);
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  handleQueryChange(event) {
+    this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
+  }
+
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken() {
     $.ajax({
@@ -236,63 +264,69 @@ class App extends React.Component {
     const song = this.state.item || {};
     if (this.state.isAuthenticated) {
       return (
-        <div className="App">
-          <div className="container">
+        <div className='App'>
+          <div className='container'>
             <h1>minify</h1>
             <div>Welcome to minify!!</div>
             <h2>User: {user}</h2>
             <button
-              id="currently playing"
+              id='currently playing'
               onClick={this.getCurrentlyPlaying}
-              className="btn btn-primary"
+              className='btn btn-primary'
             >
               Get Current song
             </button>
             <button
-              id="resume"
+              id='resume'
               onClick={this.resume}
-              className="btn btn-primary"
+              className='btn btn-primary'
             >
               resume
             </button>
-            <button id="pause" onClick={this.pause} className="btn btn-primary">
+            <button id='pause' onClick={this.pause} className='btn btn-primary'>
               pause
             </button>
             <button
-              id="next"
+              id='next'
               onClick={this.seekNext}
-              className="btn btn-primary"
+              className='btn btn-primary'
             >
               next
             </button>
             <button
-              id="previous"
+              id='previous'
               onClick={this.seekPrevious}
-              className="btn btn-primary"
+              className='btn btn-primary'
             >
               previous
             </button>
             <button
-              className="btn btn-default"
-              id="obtain-new-token"
+              className='btn btn-default'
+              id='obtain-new-token'
               onClick={this.getNewAccessToken}
             >
               Refresh Token
             </button>
             <button
-              id="seek"
+              id='seek'
               onClick={() => {
                 this.setState({ progress_ms: 25000 }, this.seek);
               }}
-              className="btn btn-primary"
+              className='btn btn-primary'
             >
               seek 25000
             </button>
             <input
-              type="range"
+              type='range'
               value={this.state.progress_ms}
-              onChange={this.handleChange}
+              onChange={this.handleSliderChange}
               max={song.duration_ms || 0}
+            />
+            <input
+              type='text'
+              id='song-search'
+              value={this.state.query}
+              onChange={this.handleQueryChange}
             />
             {/* <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
@@ -302,16 +336,16 @@ class App extends React.Component {
       );
     } else {
       return (
-        <div className="container">
-          <div id="login">
+        <div className='container'>
+          <div id='login'>
             <h1>Welcome to minify! Please login to Spotify below</h1>
-            <a href="http://localhost:8888/login" className="btn btn-primary">
+            <a href='http://localhost:8888/login' className='btn btn-primary'>
               Log in with Spotify
             </a>
           </div>
-          <div id="loggedin">
-            <div id="user-profile"></div>
-            <div id="oauth"></div>
+          <div id='loggedin'>
+            <div id='user-profile'></div>
+            <div id='oauth'></div>
           </div>
         </div>
       );
