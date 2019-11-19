@@ -20,7 +20,8 @@ class App extends React.Component {
       item: '',
       is_playing: '',
       progress_ms: 0,
-      query: ''
+      query: '',
+      queryResults: { tracks: {} }
     };
 
     this.setState = this.setState.bind(this);
@@ -37,7 +38,7 @@ class App extends React.Component {
     this.getNewAccessToken = this.getNewAccessToken.bind(this);
 
     this.seekThrottle = _.throttle(this.seek, 500);
-    this.searchSpotifyThrottle = _.throttle(this.searchSpotify, 500);
+    this.searchSpotifyThrottle = _.throttle(this.searchSpotify, 1000);
   }
 
   componentDidMount() {
@@ -230,6 +231,7 @@ class App extends React.Component {
       },
       success: data => {
         console.log(data);
+        this.setState({ queryResults: data });
       },
       error: err => {
         console.log(err);
@@ -260,8 +262,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { user } = this.state;
+    const { user, queryResults } = this.state;
     const song = this.state.item || {};
+    queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
         <div className='App'>
@@ -328,6 +331,24 @@ class App extends React.Component {
               value={this.state.query}
               onChange={this.handleQueryChange}
             />
+            <div>
+              {console.log(queryResults.tracks)}
+              {queryResults.tracks.items.map(song => {
+                return (
+                  <div className='search-result'>
+                    <p>Song Name: {song.name}</p>
+                    <p>
+                      Artist:{' '}
+                      {song.artists
+                        .map(artist => {
+                          return artist.name;
+                        })
+                        .join(' & ')}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
             {/* <p>item: {this.state.item}</p>
           <p>is_playing {this.state.is_playing}</p>
           <p>progress_ms: {this.state.progress_ms}</p> */}
