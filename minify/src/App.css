@@ -77,11 +77,6 @@ body {
   filter: brightness(0) invert(1);
 }
 
-.filter-green {
-  filter: brightness(0) saturate(100%) invert(79%) sepia(46%) saturate(4008%)
-    hue-rotate(116deg) brightness(92%) contrast(93%) !important;
-}
-
 #like-false {
   background-image: url('http://localhost:3000/like-button-clear.svg');
   width: 13px;
@@ -256,4 +251,9 @@ input[type='range']::-webkit-slider-thumb {
   width: 7px;
   background-color: #ffffff;
   border-radius: 40%;
+}
+
+.filter-green {
+  filter: invert(79%) sepia(46%) saturate(4008%) hue-rotate(116deg)
+    brightness(92%) contrast(93%) !important;
 }

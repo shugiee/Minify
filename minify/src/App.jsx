@@ -3,6 +3,8 @@ import $ from 'jquery';
 import './App.css';
 import PlayPause from './PlayPause.jsx';
 import Like from './Like.jsx';
+import Shuffle from './Shuffle.jsx';
+import Repeat from './Repeat.jsx';
 import * as helperJS from './helperJS';
 import _ from 'lodash';
 
@@ -341,18 +343,18 @@ class App extends React.Component {
 
   incrementProgress() {
     this.setState(state => {
-      state.playState.progress_ms += 250;
-      if (state.playState.duration_ms - state.playState.progress_ms < 500) {
+      state.playState.progress_ms += 1000;
+      if (state.playState.duration_ms - state.playState.progress_ms < 1000) {
         setTimeout(() => {
           this.getCurrentlyPlaying();
-        }, 650);
+        }, 1200);
       }
       return { playState: state.playState };
     });
   }
 
   startInterval() {
-    const intervalID = setInterval(this.incrementProgress, 250);
+    const intervalID = setInterval(this.incrementProgress, 1000);
     this.setState({ intervalID });
   }
 
@@ -385,8 +387,15 @@ class App extends React.Component {
   }
 
   render() {
-    const { queryResults, likesCurrentSong } = this.state;
-    const { is_playing, progress_ms, item } = this.state.playState;
+    const { queryResults, likesCurrentSong, playState } = this.state;
+    const {
+      is_playing,
+      progress_ms,
+      item,
+      shuffle_state,
+      repeat_state
+    } = playState;
+    console.log('shuffle_state:', shuffle_state);
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
@@ -444,9 +453,7 @@ class App extends React.Component {
                 />
               </div>
 
-              <div className='shuffle-container d-flex align-items-center justify-content-center'>
-                <span id='shuffle' className='icon'></span>
-              </div>
+              <Shuffle shuffle_state={shuffle_state} />
 
               <div
                 className='previous-container d-flex align-items-center justify-content-center'
@@ -468,9 +475,7 @@ class App extends React.Component {
                 <span id='next' className='icon'></span>
               </div>
 
-              <div className='repeat-container d-flex align-items-center justify-content-center'>
-                <span id='repeat' className='icon'></span>
-              </div>
+              <Repeat repeat_state={repeat_state} />
             </div>
           </div>
         </div>
