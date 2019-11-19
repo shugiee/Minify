@@ -3,6 +3,7 @@ import $ from 'jquery';
 import './App.css';
 import PlayPause from './PlayPause.jsx';
 import Like from './Like.jsx';
+import PlaybackSlider from './PlaybackSlider.jsx';
 import Shuffle from './Shuffle.jsx';
 import Repeat from './Repeat.jsx';
 import * as helperJS from './helperJS';
@@ -16,7 +17,8 @@ class App extends React.Component {
       playState: {
         device: { is_active: false },
         item: { album: { images: ['', '', ''], artists: [] } },
-        progress_ms: 0
+        progress_ms: 0,
+        duration_ms: 0
       },
       isAuthenticated: false,
       // user: 'Hard Code Jonathan',
@@ -24,7 +26,6 @@ class App extends React.Component {
         'BQBeTr9b3iUHIbLppJJt9xJTchUkziSJCZtFJ4uWcM__QUwQjS4nMjSgVzqbjl7Ve36A1_4pDR_IMtfTWxlfX3YcaSkJxHw4J3TBQOcfrMbSrN2A8n5ZrSAn-GeKUnkLoaP9qR5gsn3oU9Ognsc14lA0YmQepMk1lMi38Z14H6o5qMr3Ol2SypKC499lIkE5jUAKo_9iep4AUqUZLOHsg-jisspLYBX1NZDBHtOqjzIiEqADCJftxo2MmeCrU5YIqs4hzRPkeexd',
       refresh_token:
         'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
-      progress_ms: 0,
       query: '',
       queryResults: { tracks: {} },
       likesCurrentSong: false
@@ -221,7 +222,7 @@ class App extends React.Component {
   }
 
   seek() {
-    const value = this.state.progress_ms;
+    const value = this.state.item.progress_ms;
     // seek/scrub to part of song
     $.ajax({
       url: `https://api.spotify.com/v1/me/player/seek?position_ms=${value}`,
@@ -256,7 +257,11 @@ class App extends React.Component {
   }
 
   handleSliderChange(event) {
-    this.setState({ progress_ms: event.target.value });
+    console.log('handling slider change!');
+    const { playState } = this.state;
+    console.log(playState);
+    playState.progress_ms = event.target.value;
+    this.setState({ playState });
     this.seekThrottle();
   }
 
@@ -393,9 +398,9 @@ class App extends React.Component {
       progress_ms,
       item,
       shuffle_state,
-      repeat_state
+      repeat_state,
+      duration_ms
     } = playState;
-    console.log('shuffle_state:', shuffle_state);
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
@@ -437,21 +442,11 @@ class App extends React.Component {
 
               <Like likesCurrentSong={likesCurrentSong} />
 
-              <div className='playback-slider-container'>
-                <input
-                  type='range'
-                  value={progress_ms}
-                  onChange={this.handleSliderChange}
-                  max={item.duration_ms || 0}
-                  id='playback-slider'
-                  style={{
-                    background: `linear-gradient(
-                      90deg, 
-                      #ffffff ${(progress_ms / item.duration_ms) * 100}%, 
-                      #666666 0%)`
-                  }}
-                />
-              </div>
+              <PlaybackSlider
+                handleSliderChange={this.handleSliderChange}
+                progress_ms={progress_ms}
+                duration_ms={duration_ms}
+              />
 
               <Shuffle shuffle_state={shuffle_state} />
 
