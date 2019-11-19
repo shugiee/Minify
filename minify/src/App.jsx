@@ -142,7 +142,7 @@ class App extends React.Component {
       },
       success: this.getCurrentlyPlaying,
       error: err => {
-        if (err.status === 403) {
+        if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
         }
         console.log(err);
@@ -166,7 +166,7 @@ class App extends React.Component {
       },
       success: this.getCurrentlyPlaying,
       error: err => {
-        if (err.status === 403) {
+        if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
         }
         console.log(err);
@@ -188,6 +188,19 @@ class App extends React.Component {
         xhr.setRequestHeader(
           'Authorization',
           'Bearer ' + this.state.access_token
+        );
+      },
+      success: () => {
+        this.setState(
+          state => {
+            state.playState.item.progress_ms = parseInt(value);
+            return {
+              playState: state.playState
+            };
+          },
+          () => {
+            console.log(this.state);
+          }
         );
       },
       error: err => {
@@ -283,16 +296,22 @@ class App extends React.Component {
         console.log(err);
       }
     }).done(data => {
-      this.setState({
-        access_token: data.access_token
-      });
+      this.setState(
+        {
+          access_token: data.access_token
+        },
+        setTimeout(() => {
+          this.getNewAccessToken();
+        }, 3500)
+      );
     });
   }
 
   render() {
     const { queryResults } = this.state;
-    const { is_playing } = this.state.playState;
+    const { is_playing, progress_ms } = this.state.playState;
     const song = this.state.playState.item || {};
+    console.log('percent:', (progress_ms / song.duration_ms) * 100);
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
@@ -307,10 +326,12 @@ class App extends React.Component {
           <div className='container'>
             <div className='d-inline-flex justify-content-center'>
               <div className='player-grid'>
-                <div className='title-container d-inline-flex justify-content-center'>
-                  <h1>minify</h1>
+                <div className='logo-container-outer d-flex align-items-center justify-content-center'>
+                  <div className="logo-container-inner d-flex align-items-center justify-content-center'">
+                    <img id='logo' src='/logo.png' alt='Spotify Logo' />
+                  </div>
                 </div>
-                <div className='artwork-container  d-flex align-items-center justify-content-center'>
+                <div className='artwork-container d-flex align-items-center justify-content-center'>
                   <img id='artwork' src={song.album.images[1].url}></img>
                 </div>
                 {/* <span>Welcome to minify!!</span>
@@ -342,10 +363,16 @@ class App extends React.Component {
                 <div className='playback-slider-container'>
                   <input
                     type='range'
-                    value={this.state.progress_ms}
+                    value={progress_ms}
                     onChange={this.handleSliderChange}
                     max={song.duration_ms || 0}
                     id='playback-slider'
+                    style={{
+                      background: `linear-gradient(
+                      90deg, 
+                      #ffffff ${(progress_ms / song.duration_ms) * 100}%, 
+                      #000000 0%)`
+                    }}
                   />
                 </div>
                 {/* <input
