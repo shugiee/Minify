@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import './App.css';
+import PlayPause from './PlayPause.jsx';
 import * as helperJS from './helperJS';
 import * as _ from 'lodash';
 
@@ -9,6 +10,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      playState: { device: { is_active: false } },
       isAuthenticated: false,
       // user: 'Hard Code Jonathan',
       access_token:
@@ -16,7 +18,6 @@ class App extends React.Component {
       refresh_token:
         'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
       item: '',
-      is_playing: '',
       progress_ms: 0,
       query: '',
       queryResults: { tracks: {} }
@@ -50,11 +51,10 @@ class App extends React.Component {
           access_token: tokens.access_token,
           refresh_token: tokens.refresh_token
         },
-        () => {
-          // get current song
-          this.getCurrentlyPlaying();
-        }
+        this.getCurrentlyPlaying
       );
+    } else {
+      this.login();
     }
   }
 
@@ -66,14 +66,11 @@ class App extends React.Component {
         console.log(err);
       },
       success: xhr => {
-        console.log('SUCCESS', xhr);
         this.setState(
           {
             isAuthenticated: true
-          }
-          // () => {
-          //   res.redirect('http://localhost:3000');
-          // }
+          },
+          this.getCurrentlyPlaying
         );
       }
     });
@@ -81,32 +78,24 @@ class App extends React.Component {
 
   getCurrentlyPlaying() {
     // Make a call using the token
-    // $.ajax({
-    //   url: 'https://api.spotify.com/v1/me/player',
-    //   type: 'GET',
-    //   beforeSend: xhr => {
-    //     xhr.setRequestHeader(
-    //       'Authorization',
-    //       'Bearer ' + this.state.access_token
-    //     );
-    //   },
-    //   success: data => {
-    //     this.setState(
-    //       {
-    //         item: data.item,
-    //         is_playing: JSON.stringify(data.is_playing),
-    //         progress_ms: data.progress_ms
-    //       },
-    //       () => {
-    //         console.log(this.state);
-    //       }
-    //     );
-    //   }
-    // });
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player',
+      type: 'GET',
+      beforeSend: xhr => {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Bearer ' + this.state.access_token
+        );
+      },
+      success: data => {
+        this.setState({
+          playState: data
+        });
+      }
+    });
   }
 
   playSong(context_uri, song_number) {
-    console.log(context_uri);
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/play',
       type: 'PUT',
@@ -128,6 +117,7 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
+      success: this.getCurrentlyPlaying,
       error: err => {
         console.log(err);
       }
@@ -148,7 +138,11 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
+      success: this.getCurrentlyPlaying,
       error: err => {
+        if (err.status === 403) {
+          this.getCurrentlyPlaying();
+        }
         console.log(err);
       }
     });
@@ -168,7 +162,11 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
+      success: this.getCurrentlyPlaying,
       error: err => {
+        if (err.status === 403) {
+          this.getCurrentlyPlaying();
+        }
         console.log(err);
       }
     });
@@ -176,7 +174,6 @@ class App extends React.Component {
 
   seek() {
     const value = this.state.progress_ms;
-    console.log('seeking:', value);
     // seek/scrub to part of song
     $.ajax({
       url: `https://api.spotify.com/v1/me/player/seek?position_ms=${value}`,
@@ -215,6 +212,7 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
+      success: this.getCurrentlyPlaying,
       error: err => {
         console.log(err);
       }
@@ -235,6 +233,7 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
+      success: this.getCurrentlyPlaying,
       error: err => {
         console.log(err);
       }
@@ -258,7 +257,6 @@ class App extends React.Component {
         );
       },
       success: data => {
-        console.log(data);
         this.setState({ queryResults: data });
       },
       error: err => {
@@ -291,11 +289,19 @@ class App extends React.Component {
 
   render() {
     const { queryResults } = this.state;
+    const { is_playing } = this.state.playState;
     const song = this.state.item || {};
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
         <div className='App'>
+          <button
+            className='btn btn-default'
+            id='obtain-new-token'
+            onClick={this.getNewAccessToken}
+          >
+            Refresh Token
+          </button>
           <div className='container'>
             <div className='d-inline-flex justify-content-center'>
               <div className='player-grid'>
@@ -320,61 +326,17 @@ class App extends React.Component {
                 >
                   <span id='previous' className='icon'></span>
                 </div>
-                <div
-                  className='resume-container d-flex align-items-center justify-content-center'
-                  onClick={this.resume}
-                >
-                  <span id='resume' className='icon'></span>
-                </div>
-                <div
-                  className='pause-container d-flex align-items-center justify-content-center'
-                  onClick={this.pause}
-                >
-                  <span id='pause' className='icon'></span>
-                </div>
+                <PlayPause
+                  is_playing={is_playing}
+                  resume={this.resume}
+                  pause={this.pause}
+                />
                 <div
                   className='next-container d-flex align-items-center justify-content-center'
                   onClick={this.seekPrevious}
                 >
                   <span id='next' className='icon'></span>
                 </div>
-                {/* <button
-            id='pause'
-            onClick={this.pause}
-            className='btn btn-primary'
-            >
-            pause
-            </button>
-            <button
-            id='next'
-            onClick={this.seekNext}
-            className='btn btn-primary'
-            >
-            next
-            </button>
-            <button
-            id='previous'
-            onClick={this.seekPrevious}
-            className='btn btn-primary'
-            >
-            previous
-            </button> */}
-                {/* <button
-            className='btn btn-default'
-            id='obtain-new-token'
-            onClick={this.getNewAccessToken}
-            >
-            Refresh Token
-            </button>
-            <button
-            id='seek'
-            onClick={() => {
-            this.setState({ progress_ms: 25000 }, this.seek);
-            }}
-            className='btn btn-primary'
-            >
-            seek 25000
-            </button> */}
                 <div className='playback-slider-container'>
                   <input
                     type='range'

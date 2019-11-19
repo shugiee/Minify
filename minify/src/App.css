@@ -28,7 +28,7 @@ body {
 
 .player-grid {
   display: inline-grid;
-  grid-template-columns: [player-col-1] 40px [player-col-2] 15px [player-col-3] 20px [player-col-4] 50px [player-col-5] 20px [player-col-6] 15px [player-col-7] 40px [player-col-end] 0px;
+  grid-template-columns: [player-col-1] 20px [player-col-2] 35px [player-col-3] 20px [player-col-4] 50px [player-col-5] 20px [player-col-6] 35px [player-col-7] 20px [player-col-end] 0px;
   grid-template-rows: [player-row-1] 50px [player-row-2] auto [player-row-3] 40px [player-row-4] 15px;
   width: 200px;
   height: 350px;
@@ -39,6 +39,10 @@ body {
 }
 
 .icon {
+  filter: brightness(0) invert(0.75);
+}
+
+.icon:hover {
   filter: brightness(0) invert(1);
 }
 
