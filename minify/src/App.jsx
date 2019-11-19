@@ -633,7 +633,11 @@ class App extends React.Component {
               <div className='search-results-container'>
                 {queryResults.tracks.items.map(song => {
                   return (
-                    <SearchResult result={song} playSong={this.playSong} />
+                    <SearchResult
+                      result={song}
+                      playSong={this.playSong}
+                      showSearchBar={this.state.showSearchBar}
+                    />
                   );
                 })}
               </div>
