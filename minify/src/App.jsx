@@ -140,7 +140,11 @@ class App extends React.Component {
       },
       success: data => {
         if (data) {
+          this.checkLikeStatus();
           this.startInterval();
+          // data.item is null if a search reasult was just played, which causes downstream errors
+          // to combat this, use old item; it will be wiped in subsequent API calls anyway
+          data.item = data.item ? data.item : this.state.playState.item;
           this.setState(
             {
               playState: data
@@ -149,7 +153,6 @@ class App extends React.Component {
               if (!data.is_playing) {
                 this.clearInterval();
               }
-              this.checkLikeStatus();
             }
           );
         } else {
@@ -174,10 +177,7 @@ class App extends React.Component {
         },
         success: data => {
           this.setState({ devices: data.devices }, () => {
-            this.playSong(
-              this.state.topSong.album.uri,
-              this.staet.topSong.track_number
-            );
+            this.playSong(this.state.topSong, 'topSong');
           });
         },
         error: err => console.error(err)
@@ -203,7 +203,7 @@ class App extends React.Component {
         success: songs => {
           const topSong = songs.items[0];
           this.setState({ topSong }, () => {
-            this.playSong(null, null, topSong.uri);
+            this.playSong(topSong, 'topSong');
           });
         },
         error: err => console.error(err)
@@ -215,7 +215,7 @@ class App extends React.Component {
 
   checkLikeStatus() {
     console.log('check like status called!');
-    if (this.state.playState.item && this.state.playState.item.id) {
+    if (this.state.playState.item.id) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks/contains?ids=${this.state.playState.item.id}`,
         type: 'GET',
@@ -234,20 +234,21 @@ class App extends React.Component {
     }
   }
 
-  playSong(context_uri, song_number, device_id, uri) {
-    console.log('play song called!');
+  playSong(song, origin, device_id) {
+    console.log(`play song called from origin: ${origin}`);
     const device = device_id ? device_id : '';
     let data;
-    if (uri) {
+    // if playing top song, use 'uris' array instead of context
+    if (origin === 'topSong') {
       data = JSON.stringify({
-        uris: [uri],
+        uris: [song.uri],
         position_ms: 0
       });
     } else {
       data = JSON.stringify({
-        context_uri: context_uri,
+        context_uri: song.album.uri,
         offset: {
-          position: song_number - 1
+          position: song.track_number - 1
         },
         position_ms: 0
       });
@@ -266,15 +267,18 @@ class App extends React.Component {
           'Bearer ' + this.state.access_token
         );
       },
-      success: () => {
+      success: song => {
         this.clearInput();
-        this.startInterval();
         this.getCurrentlyPlaying();
-        this.checkLikeStatus();
       },
       error: err => {
         console.error(err);
       }
+    });
+    // Save this new song as playState.item, to immediately render song data
+    this.setState(state => {
+      state.playState.item = song;
+      return { playState: state.playState };
     });
   }
 
@@ -446,26 +450,28 @@ class App extends React.Component {
     console.log('search spotify called!');
     const { query } = this.state;
     const joinedQuery = query.replace(' ', '%20');
-    $.ajax({
-      url: `https://api.spotify.com/v1/search?q=${joinedQuery}&type=track&limit=10`,
-      type: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      beforeSend: xhr => {
-        xhr.setRequestHeader(
-          'Authorization',
-          'Bearer ' + this.state.access_token
-        );
-      },
-      success: data => {
-        this.setState({ queryResults: data });
-      },
-      error: err => {
-        console.error(err);
-      }
-    });
+    if (query.length) {
+      $.ajax({
+        url: `https://api.spotify.com/v1/search?q=${joinedQuery}&type=track&limit=10`,
+        type: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        beforeSend: xhr => {
+          xhr.setRequestHeader(
+            'Authorization',
+            'Bearer ' + this.state.access_token
+          );
+        },
+        success: data => {
+          this.setState({ queryResults: data });
+        },
+        error: err => {
+          console.error(err);
+        }
+      });
+    }
   }
 
   handleQueryChange(event) {
@@ -807,6 +813,7 @@ class App extends React.Component {
                       song={song}
                       playSong={this.playSong}
                       showSearchBar={this.state.showSearchBar}
+                      // key={song ? song.id : 0}
                     />
                   );
                 })}

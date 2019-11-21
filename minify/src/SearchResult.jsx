@@ -7,7 +7,7 @@ const SearchResult = props => {
       <div className='search-result'>
         <a
           onClick={() => {
-            props.playSong(song.album.uri, song.track_number);
+            props.playSong(song, 'searchResult');
           }}
         >
           Song Name: {song.name}
