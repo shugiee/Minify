@@ -847,6 +847,21 @@ class App extends React.Component {
                 LOG IN WITH SPOTIFY
               </a>
             </div>
+            <div className='subtle-credit-container d-flex align-items-center justify-content-center'>
+              <p className='subtle-credit'>
+                Made by{' '}
+                <a href='https://github.com/MyNameIsJonathan' target='_blank'>
+                  Jay Olson
+                </a>{' '}
+                through the generosity of the public-facing{' '}
+                <a
+                  href='https://developer.spotify.com/documentation/web-api/'
+                  target='_blank'
+                >
+                  Spotify API
+                </a>
+              </p>
+            </div>
           </div>
           <div id='loggedin'>
             <div id='user-profile'></div>

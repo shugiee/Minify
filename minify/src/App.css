@@ -67,9 +67,6 @@ input:focus {
   filter: brightness(0) invert(1);
 }
 
-#minify-top {
-}
-
 .intro {
   color: #ffffff;
   font-size: 1.25em;
@@ -94,6 +91,19 @@ input:focus {
 .subtle {
   color: #999999;
   text-align: center;
+}
+
+.subtle-credit-container {
+  border-radius: 5px;
+  text-align: center;
+  padding: 7px 0;
+  margin: 10px 5px;
+}
+
+.subtle-credit {
+  color: #999999;
+  text-align: center;
+  font-size: 0.75rem;
 }
 
 #login {
