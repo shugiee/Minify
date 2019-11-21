@@ -140,7 +140,6 @@ class App extends React.Component {
       },
       success: data => {
         if (data) {
-          this.checkLikeStatus();
           this.startInterval();
           // data.item is null if a search reasult was just played, which causes downstream errors
           // to combat this, use old item; it will be wiped in subsequent API calls anyway
@@ -153,6 +152,7 @@ class App extends React.Component {
               if (!data.is_playing) {
                 this.clearInterval();
               }
+              this.checkLikeStatus();
             }
           );
         } else {
