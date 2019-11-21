@@ -61,7 +61,7 @@ class App extends React.Component {
     this.transferDevice = this.transferDevice.bind(this);
 
     this.seekThrottle = _.throttle(this.seek, 500);
-    this.searchSpotifyThrottle = _.throttle(this.searchSpotify, 3000);
+    this.searchSpotifyThrottle = _.throttle(this.searchSpotify, 250);
   }
 
   componentDidMount() {
@@ -237,49 +237,54 @@ class App extends React.Component {
   playSong(song, origin, device_id) {
     console.log(`play song called from origin: ${origin}`);
     // Save this new song as playState.item, to immediately render song data
-    this.setState(state => {
-      state.playState.item = song;
-      return { playState: state.playState };
-    });
-    const device = device_id ? device_id : '';
-    let data;
-    // if playing top song, use 'uris' array instead of context
-    if (origin === 'topSong') {
-      data = JSON.stringify({
-        uris: [song.uri],
-        position_ms: 0,
-      });
-    } else {
-      data = JSON.stringify({
-        context_uri: song.album.uri,
-        offset: {
-          position: song.track_number - 1,
-        },
-        position_ms: 0,
-      });
-    }
-    $.ajax({
-      url: `https://api.spotify.com/v1/me/player/play${device}`,
-      type: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    this.setState(
+      state => {
+        state.playState.item = song;
+        return { playState: state.playState };
       },
-      data: data,
-      beforeSend: xhr => {
-        xhr.setRequestHeader(
-          'Authorization',
-          'Bearer ' + this.state.access_token
-        );
-      },
-      success: song => {
-        this.clearInput();
-        this.getCurrentlyPlaying();
-      },
-      error: err => {
-        console.error(err);
-      },
-    });
+      // wrap the following in the setState callback to only run after updating on-screen playback information
+      () => {
+        const device = device_id ? device_id : '';
+        let data;
+        // if playing top song, use 'uris' array instead of context
+        if (origin === 'topSong') {
+          data = JSON.stringify({
+            uris: [song.uri],
+            position_ms: 0,
+          });
+        } else {
+          data = JSON.stringify({
+            context_uri: song.album.uri,
+            offset: {
+              position: song.track_number - 1,
+            },
+            position_ms: 0,
+          });
+        }
+        $.ajax({
+          url: `https://api.spotify.com/v1/me/player/play${device}`,
+          type: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          data: data,
+          beforeSend: xhr => {
+            xhr.setRequestHeader(
+              'Authorization',
+              'Bearer ' + this.state.access_token
+            );
+          },
+          success: song => {
+            this.clearInput();
+            this.getCurrentlyPlaying();
+          },
+          error: err => {
+            console.error(err);
+          },
+        });
+      }
+    );
   }
 
   resume() {
