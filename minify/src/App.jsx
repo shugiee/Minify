@@ -236,6 +236,11 @@ class App extends React.Component {
 
   playSong(song, origin, device_id) {
     console.log(`play song called from origin: ${origin}`);
+    // Save this new song as playState.item, to immediately render song data
+    this.setState(state => {
+      state.playState.item = song;
+      return { playState: state.playState };
+    });
     const device = device_id ? device_id : '';
     let data;
     // if playing top song, use 'uris' array instead of context
@@ -274,11 +279,6 @@ class App extends React.Component {
       error: err => {
         console.error(err);
       }
-    });
-    // Save this new song as playState.item, to immediately render song data
-    this.setState(state => {
-      state.playState.item = song;
-      return { playState: state.playState };
     });
   }
 
