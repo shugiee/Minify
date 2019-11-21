@@ -1,3 +1,4 @@
+// USER
 {
   "items": [
     {
@@ -84,4 +85,293 @@
   "previous": null,
   "href": "https://api.spotify.com/v1/me/top/tracks?limit=1&offset=0",
   "next": "https://api.spotify.com/v1/me/top/tracks?limit=1&offset=1"
+}
+
+// CURRENT SONG
+{
+  "device": {
+    "id": "f8029e3957fb3472ca04ff22c4cce77394ba028b",
+    "is_active": true,
+    "is_private_session": false,
+    "is_restricted": false,
+    "name": "Jonathan’s MacBook Pro (3)",
+    "type": "Computer",
+    "volume_percent": 26
+  },
+  "shuffle_state": false,
+  "repeat_state": "context",
+  "timestamp": 1574192264247,
+  "context": {
+    "external_urls": {
+      "spotify": "https://open.spotify.com/album/6AxZq3UT0oYCO1zoXECi8f"
+    },
+    "href": "https://api.spotify.com/v1/albums/6AxZq3UT0oYCO1zoXECi8f",
+    "type": "album",
+    "uri": "spotify:album:6AxZq3UT0oYCO1zoXECi8f"
+  },
+  "progress_ms": 14537,
+  "item": {
+    "album": {
+      "album_type": "single",
+      "artists": [
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/5R3Hr2cnCCjt220Jmt2xLf"
+          },
+          "href": "https://api.spotify.com/v1/artists/5R3Hr2cnCCjt220Jmt2xLf",
+          "id": "5R3Hr2cnCCjt220Jmt2xLf",
+          "name": "Dillon Francis",
+          "type": "artist",
+          "uri": "spotify:artist:5R3Hr2cnCCjt220Jmt2xLf"
+        },
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/61qMnYXa1GxSBoV3IiYKjZ"
+          },
+          "href": "https://api.spotify.com/v1/artists/61qMnYXa1GxSBoV3IiYKjZ",
+          "id": "61qMnYXa1GxSBoV3IiYKjZ",
+          "name": "Yung Pinch",
+          "type": "artist",
+          "uri": "spotify:artist:61qMnYXa1GxSBoV3IiYKjZ"
+        }
+      ],
+      "available_markets": [
+        "AD",
+        "AE",
+        "AR",
+        "AT",
+        "AU",
+        "BE",
+        "BG",
+        "BH",
+        "BO",
+        "BR",
+        "CA",
+        "CH",
+        "CL",
+        "CO",
+        "CR",
+        "CY",
+        "CZ",
+        "DE",
+        "DK",
+        "DO",
+        "DZ",
+        "EC",
+        "EE",
+        "EG",
+        "ES",
+        "FI",
+        "FR",
+        "GB",
+        "GR",
+        "GT",
+        "HK",
+        "HN",
+        "HU",
+        "ID",
+        "IE",
+        "IL",
+        "IN",
+        "IS",
+        "IT",
+        "JO",
+        "JP",
+        "KW",
+        "LB",
+        "LI",
+        "LT",
+        "LU",
+        "LV",
+        "MA",
+        "MC",
+        "MT",
+        "MX",
+        "MY",
+        "NI",
+        "NL",
+        "NO",
+        "NZ",
+        "OM",
+        "PA",
+        "PE",
+        "PH",
+        "PL",
+        "PS",
+        "PT",
+        "PY",
+        "QA",
+        "RO",
+        "SA",
+        "SE",
+        "SG",
+        "SK",
+        "SV",
+        "TH",
+        "TN",
+        "TR",
+        "TW",
+        "US",
+        "UY",
+        "VN",
+        "ZA"
+      ],
+      "external_urls": {
+        "spotify": "https://open.spotify.com/album/6AxZq3UT0oYCO1zoXECi8f"
+      },
+      "href": "https://api.spotify.com/v1/albums/6AxZq3UT0oYCO1zoXECi8f",
+      "id": "6AxZq3UT0oYCO1zoXECi8f",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/ab67616d0000b2734786d43d0bb9a857d5bbbf61",
+          "width": 640
+        },
+        {
+          "height": 300,
+          "url": "https://i.scdn.co/image/ab67616d00001e024786d43d0bb9a857d5bbbf61",
+          "width": 300
+        },
+        {
+          "height": 64,
+          "url": "https://i.scdn.co/image/ab67616d000048514786d43d0bb9a857d5bbbf61",
+          "width": 64
+        }
+      ],
+      "name": "Hello There",
+      "release_date": "2017-10-11",
+      "release_date_precision": "day",
+      "total_tracks": 1,
+      "type": "album",
+      "uri": "spotify:album:6AxZq3UT0oYCO1zoXECi8f"
+    },
+    "artists": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/5R3Hr2cnCCjt220Jmt2xLf"
+        },
+        "href": "https://api.spotify.com/v1/artists/5R3Hr2cnCCjt220Jmt2xLf",
+        "id": "5R3Hr2cnCCjt220Jmt2xLf",
+        "name": "Dillon Francis",
+        "type": "artist",
+        "uri": "spotify:artist:5R3Hr2cnCCjt220Jmt2xLf"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/61qMnYXa1GxSBoV3IiYKjZ"
+        },
+        "href": "https://api.spotify.com/v1/artists/61qMnYXa1GxSBoV3IiYKjZ",
+        "id": "61qMnYXa1GxSBoV3IiYKjZ",
+        "name": "Yung Pinch",
+        "type": "artist",
+        "uri": "spotify:artist:61qMnYXa1GxSBoV3IiYKjZ"
+      }
+    ],
+    "available_markets": [
+      "AD",
+      "AE",
+      "AR",
+      "AT",
+      "AU",
+      "BE",
+      "BG",
+      "BH",
+      "BO",
+      "BR",
+      "CA",
+      "CH",
+      "CL",
+      "CO",
+      "CR",
+      "CY",
+      "CZ",
+      "DE",
+      "DK",
+      "DO",
+      "DZ",
+      "EC",
+      "EE",
+      "EG",
+      "ES",
+      "FI",
+      "FR",
+      "GB",
+      "GR",
+      "GT",
+      "HK",
+      "HN",
+      "HU",
+      "ID",
+      "IE",
+      "IL",
+      "IN",
+      "IS",
+      "IT",
+      "JO",
+      "JP",
+      "KW",
+      "LB",
+      "LI",
+      "LT",
+      "LU",
+      "LV",
+      "MA",
+      "MC",
+      "MT",
+      "MX",
+      "MY",
+      "NI",
+      "NL",
+      "NO",
+      "NZ",
+      "OM",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PS",
+      "PT",
+      "PY",
+      "QA",
+      "RO",
+      "SA",
+      "SE",
+      "SG",
+      "SK",
+      "SV",
+      "TH",
+      "TN",
+      "TR",
+      "TW",
+      "US",
+      "UY",
+      "VN",
+      "ZA"
+    ],
+    "disc_number": 1,
+    "duration_ms": 180321,
+    "explicit": true,
+    "external_ids": {
+      "isrc": "QMUY41700213"
+    },
+    "external_urls": {
+      "spotify": "https://open.spotify.com/track/7fyx7nBQTEtYrfXc0UgUYs"
+    },
+    "href": "https://api.spotify.com/v1/tracks/7fyx7nBQTEtYrfXc0UgUYs",
+    "id": "7fyx7nBQTEtYrfXc0UgUYs",
+    "is_local": false,
+    "name": "Hello There",
+    "popularity": 48,
+    "preview_url": "https://p.scdn.co/mp3-preview/698defcdd9bff67bc6d804dee3803270a4d53962?cid=774b29d4f13844c495f206cafdad9c86",
+    "track_number": 1,
+    "type": "track",
+    "uri": "spotify:track:7fyx7nBQTEtYrfXc0UgUYs"
+  },
+  "currently_playing_type": "track",
+  "actions": {
+    "disallows": {
+      "resuming": true
+    }
+  },
+  "is_playing": true
 }

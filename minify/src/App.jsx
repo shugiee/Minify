@@ -17,12 +17,7 @@ class App extends React.Component {
 
     this.state = {
       user: null,
-      playState: {
-        device: { is_active: false },
-        item: { album: { images: ['', '', ''], artists: [] } },
-        progress_ms: 0,
-        duration_ms: 0
-      },
+      playState: helperJS.templateCurrentSong,
       isAuthenticated: false,
       access_token:
         'BQBeTr9b3iUHIbLppJJt9xJTchUkziSJCZtFJ4uWcM__QUwQjS4nMjSgVzqbjl7Ve36A1_4pDR_IMtfTWxlfX3YcaSkJxHw4J3TBQOcfrMbSrN2A8n5ZrSAn-GeKUnkLoaP9qR5gsn3oU9Ognsc14lA0YmQepMk1lMi38Z14H6o5qMr3Ol2SypKC499lIkE5jUAKo_9iep4AUqUZLOHsg-jisspLYBX1NZDBHtOqjzIiEqADCJftxo2MmeCrU5YIqs4hzRPkeexd',
@@ -144,14 +139,18 @@ class App extends React.Component {
         );
       },
       success: data => {
-        // if (data && data.is_playing) {
         if (data) {
           this.startInterval();
           this.setState(
             {
               playState: data
             },
-            this.checkLikeStatus
+            () => {
+              if (!data.is_playing) {
+                this.clearInterval();
+              }
+              this.checkLikeStatus();
+            }
           );
         } else {
           this.getTopSong();
@@ -216,7 +215,7 @@ class App extends React.Component {
 
   checkLikeStatus() {
     console.log('check like status called!');
-    if (this.state.playState.item.id) {
+    if (this.state.playState.item && this.state.playState.item.id) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks/contains?ids=${this.state.playState.item.id}`,
         type: 'GET',
@@ -610,27 +609,27 @@ class App extends React.Component {
 
   incrementProgress() {
     console.log('increment progress called');
-    // this.setState(
-    //   state => {
-    //     state.playState.progress_ms += 1000;
-    //     state.timer = (state.time + 1) % 5;
-    //     if (
-    //       state.playState.item.duration_ms - state.playState.progress_ms <
-    //       2000
-    //     ) {
-    //       setTimeout(() => {
-    //         // this.clearProgress_ms();
-    //         this.getCurrentlyPlaying();
-    //       }, 2000);
-    //     }
-    //     return { playState: state.playState };
-    //   },
-    //   () => {
-    //     if (this.state.timer % 5 === 0) {
-    //       this.getCurrentlyPlaying();
-    //     }
-    //   }
-    // );
+    this.setState(
+      state => {
+        state.playState.progress_ms += 1000;
+        state.timer = (state.timer + 1) % 5;
+        if (
+          state.playState.item.duration_ms - state.playState.progress_ms <
+          2000
+        ) {
+          setTimeout(() => {
+            // this.clearProgress_ms();
+            this.getCurrentlyPlaying();
+          }, 2000);
+        }
+        return { playState: state.playState };
+      },
+      () => {
+        if (this.state.timer % 5 === 0) {
+          this.getCurrentlyPlaying();
+        }
+      }
+    );
   }
 
   startInterval() {
@@ -716,7 +715,7 @@ class App extends React.Component {
     const { progress_ms } = playState;
     item = item || { album: { images: ['', ''] }, duration_ms: 0 };
 
-    const artists = item.album.artists;
+    const artists = item.album.artists || [];
     queryResults.tracks.items = queryResults.tracks.items || [];
     if (this.state.isAuthenticated) {
       return (
