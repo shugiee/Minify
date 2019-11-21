@@ -1,13 +1,14 @@
 import React from 'react';
 
 const SearchResult = props => {
-  const { song, playSong, showSearchBar } = props;
+  const { song, playSong, toggleSearchVilibility, showSearchBar } = props;
   if (props.showSearchBar) {
     return (
       <div
         className='search-result-container'
         onClick={() => {
           props.playSong(song, 'searchResult');
+          props.toggleSearchVisibility();
         }}
       >
         <div className='search-image-container d-flex align-items-center justify-content-center'>

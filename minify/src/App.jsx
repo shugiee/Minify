@@ -48,7 +48,7 @@ class App extends React.Component {
     this.seekPrevious = this.seekPrevious.bind(this);
     this.searchSpotify = this.searchSpotify.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
-    this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
+    this.toggleSearchVisibility = this.toggleSearchVisibility.bind(this);
     this.toggleShuffle = this.toggleShuffle.bind(this);
     this.toggleLike = this.toggleLike.bind(this);
     this.toggleRepeat = this.toggleRepeat.bind(this);
@@ -484,22 +484,12 @@ class App extends React.Component {
     this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
   }
 
-  handleSearchButtonClick() {
-    console.log('handle search button called!');
-    if (this.state.showSearchBar) {
-      this.setState(state => {
-        return {
-          showSearchBar: !state.showSearchBar,
-          showSearchBar: false,
-        };
-      });
-    } else {
-      this.setState(state => {
-        return {
-          showSearchBar: !state.showSearchBar,
-        };
-      });
-    }
+  toggleSearchVisibility() {
+    this.setState(state => {
+      return {
+        showSearchBar: !state.showSearchBar,
+      };
+    });
   }
 
   toggleShuffle() {
@@ -738,7 +728,7 @@ class App extends React.Component {
             <div className='player-grid'>
               <div
                 className='search-container d-flex align-items-center justify-content-center'
-                onClick={this.handleSearchButtonClick}
+                onClick={this.toggleSearchVisibility}
               >
                 <span id='search-button' className='icon'></span>
               </div>
@@ -817,6 +807,7 @@ class App extends React.Component {
                     <SearchResult
                       song={song}
                       playSong={this.playSong}
+                      toggleSearchVisibility={this.toggleSearchVisibility}
                       showSearchBar={this.state.showSearchBar}
                       key={song ? song.id : 0}
                     />
