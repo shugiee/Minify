@@ -34,6 +34,10 @@ h1 {
   margin: 0px;
 }
 
+p {
+  margin-bottom: 0px;
+}
+
 ::placeholder {
   font-size: 0.75rem;
   padding-left: 5px;
@@ -52,7 +56,7 @@ input:focus {
 .player-grid {
   display: inline-grid;
   grid-template-columns: [player-col-1] 5px [player-col-2] 20px [player-col-3] 20px [player-col-4] 25px [player-col-5] 10px [player-col-6] 50px [player-col-7] 10px [player-col-8] 25px [player-col-9] 20px [player-col-10] 20px [player-col-11] 5px [player-col-end] 0px;
-  grid-template-rows: [player-row-1] 20px [player-row-2] 10px [player-row-3] 210px [player-row-4] 25px [player-row-5] 20px [player-row-6] 20px [player-row-7] 5px [player-row-8] 35px [player-row-9] 20px [player-row-10] 35px;
+  grid-template-rows: [player-row-1] 25px [player-row-2] 10px [player-row-3] 210px [player-row-4] 25px [player-row-5] 20px [player-row-6] 20px [player-row-7] 5px [player-row-8] 35px [player-row-9] 20px [player-row-10] 35px;
 }
 
 .icon {
@@ -147,7 +151,7 @@ input:focus {
   transform: translate(0, -10px);
 }
 
-#search {
+#search-button {
   background-image: url('http://localhost:3000/search-button.svg');
   width: 13px;
   height: 13px;
@@ -350,6 +354,53 @@ input:focus {
   color: #ffffff;
   font-size: 0.6rem;
   display: inline-block;
+}
+
+.search-result-container {
+  height: 60px;
+  display: inline-grid;
+  width: 100%;
+  grid-template-rows: [search-result-row-top] 5px [search-result-row-1] 25px [search-result-row-2] 25px [search-result-row-bottom] 5px;
+  grid-template-columns: [search-result-col-left] 5px [search-result-col-1] 50px [search-result-col-2] auto [search-result-col-right] 5px;
+}
+
+.search-image-container {
+  width: 50px;
+  height: 50px;
+  grid-row-start: search-result-row-1;
+  grid-row-end: search-result-row-bottom;
+  grid-column-start: search-result-col-1;
+  grid-column-end: search-result-col-2;
+}
+
+.search-image {
+  height: 50px;
+  width: 50px;
+}
+
+.search-information-song-name {
+  grid-row-start: search-result-row-1;
+  grid-row-end: search-result-row-2;
+  grid-column-start: search-result-col-2;
+  grid-column-end: search-result-col-right;
+  font-size: 0.85rem;
+  text-align: left;
+  line-height: 25px;
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.search-information-artist-name {
+  grid-row-start: search-result-row-2;
+  grid-row-end: search-result-row-bottom;
+  grid-column-start: search-result-col-2;
+  grid-column-end: search-result-col-right;
+  font-size: 0.6rem;
+  text-align: left;
+  line-height: 25px;
+  margin-left: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

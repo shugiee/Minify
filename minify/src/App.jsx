@@ -29,7 +29,7 @@ class App extends React.Component {
       queryResults: { tracks: {} },
       likesCurrentSong: false,
       manual_progress: 0,
-      timer: 1
+      timer: 1,
     };
 
     this.setState = this.setState.bind(this);
@@ -72,7 +72,7 @@ class App extends React.Component {
         {
           isAuthenticated: true,
           access_token: tokens.access_token,
-          refresh_token: tokens.refresh_token
+          refresh_token: tokens.refresh_token,
         },
         () => {
           this.getCurrentUser();
@@ -95,14 +95,14 @@ class App extends React.Component {
       success: xhr => {
         this.setState(
           {
-            isAuthenticated: true
+            isAuthenticated: true,
           },
           () => {
             this.getCurrentUser();
             this.getCurrentlyPlaying();
           }
         );
-      }
+      },
     });
   }
 
@@ -122,7 +122,7 @@ class App extends React.Component {
           this.setState({ user });
         }
       },
-      error: err => console.error(err)
+      error: err => console.error(err),
     });
   }
 
@@ -146,7 +146,7 @@ class App extends React.Component {
           data.item = data.item ? data.item : this.state.playState.item;
           this.setState(
             {
-              playState: data
+              playState: data,
             },
             () => {
               if (!data.is_playing) {
@@ -158,7 +158,7 @@ class App extends React.Component {
         } else {
           this.getTopSong();
         }
-      }
+      },
     });
   }
 
@@ -180,7 +180,7 @@ class App extends React.Component {
             this.playSong(this.state.topSong, 'topSong');
           });
         },
-        error: err => console.error(err)
+        error: err => console.error(err),
       });
     } else {
       console.log('Top track already saved! ');
@@ -206,7 +206,7 @@ class App extends React.Component {
             this.playSong(topSong, 'topSong');
           });
         },
-        error: err => console.error(err)
+        error: err => console.error(err),
       });
     } else {
       console.log('Top track already saved! ');
@@ -227,9 +227,9 @@ class App extends React.Component {
         },
         success: response => {
           this.setState({
-            likesCurrentSong: response[0]
+            likesCurrentSong: response[0],
           });
-        }
+        },
       });
     }
   }
@@ -247,15 +247,15 @@ class App extends React.Component {
     if (origin === 'topSong') {
       data = JSON.stringify({
         uris: [song.uri],
-        position_ms: 0
+        position_ms: 0,
       });
     } else {
       data = JSON.stringify({
         context_uri: song.album.uri,
         offset: {
-          position: song.track_number - 1
+          position: song.track_number - 1,
         },
-        position_ms: 0
+        position_ms: 0,
       });
     }
     $.ajax({
@@ -263,7 +263,7 @@ class App extends React.Component {
       type: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       data: data,
       beforeSend: xhr => {
@@ -278,7 +278,7 @@ class App extends React.Component {
       },
       error: err => {
         console.error(err);
-      }
+      },
     });
   }
 
@@ -289,7 +289,7 @@ class App extends React.Component {
       type: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -305,7 +305,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -316,7 +316,7 @@ class App extends React.Component {
       type: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -336,7 +336,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -350,7 +350,7 @@ class App extends React.Component {
         type: 'PUT',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
@@ -362,7 +362,7 @@ class App extends React.Component {
           this.setState(state => {
             state.playState.progress_ms = parseInt(result);
             return {
-              playState: state.playState
+              playState: state.playState,
             };
           });
           if (cb) {
@@ -371,7 +371,7 @@ class App extends React.Component {
         },
         error: err => {
           console.error(err);
-        }
+        },
       });
     }
   }
@@ -399,7 +399,7 @@ class App extends React.Component {
       type: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -415,7 +415,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -426,7 +426,7 @@ class App extends React.Component {
       type: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -442,7 +442,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -456,7 +456,7 @@ class App extends React.Component {
         type: 'GET',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
@@ -469,7 +469,7 @@ class App extends React.Component {
         },
         error: err => {
           console.error(err);
-        }
+        },
       });
     }
   }
@@ -485,13 +485,13 @@ class App extends React.Component {
       this.setState(state => {
         return {
           showSearchBar: !state.showSearchBar,
-          showSearchBar: false
+          showSearchBar: false,
         };
       });
     } else {
       this.setState(state => {
         return {
-          showSearchBar: !state.showSearchBar
+          showSearchBar: !state.showSearchBar,
         };
       });
     }
@@ -505,7 +505,7 @@ class App extends React.Component {
       type: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -521,7 +521,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -533,7 +533,7 @@ class App extends React.Component {
         type: 'DELETE',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
@@ -549,7 +549,7 @@ class App extends React.Component {
             this.getNewAccessToken();
           }
           console.error(err);
-        }
+        },
       });
     } else {
       $.ajax({
@@ -557,7 +557,7 @@ class App extends React.Component {
         type: 'PUT',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
@@ -573,7 +573,7 @@ class App extends React.Component {
             this.getNewAccessToken();
           }
           console.error(err);
-        }
+        },
       });
     }
   }
@@ -592,7 +592,7 @@ class App extends React.Component {
       type: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -609,7 +609,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -669,7 +669,7 @@ class App extends React.Component {
       url: '/refresh_token',
       type: 'GET',
       data: {
-        refresh_token: this.state.refresh_token
+        refresh_token: this.state.refresh_token,
       },
       success: data => {
         this.setState(
@@ -681,7 +681,7 @@ class App extends React.Component {
       },
       error: err => {
         console.error(err);
-      }
+      },
     });
   }
 
@@ -691,10 +691,10 @@ class App extends React.Component {
       type: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       data: JSON.stringify({
-        device_ids: device_id
+        device_ids: device_id,
       }),
       beforeSend: xhr => {
         xhr.setRequestHeader(
@@ -711,7 +711,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -735,7 +735,7 @@ class App extends React.Component {
                 className='search-container d-flex align-items-center justify-content-center'
                 onClick={this.handleSearchButtonClick}
               >
-                <span id='search' className='icon'></span>
+                <span id='search-button' className='icon'></span>
               </div>
 
               <div className='artwork-container'>
@@ -813,7 +813,7 @@ class App extends React.Component {
                       song={song}
                       playSong={this.playSong}
                       showSearchBar={this.state.showSearchBar}
-                      // key={song ? song.id : 0}
+                      key={song ? song.id : 0}
                     />
                   );
                 })}
