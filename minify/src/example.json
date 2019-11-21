@@ -1,0 +1,87 @@
+{
+  "items": [
+    {
+      "album": {
+        "album_type": "ALBUM",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/2ye2Wgw4gimLv2eAKyk1NB"
+            },
+            "href": "https://api.spotify.com/v1/artists/2ye2Wgw4gimLv2eAKyk1NB",
+            "id": "2ye2Wgw4gimLv2eAKyk1NB",
+            "name": "Metallica",
+            "type": "artist",
+            "uri": "spotify:artist:2ye2Wgw4gimLv2eAKyk1NB"
+          }
+        ],
+        "available_markets": ["CA", "US"],
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7KDqRmr937ylvGilPGWxfD"
+        },
+        "href": "https://api.spotify.com/v1/albums/7KDqRmr937ylvGilPGWxfD",
+        "id": "7KDqRmr937ylvGilPGWxfD",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273a49eff6d64cafc2551553380",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/ab67616d00001e02a49eff6d64cafc2551553380",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/ab67616d00004851a49eff6d64cafc2551553380",
+            "width": 64
+          }
+        ],
+        "name": "Reload",
+        "release_date": "1997-11-18",
+        "release_date_precision": "day",
+        "total_tracks": 13,
+        "type": "album",
+        "uri": "spotify:album:7KDqRmr937ylvGilPGWxfD"
+      },
+      "artists": [
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/2ye2Wgw4gimLv2eAKyk1NB"
+          },
+          "href": "https://api.spotify.com/v1/artists/2ye2Wgw4gimLv2eAKyk1NB",
+          "id": "2ye2Wgw4gimLv2eAKyk1NB",
+          "name": "Metallica",
+          "type": "artist",
+          "uri": "spotify:artist:2ye2Wgw4gimLv2eAKyk1NB"
+        }
+      ],
+      "available_markets": ["CA", "US"],
+      "disc_number": 1,
+      "duration_ms": 269733,
+      "explicit": false,
+      "external_ids": {
+        "isrc": "USEV19719673"
+      },
+      "external_urls": {
+        "spotify": "https://open.spotify.com/track/1tTPC0hsnXq1IGpvWY54JC"
+      },
+      "href": "https://api.spotify.com/v1/tracks/1tTPC0hsnXq1IGpvWY54JC",
+      "id": "1tTPC0hsnXq1IGpvWY54JC",
+      "is_local": false,
+      "name": "Fuel",
+      "popularity": 61,
+      "preview_url": "https://p.scdn.co/mp3-preview/c44db490b2b4755ab68001cb94a4f10d70d93b78?cid=774b29d4f13844c495f206cafdad9c86",
+      "track_number": 1,
+      "type": "track",
+      "uri": "spotify:track:1tTPC0hsnXq1IGpvWY54JC"
+    }
+  ],
+  "total": 50,
+  "limit": 1,
+  "offset": 0,
+  "previous": null,
+  "href": "https://api.spotify.com/v1/me/top/tracks?limit=1&offset=0",
+  "next": "https://api.spotify.com/v1/me/top/tracks?limit=1&offset=1"
+}

@@ -7,8 +7,15 @@ const PlaybackSlider = props => {
       <input
         type='range'
         value={props.progress_ms}
-        onChange={props.handleSliderChange}
-        max={props.duration_ms || 0}
+        onChange={event => {
+          console.log(props.progress_ms);
+          props.handleSliderChange(event);
+        }}
+        onClick={event => {
+          props.handleSliderClick(event);
+        }}
+        min='0'
+        max={JSON.stringify(props.duration_ms) || '0'}
         id='playback-slider'
         style={{
           background: `linear-gradient(
