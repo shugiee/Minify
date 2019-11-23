@@ -1,15 +1,15 @@
 import React from 'react';
 import $ from 'jquery';
 import './App.css';
+import _ from 'lodash';
 import PlayPause from './PlayPause.jsx';
 import Like from './Like.jsx';
 import PlaybackSlider from './PlaybackSlider.jsx';
 import Shuffle from './Shuffle.jsx';
 import Repeat from './Repeat.jsx';
 import SearchBar from './SearchBar.jsx';
-import SearchResult from './SearchResult.jsx';
+import SearchResultAll from './SearchResultsAll.jsx';
 import * as helperJS from './helperJS';
-import _ from 'lodash';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,14 +19,17 @@ class App extends React.Component {
       user: null,
       playState: helperJS.templateCurrentSong,
       isAuthenticated: false,
-      access_token:
-        'BQBeTr9b3iUHIbLppJJt9xJTchUkziSJCZtFJ4uWcM__QUwQjS4nMjSgVzqbjl7Ve36A1_4pDR_IMtfTWxlfX3YcaSkJxHw4J3TBQOcfrMbSrN2A8n5ZrSAn-GeKUnkLoaP9qR5gsn3oU9Ognsc14lA0YmQepMk1lMi38Z14H6o5qMr3Ol2SypKC499lIkE5jUAKo_9iep4AUqUZLOHsg-jisspLYBX1NZDBHtOqjzIiEqADCJftxo2MmeCrU5YIqs4hzRPkeexd',
-      refresh_token:
-        'AQDL8m-MQ1EXzEi_e9EAtgO8fcQA8p8eDi1DgHHTxToaQLKwzwQ7LZD0jnee_1TftcMVLuIrCa-yAv7pFg4axKiwgu8F91yHV0giGtVT8y-qgisiuCXWUmdC7JlD1XsUkkk',
+      access_token: '',
+      refresh_token: '',
       devices: [],
       topSong: null,
       query: '',
-      queryResults: { tracks: {} },
+      queryResults: {
+        tracks: { items: [] },
+        albums: { items: [] },
+        artists: { items: [] },
+        playlists: { items: [] },
+      },
       likesCurrentSong: false,
       manual_progress: 0,
       timer: 1,
@@ -39,6 +42,9 @@ class App extends React.Component {
     this.getDevices = this.getDevices.bind(this);
     this.getTopSong = this.getTopSong.bind(this);
     this.playSong = this.playSong.bind(this);
+    this.playAlbum = this.playAlbum.bind(this);
+    this.playArtist = this.playArtist.bind(this);
+    this.playPlaylist = this.playPlaylist.bind(this);
     this.resume = this.resume.bind(this);
     this.pause = this.pause.bind(this);
     this.seek = this.seek.bind(this);
@@ -135,7 +141,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: data => {
@@ -244,7 +250,7 @@ class App extends React.Component {
       },
       // wrap the following in the setState callback to only run after updating on-screen playback information
       () => {
-        const device = device_id ? device_id : '';
+        const device = device_id || '';
         let data;
         // if playing top song, use 'uris' array instead of context
         if (origin === 'topSong') {
@@ -286,6 +292,12 @@ class App extends React.Component {
       }
     );
   }
+
+  playAlbum(album) {}
+
+  playArtist(artist) {}
+
+  playPlaylist(playlist) {}
 
   resume() {
     console.log('resume called!');
@@ -457,7 +469,7 @@ class App extends React.Component {
     const joinedQuery = query.replace(' ', '%20');
     if (query.length) {
       $.ajax({
-        url: `https://api.spotify.com/v1/search?q=${joinedQuery}&type=track&limit=10`,
+        url: `https://api.spotify.com/v1/search?q=${joinedQuery}&type=album,artist,playlist,track&limit=3`,
         type: 'GET',
         headers: {
           Accept: 'application/json',
@@ -648,14 +660,16 @@ class App extends React.Component {
 
   clearInput() {
     console.log('clear input called');
-    this.setState({ query: '', queryResults: { tracks: {} } });
+    this.setState({
+      query: '',
+      queryResults: {
+        tracks: { items: [] },
+        albums: { items: [] },
+        artists: { items: [] },
+        playlists: { items: [] },
+      },
+    });
   }
-
-  // clearProgress_ms() {
-  //   const { playState } = this.state;
-  //   playState.progress_ms = 0;
-  //   this.setState({ playState });
-  // }
 
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken() {
@@ -711,13 +725,17 @@ class App extends React.Component {
   }
 
   render() {
-    const { queryResults, likesCurrentSong, playState } = this.state;
+    const {
+      queryResults,
+      likesCurrentSong,
+      playState,
+      showSearchBar,
+    } = this.state;
     let { is_playing, item, shuffle_state, repeat_state } = playState;
     const { progress_ms } = playState;
     item = item || { album: { images: ['', ''] }, duration_ms: 0 };
-
     const artists = item.album.artists || [];
-    queryResults.tracks.items = queryResults.tracks.items || [];
+
     if (this.state.isAuthenticated) {
       return (
         <div className='App'>
@@ -730,7 +748,7 @@ class App extends React.Component {
                 className='search-container d-flex align-items-center justify-content-center'
                 onClick={this.toggleSearchVisibility}
               >
-                <span id='search-button' className='icon'></span>
+                <span id='search-button' className='icon' />
               </div>
 
               <div className='artwork-container'>
@@ -738,7 +756,7 @@ class App extends React.Component {
                   id='artwork'
                   src={item.album.images[1].url}
                   alt='Album artwork'
-                ></img>
+                />
               </div>
 
               <div className='song-name-container'>
@@ -776,7 +794,7 @@ class App extends React.Component {
                 className='previous-container d-flex align-items-center justify-content-center'
                 onClick={this.seekPrevious}
               >
-                <span id='previous' className='icon'></span>
+                <span id='previous' className='icon' />
               </div>
 
               <PlayPause
@@ -789,7 +807,7 @@ class App extends React.Component {
                 className='next-container d-flex align-items-center justify-content-center'
                 onClick={this.seekNext}
               >
-                <span id='next' className='icon'></span>
+                <span id='next' className='icon' />
               </div>
 
               <Repeat
@@ -801,75 +819,70 @@ class App extends React.Component {
                 query={this.state.query}
                 handleQueryChange={this.handleQueryChange}
               />
-              <div className='search-results-container'>
-                {queryResults.tracks.items.map(song => {
-                  return (
-                    <SearchResult
-                      song={song}
-                      playSong={this.playSong}
-                      toggleSearchVisibility={this.toggleSearchVisibility}
-                      showSearchBar={this.state.showSearchBar}
-                      key={song ? song.id : 0}
-                    />
-                  );
-                })}
-              </div>
+              <SearchResultAll
+                queryResults={queryResults}
+                playSong={this.playSong}
+                playAlbum={this.playAlbum}
+                playArtist={this.playArtist}
+                playPlaylist={this.playPlaylist}
+                toggleSearchVisibility={this.toggleSearchVisibility}
+                showSearchBar={showSearchBar}
+              />
             </div>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className='container d-flex align-items-center justify-content-center'>
-          <div id='login'>
-            <div className='spotify-logo-container d-flex align-items-center justify-content-center'>
-              <img
-                src='http://localhost:3000/spotify-icon.png'
-                id='spotify-logo'
-              ></img>
-            </div>
-            <h1 className='intro' id='minify-top'>
-              Welcome to
-            </h1>
-            <div className='minify-container'>
-              <h1 className='minify'>Minify</h1>
-            </div>
-            <div className='spotify-logo-container'>
-              <p className='subtle'>A Spotify Mini-Player</p>
-            </div>
-            <h1 className='intro'>Please login to Spotify below</h1>
-            <div id='login-button-container'>
-              <a
-                href='http://localhost:8888/login'
-                id='login-button'
-                className='d-flex align-items-center justify-content-center'
-              >
-                LOG IN WITH SPOTIFY
-              </a>
-            </div>
-            <div className='subtle-credit-container d-flex align-items-center justify-content-center'>
-              <p className='subtle-credit'>
-                Made by{' '}
-                <a href='https://github.com/MyNameIsJonathan' target='_blank'>
-                  Jay Olson
-                </a>{' '}
-                through the generosity of the public-facing{' '}
-                <a
-                  href='https://developer.spotify.com/documentation/web-api/'
-                  target='_blank'
-                >
-                  Spotify API
-                </a>
-              </p>
-            </div>
-          </div>
-          <div id='loggedin'>
-            <div id='user-profile'></div>
-            <div id='oauth'></div>
           </div>
         </div>
       );
     }
+    return (
+      <div className='container d-flex align-items-center justify-content-center'>
+        <div id='login'>
+          <div className='spotify-logo-container d-flex align-items-center justify-content-center'>
+            <img
+              src='http://localhost:3000/spotify-icon.png'
+              id='spotify-logo'
+            />
+          </div>
+          <h1 className='intro' id='minify-top'>
+            Welcome to
+          </h1>
+          <div className='minify-container'>
+            <h1 className='minify'>Minify</h1>
+          </div>
+          <div className='spotify-logo-container'>
+            <p className='subtle'>A Spotify Mini-Player</p>
+          </div>
+          <h1 className='intro'>Please login to Spotify below</h1>
+          <div id='login-button-container'>
+            <a
+              href='http://localhost:8888/login'
+              id='login-button'
+              className='d-flex align-items-center justify-content-center'
+            >
+              LOG IN WITH SPOTIFY
+            </a>
+          </div>
+          <div className='subtle-credit-container d-flex align-items-center justify-content-center'>
+            <p className='subtle-credit'>
+              Made by{' '}
+              <a href='https://github.com/MyNameIsJonathan' target='_blank'>
+                Jay Olson
+              </a>{' '}
+              through the generosity of the public-facing{' '}
+              <a
+                href='https://developer.spotify.com/documentation/web-api/'
+                target='_blank'
+              >
+                Spotify API
+              </a>
+            </p>
+          </div>
+        </div>
+        <div id='loggedin'>
+          <div id='user-profile' />
+          <div id='oauth' />
+        </div>
+      </div>
+    );
   }
 }
 

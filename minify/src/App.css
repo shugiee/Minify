@@ -44,6 +44,16 @@ p {
   color: #cccccc;
 }
 
+::-webkit-scrollbar {
+  background-color: #1db954;
+  width: 0.5rem;
+  /* display: none; */
+}
+
+::-webkit-scrollbar-thumb {
+  color: black;
+}
+
 input:focus {
   outline: none;
 }
@@ -357,13 +367,23 @@ input:focus {
   display: inline-block;
 }
 
-.search-results-container {
+.search-results-container-outer {
   grid-column-start: player-col-1;
   grid-column-end: player-col-end;
   grid-row-start: player-row-11;
+  display: inline-block;
+}
+
+.search-results-container-inner {
+  width: 100%;
   color: #ffffff;
   font-size: 0.6rem;
-  display: inline-block;
+  /* display: inline-block; */
+}
+
+.search-results-group {
+  font-size: 0.75rem;
+  color: #1db954;
 }
 
 .search-result-container {
@@ -400,6 +420,7 @@ input:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  color: #ffffff;
 }
 
 .search-information-artist-name {
@@ -414,6 +435,7 @@ input:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  color: #cccccc;
 }
 
 input[type='range']::-webkit-slider-thumb {
