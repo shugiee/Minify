@@ -15,12 +15,18 @@ const SearchResultArtist = props => {
       <div
         className='search-result-container'
         onClick={() => {
-          playArtist(artist, 'searchResult');
+          playArtist(artist);
           toggleSearchVisibility();
         }}
       >
         <img
-          src={artist.images[2].url}
+          src={
+            artist.images[2]
+              ? artist.images[2].url
+              : artist.images[1]
+              ? artist.images[1]
+              : ''
+          }
           className='card-img search-image'
           alt='Seach result album artwork'
         />

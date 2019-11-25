@@ -14,7 +14,7 @@ const SearchResultPlaylist = props => {
       <div
         className='search-result-container'
         onClick={() => {
-          playPlaylist(playlist, 'searchResult');
+          playPlaylist(playlist);
           toggleSearchVisibility();
         }}
       >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // TODO FINISH
 
@@ -7,7 +7,7 @@ const SearchResultAlbum = props => {
   if (showSearchBar) {
     return (
       <div
-        className='search-result-container'
+        className="search-result-container"
         onClick={() => {
           playAlbum(album);
           toggleSearchVisibility();
@@ -15,21 +15,21 @@ const SearchResultAlbum = props => {
       >
         <img
           src={album.images[2].url}
-          className='card-img search-image'
-          alt='Seach result album artwork'
+          className="card-img search-image"
+          alt="Seach result album artwork"
         />
-        <p className='search-information-song-name'>{album.name}</p>
-        <p className='search-information-artist-name'>
+        <p className="search-information-song-name">{album.name}</p>
+        <p className="search-information-artist-name">
           {album.artists
             .map(artist => {
               return artist.name;
             })
-            .join(' & ')}
+            .join(" & ")}
         </p>
       </div>
     );
   }
-  return <div className='hidden' />;
+  return <div className="hidden" />;
 };
 
 export default SearchResultAlbum;
