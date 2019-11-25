@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React from "react";
 import $ from "jquery";
 import "./App.css";
@@ -313,11 +314,10 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           "Authorization",
-          "Bearer " + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: songs => {
-        console.log(songs.items[0]);
         songs.items[0].album = album;
         this.playSong(songs.items[0], "searchResult");
       },
@@ -343,7 +343,6 @@ class App extends React.Component {
         );
       },
       success: songs => {
-        console.log(songs.tracks[0]);
         this.playSong(songs.tracks[0], "searchResult");
       },
       error: err => {
@@ -502,15 +501,15 @@ class App extends React.Component {
           "Bearer " + this.state.access_token
         );
       },
-      success: this.getCurrentlyPlaying,
       error: err => {
-        if (err.status === 403 || err.status === 404) {
+        if (err.status === 403) {
           this.getCurrentlyPlaying();
         } else if (err.status === 401) {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
+      complete: this.getCurrentlyPlaying
     });
   }
 
@@ -529,7 +528,6 @@ class App extends React.Component {
           "Bearer " + this.state.access_token
         );
       },
-      success: this.getCurrentlyPlaying,
       error: err => {
         if (err.status === 403 || err.status === 404) {
           this.getCurrentlyPlaying();
@@ -537,7 +535,8 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
+      complete: this.getCurrentlyPlaying
     });
   }
 

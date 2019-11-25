@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // TODO FINISH
 
@@ -10,34 +10,43 @@ function toTitleCase(str) {
 
 const SearchResultArtist = props => {
   const { artist, playArtist, toggleSearchVisibility, showSearchBar } = props;
+  const imagesLength = artist.images.length;
+  let src;
+  switch (imagesLength) {
+    case 1:
+      src = artist.images[0].url;
+      break;
+    case 2:
+      src = artist.images[1].url;
+      break;
+    case 3:
+      src = artist.images[2].url;
+      break;
+    default:
+      src = "";
+  }
   if (showSearchBar) {
     return (
       <div
-        className='search-result-container'
+        className="search-result-container"
         onClick={() => {
           playArtist(artist);
           toggleSearchVisibility();
         }}
       >
         <img
-          src={
-            artist.images[2]
-              ? artist.images[2].url
-              : artist.images[1]
-              ? artist.images[1]
-              : ''
-          }
-          className='card-img search-image'
-          alt='Seach result album artwork'
+          src={src}
+          className="card-img search-image"
+          alt="Seach result album artwork"
         />
-        <p className='search-information-song-name'>{artist.name}</p>
-        <p className='search-information-artist-name'>
-          {toTitleCase(artist.genres[0] || '')}
+        <p className="search-information-song-name">{artist.name}</p>
+        <p className="search-information-artist-name">
+          {toTitleCase(artist.genres[0] || "")}
         </p>
       </div>
     );
   }
-  return <div className='hidden' />;
+  return <div className="hidden" />;
 };
 
 export default SearchResultArtist;
