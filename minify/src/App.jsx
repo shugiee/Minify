@@ -1,39 +1,36 @@
 /* eslint-disable no-param-reassign */
-import React from "react";
-import $ from "jquery";
-import "./App.css";
-import _ from "lodash";
-import PlayPause from "./PlayPause";
-import Like from "./Like";
-import PlaybackSlider from "./PlaybackSlider";
-import Shuffle from "./Shuffle";
-import Repeat from "./Repeat";
-import SearchBar from "./SearchBar";
-import SearchResultAll from "./SearchResultsAll";
-import * as helperJS from "./helperJS";
+import React from 'react';
+import $ from 'jquery';
+import './App.css';
+import _ from 'lodash';
+import PlayPause from './PlayPause';
+import Like from './Like';
+import PlaybackSlider from './PlaybackSlider';
+import Shuffle from './Shuffle';
+import Repeat from './Repeat';
+import SearchBar from './SearchBar';
+import SearchResultAll from './SearchResultsAll';
+import * as helperJS from './helperJS';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: null,
       playState: helperJS.templateCurrentSong,
       isAuthenticated: false,
-      access_token: "",
-      refresh_token: "",
-      devices: [],
+      access_token: '',
+      refresh_token: '',
       topSong: null,
-      query: "",
+      query: '',
       queryResults: {
         tracks: { items: [] },
         albums: { items: [] },
         artists: { items: [] },
-        playlists: { items: [] }
+        playlists: { items: [] },
       },
       likesCurrentSong: false,
-      manual_progress: 0,
-      timer: 1
+      timer: 1,
     };
 
     this.setState = this.setState.bind(this);
@@ -79,7 +76,7 @@ class App extends React.Component {
         {
           isAuthenticated: true,
           access_token: tokens.access_token,
-          refresh_token: tokens.refresh_token
+          refresh_token: tokens.refresh_token,
         },
         () => {
           this.getCurrentUser();
@@ -91,37 +88,15 @@ class App extends React.Component {
     }
   }
 
-  login() {
-    console.log("login called!");
-    $.ajax({
-      url: "/login",
-      type: "GET",
-      error: err => {
-        console.error(err);
-      },
-      success: xhr => {
-        this.setState(
-          {
-            isAuthenticated: true
-          },
-          () => {
-            this.getCurrentUser();
-            this.getCurrentlyPlaying();
-          }
-        );
-      }
-    });
-  }
-
   getCurrentUser() {
-    console.log("get current user called!");
+    console.log('get current user called!');
     $.ajax({
-      url: "https://api.spotify.com/v1/me",
-      type: "GET",
+      url: 'https://api.spotify.com/v1/me',
+      type: 'GET',
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: user => {
@@ -129,19 +104,19 @@ class App extends React.Component {
           this.setState({ user });
         }
       },
-      error: err => console.error(err)
+      error: err => console.error(err),
     });
   }
 
   getCurrentlyPlaying() {
-    console.log("get currently playing called!");
+    console.log('get currently playing called!');
     // Make a call using the token
     $.ajax({
-      url: "https://api.spotify.com/v1/me/player",
-      type: "GET",
+      url: 'https://api.spotify.com/v1/me/player',
+      type: 'GET',
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
+          'Authorization',
           `Bearer ${this.state.access_token}`
         );
       },
@@ -153,7 +128,7 @@ class App extends React.Component {
           data.item = data.item ? data.item : this.state.playState.item;
           this.setState(
             {
-              playState: data
+              playState: data,
             },
             () => {
               if (!data.is_playing) {
@@ -169,81 +144,81 @@ class App extends React.Component {
       error: err => {
         // if token is expired, get a new one
         if (err.status === 401) {
-          console.log("EEERERERRRORORORORRR");
+          console.log('EEERERERRRORORORORRR');
           this.getNewAccessToken(this.getCurrentlyPlaying);
         }
-      }
+      },
     });
   }
 
   getDevices() {
-    console.log("get devices called!");
+    console.log('get devices called!');
     if (!this.state.topSong) {
-      console.log("getting new top song!!");
+      console.log('getting new top song!!');
       $.ajax({
-        url: "https://api.spotify.com/v1/me/player/devices",
-        type: "GET",
+        url: 'https://api.spotify.com/v1/me/player/devices',
+        type: 'GET',
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: data => {
           this.setState({ devices: data.devices }, () => {
-            this.playSong(this.state.topSong, "topSong");
+            this.playSong(this.state.topSong, 'topSong');
           });
         },
-        error: err => console.error(err)
+        error: err => console.error(err),
       });
     } else {
-      console.log("Top track already saved! ");
+      console.log('Top track already saved! ');
     }
   }
 
   getTopSong() {
-    console.log("get top song called!");
+    console.log('get top song called!');
     if (!this.state.topSong) {
-      console.log("getting new top song!!");
+      console.log('getting new top song!!');
       $.ajax({
-        url: "https://api.spotify.com/v1/me/top/tracks?limit=1",
-        type: "GET",
+        url: 'https://api.spotify.com/v1/me/top/tracks?limit=1',
+        type: 'GET',
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: songs => {
           const topSong = songs.items[0];
           this.setState({ topSong }, () => {
-            this.playSong(topSong, "topSong");
+            this.playSong(topSong, 'topSong');
           });
         },
-        error: err => console.error(err)
+        error: err => console.error(err),
       });
     } else {
-      console.log("Top track already saved! ");
+      console.log('Top track already saved! ');
     }
   }
 
   checkLikeStatus() {
-    console.log("check like status called!");
+    console.log('check like status called!');
     if (this.state.playState.item.id) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks/contains?ids=${this.state.playState.item.id}`,
-        type: "GET",
+        type: 'GET',
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: response => {
           this.setState({
-            likesCurrentSong: response[0]
+            likesCurrentSong: response[0],
           });
-        }
+        },
       });
     }
   }
@@ -259,35 +234,35 @@ class App extends React.Component {
       },
       // wrap the following in the setState callback to only run after updating on-screen playback information
       () => {
-        const device = device_id || "";
+        const device = device_id || '';
         let data;
         // if playing top song, use 'uris' array instead of context
-        if (origin === "topSong") {
+        if (origin === 'topSong') {
           data = JSON.stringify({
             uris: [song.uri],
-            position_ms: 0
+            position_ms: 0,
           });
         } else {
           data = JSON.stringify({
             context_uri: song.album.uri,
             offset: {
-              position: song.track_number - 1
+              position: song.track_number - 1,
             },
-            position_ms: 0
+            position_ms: 0,
           });
         }
         $.ajax({
           url: `https://api.spotify.com/v1/me/player/play${device}`,
-          type: "PUT",
+          type: 'PUT',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
           data: data,
           beforeSend: xhr => {
             xhr.setRequestHeader(
-              "Authorization",
-              "Bearer " + this.state.access_token
+              'Authorization',
+              'Bearer ' + this.state.access_token
             );
           },
           success: song => {
@@ -296,7 +271,7 @@ class App extends React.Component {
           },
           error: err => {
             console.error(err);
-          }
+          },
         });
       }
     );
@@ -306,24 +281,24 @@ class App extends React.Component {
     console.log(`play album called`);
     $.ajax({
       url: `https://api.spotify.com/v1/albums/${album.id}/tracks?limit=1&offset=0`,
-      type: "GET",
+      type: 'GET',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
+          'Authorization',
           `Bearer ${this.state.access_token}`
         );
       },
       success: songs => {
         songs.items[0].album = album;
-        this.playSong(songs.items[0], "searchResult");
+        this.playSong(songs.items[0], 'searchResult');
       },
       error: err => {
         console.error(err);
-      }
+      },
     });
   }
 
@@ -331,23 +306,23 @@ class App extends React.Component {
     console.log(`play artist called`);
     $.ajax({
       url: `https://api.spotify.com/v1/artists/${artist.id}/top-tracks?country=ES`,
-      type: "GET",
+      type: 'GET',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: songs => {
-        this.playSong(songs.tracks[0], "searchResult");
+        this.playSong(songs.tracks[0], 'searchResult');
       },
       error: err => {
         console.error(err);
-      }
+      },
     });
   }
 
@@ -355,40 +330,40 @@ class App extends React.Component {
     console.log(`play playlist called`);
     $.ajax({
       url: `https://api.spotify.com/v1/playlists/${playlist.id}/tracks?limit=1&offset=0`,
-      type: "GET",
+      type: 'GET',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: songs => {
         console.log(songs.items[0]);
-        this.playSong(songs.items[0].track, "searchResult");
+        this.playSong(songs.items[0].track, 'searchResult');
       },
       error: err => {
         console.error(err);
-      }
+      },
     });
   }
 
   resume() {
-    console.log("resume called!");
+    console.log('resume called!');
     $.ajax({
-      url: "https://api.spotify.com/v1/me/player/play",
-      type: "PUT",
+      url: 'https://api.spotify.com/v1/me/player/play',
+      type: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: this.getCurrentlyPlaying,
@@ -399,23 +374,23 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
   pause() {
-    console.log("pause called!");
+    console.log('pause called!');
     $.ajax({
-      url: "https://api.spotify.com/v1/me/player/pause",
-      type: "PUT",
+      url: 'https://api.spotify.com/v1/me/player/pause',
+      type: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: () => {
@@ -430,33 +405,33 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
   seek(cb = null) {
-    console.log("seek called!");
+    console.log('seek called!');
     const { playState } = this.state;
     // seek/scrub to part of song
     if (playState.progress_ms) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/player/seek?position_ms=${playState.progress_ms}`,
-        type: "PUT",
+        type: 'PUT',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: result => {
           this.setState(state => {
             state.playState.progress_ms = parseInt(result);
             return {
-              playState: state.playState
+              playState: state.playState,
             };
           });
           if (cb) {
@@ -465,20 +440,20 @@ class App extends React.Component {
         },
         error: err => {
           console.error(err);
-        }
+        },
       });
     }
   }
 
   handleSliderChange(event) {
-    console.log("handle slider change called!");
+    console.log('handle slider change called!');
     const { playState } = this.state;
     playState.progress_ms = event.target.value || 0;
     this.setState({ playState });
   }
 
   handleSliderClick(event) {
-    console.log("handle slider click called!");
+    console.log('handle slider click called!');
     const { playState } = this.state;
     playState.progress_ms = event.target.value || 0;
     this.setState({ playState }, () => {
@@ -487,18 +462,18 @@ class App extends React.Component {
   }
 
   seekNext() {
-    console.log("seek next called!");
+    console.log('seek next called!');
     $.ajax({
-      url: "https://api.spotify.com/v1/me/player/next",
-      type: "POST",
+      url: 'https://api.spotify.com/v1/me/player/next',
+      type: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       error: err => {
@@ -509,23 +484,23 @@ class App extends React.Component {
         }
         console.error(err);
       },
-      complete: this.getCurrentlyPlaying
+      complete: this.getCurrentlyPlaying,
     });
   }
 
   seekPrevious() {
-    console.log("seek previous called!");
+    console.log('seek previous called!');
     $.ajax({
-      url: "https://api.spotify.com/v1/me/player/previous",
-      type: "POST",
+      url: 'https://api.spotify.com/v1/me/player/previous',
+      type: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       error: err => {
@@ -536,26 +511,26 @@ class App extends React.Component {
         }
         console.error(err);
       },
-      complete: this.getCurrentlyPlaying
+      complete: this.getCurrentlyPlaying,
     });
   }
 
   searchSpotify() {
-    console.log("search spotify called!");
+    console.log('search spotify called!');
     const { query } = this.state;
-    const joinedQuery = query.replace(" ", "%20");
+    const joinedQuery = query.replace(' ', '%20');
     if (query.length) {
       $.ajax({
         url: `https://api.spotify.com/v1/search?q=${joinedQuery}&type=album,artist,playlist,track&limit=3`,
-        type: "GET",
+        type: 'GET',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: data => {
@@ -563,38 +538,38 @@ class App extends React.Component {
         },
         error: err => {
           console.error(err);
-        }
+        },
       });
     }
   }
 
   handleQueryChange(event) {
-    console.log("handle query change called!");
+    console.log('handle query change called!');
     this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
   }
 
   toggleSearchVisibility() {
     this.setState(state => {
       return {
-        showSearchBar: !state.showSearchBar
+        showSearchBar: !state.showSearchBar,
       };
     });
   }
 
   toggleShuffle() {
-    console.log("toggle shuffle called!!");
+    console.log('toggle shuffle called!!');
     $.ajax({
       url: `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state
         .playState.shuffle_state}`,
-      type: "PUT",
+      type: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: this.getCurrentlyPlaying,
@@ -605,24 +580,24 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
   toggleLike() {
-    console.log("toggle like called!!");
+    console.log('toggle like called!!');
     if (this.state.likesCurrentSong) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks?ids=${this.state.playState.item.id}`,
-        type: "DELETE",
+        type: 'DELETE',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: this.getCurrentlyPlaying,
@@ -633,20 +608,20 @@ class App extends React.Component {
             this.getNewAccessToken();
           }
           console.error(err);
-        }
+        },
       });
     } else {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks?ids=${this.state.playState.item.id}`,
-        type: "PUT",
+        type: 'PUT',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         beforeSend: xhr => {
           xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + this.state.access_token
+            'Authorization',
+            'Bearer ' + this.state.access_token
           );
         },
         success: this.getCurrentlyPlaying,
@@ -657,31 +632,31 @@ class App extends React.Component {
             this.getNewAccessToken();
           }
           console.error(err);
-        }
+        },
       });
     }
   }
 
   toggleRepeat() {
-    console.log("toggle repeat called!");
+    console.log('toggle repeat called!');
     let repeat_state;
-    if (this.state.playState.repeat_state === "context") {
-      repeat_state = "off";
+    if (this.state.playState.repeat_state === 'context') {
+      repeat_state = 'off';
     } else {
-      repeat_state = "context";
+      repeat_state = 'context';
     }
-    console.log("toggling repeat!!");
+    console.log('toggling repeat!!');
     $.ajax({
       url: `https://api.spotify.com/v1/me/player/repeat?state=${repeat_state}`,
-      type: "PUT",
+      type: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: this.getCurrentlyPlaying,
@@ -693,12 +668,12 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
   incrementProgress() {
-    console.log("increment progress called");
+    console.log('increment progress called');
     this.setState(
       state => {
         state.playState.progress_ms += 1000;
@@ -724,38 +699,38 @@ class App extends React.Component {
 
   startInterval() {
     this.clearInterval();
-    console.log("start interval called!");
+    console.log('start interval called!');
     const intervalID = setInterval(this.incrementProgress, 1000);
     this.setState({ intervalID });
   }
 
   clearInterval() {
-    console.log("clear interval called");
+    console.log('clear interval called');
     clearInterval(this.state.intervalID);
     this.setState({ intervalID: null });
   }
 
   clearInput() {
-    console.log("clear input called");
+    console.log('clear input called');
     this.setState({
-      query: "",
+      query: '',
       queryResults: {
         tracks: { items: [] },
         albums: { items: [] },
         artists: { items: [] },
-        playlists: { items: [] }
-      }
+        playlists: { items: [] },
+      },
     });
   }
 
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken(cb) {
-    console.log("get new access token called");
+    console.log('get new access token called');
     $.ajax({
-      url: "/refresh_token",
-      type: "GET",
+      url: '/refresh_token',
+      type: 'GET',
       data: {
-        refresh_token: this.state.refresh_token
+        refresh_token: this.state.refresh_token,
       },
       success: data => {
         this.setState({ access_token: data.access_token }, () => {
@@ -766,25 +741,47 @@ class App extends React.Component {
       },
       error: err => {
         console.error(err);
-      }
+      },
+    });
+  }
+
+  login() {
+    console.log('login called!');
+    $.ajax({
+      url: '/login',
+      type: 'GET',
+      error: err => {
+        console.error(err);
+      },
+      success: xhr => {
+        this.setState(
+          {
+            isAuthenticated: true,
+          },
+          () => {
+            this.getCurrentUser();
+            this.getCurrentlyPlaying();
+          }
+        );
+      },
     });
   }
 
   transferDevice(device_id) {
     $.ajax({
       url: `https://api.spotify.com/v1/me/player`,
-      type: "PUT",
+      type: 'PUT',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       data: JSON.stringify({
-        device_ids: device_id
+        device_ids: device_id,
       }),
       beforeSend: xhr => {
         xhr.setRequestHeader(
-          "Authorization",
-          "Bearer " + this.state.access_token
+          'Authorization',
+          'Bearer ' + this.state.access_token
         );
       },
       success: this.getCurrentlyPlaying,
@@ -796,7 +793,7 @@ class App extends React.Component {
           this.getNewAccessToken();
         }
         console.error(err);
-      }
+      },
     });
   }
 
@@ -805,47 +802,47 @@ class App extends React.Component {
       queryResults,
       likesCurrentSong,
       playState,
-      showSearchBar
+      showSearchBar,
     } = this.state;
     let { is_playing, item, shuffle_state, repeat_state } = playState;
     const { progress_ms } = playState;
-    item = item || { album: { images: ["", ""] }, duration_ms: 0 };
+    item = item || { album: { images: ['', ''] }, duration_ms: 0 };
     const artists = item.album.artists || [];
 
     if (this.state.isAuthenticated) {
       return (
-        <div className="App">
+        <div className='App'>
           <div
-            className="d-inline-flex justify-content-center"
-            id="player-front"
+            className='d-inline-flex justify-content-center'
+            id='player-front'
           >
-            <div className="player-grid">
+            <div className='player-grid'>
               <div
-                className="search-container d-flex align-items-center justify-content-center"
+                className='search-container d-flex align-items-center justify-content-center'
                 onClick={this.toggleSearchVisibility}
               >
-                <span id="search-button" className="icon" />
+                <span id='search-button' className='icon' />
               </div>
 
-              <div className="artwork-container">
+              <div className='artwork-container'>
                 <img
-                  id="artwork"
+                  id='artwork'
                   src={item.album.images[1].url}
-                  alt="Album artwork"
+                  alt='Album artwork'
                 />
               </div>
 
-              <div className="song-name-container">
-                <span id="song-name">{item ? item.name : ""}</span>
+              <div className='song-name-container'>
+                <span id='song-name'>{item ? item.name : ''}</span>
               </div>
 
-              <div className="artist-name-container">
-                <div id="artist-name">
+              <div className='artist-name-container'>
+                <div id='artist-name'>
                   {artists
                     .map(artist => {
                       return artist.name;
                     })
-                    .join(" & ")}
+                    .join(' & ')}
                 </div>
               </div>
 
@@ -867,10 +864,10 @@ class App extends React.Component {
               />
 
               <div
-                className="previous-container d-flex align-items-center justify-content-center"
+                className='previous-container d-flex align-items-center justify-content-center'
                 onClick={this.seekPrevious}
               >
-                <span id="previous" className="icon" />
+                <span id='previous' className='icon' />
               </div>
 
               <PlayPause
@@ -880,10 +877,10 @@ class App extends React.Component {
               />
 
               <div
-                className="next-container d-flex align-items-center justify-content-center"
+                className='next-container d-flex align-items-center justify-content-center'
                 onClick={this.seekNext}
               >
-                <span id="next" className="icon" />
+                <span id='next' className='icon' />
               </div>
 
               <Repeat
@@ -910,55 +907,52 @@ class App extends React.Component {
       );
     }
     return (
-      <div className="container d-flex align-items-center justify-content-center">
-        <div id="login">
-          <div className="spotify-logo-container d-flex align-items-center justify-content-center">
+      <div className='container d-flex align-items-center justify-content-center'>
+        <div id='login'>
+          <div className='spotify-logo-container d-flex align-items-center justify-content-center'>
             <img
-              src="http://localhost:3000/spotify-icon.png"
-              id="spotify-logo"
+              src='http://localhost:3000/spotify-icon.png'
+              id='spotify-logo'
             />
           </div>
-          <h1 className="intro" id="minify-top">
+          <h1 className='intro' id='minify-top'>
             Welcome to
           </h1>
-          <div className="minify-container">
-            <h1 className="minify">Minify</h1>
+          <div className='minify-container'>
+            <h1 className='minify'>Minify</h1>
           </div>
-          <div className="spotify-logo-container">
-            <p className="subtle">A Spotify Mini-Player</p>
+          <div className='spotify-logo-container'>
+            <p className='subtle'>A Spotify Mini-Player</p>
           </div>
-          <h1 className="intro">Please login to Spotify below</h1>
-          <div id="login-button-container">
+          <h1 className='intro'>Please login to Spotify below</h1>
+          <div id='login-button-container'>
             <a
-              href="http://localhost:8888/login"
-              id="login-button"
-              className="d-flex align-items-center justify-content-center"
+              href='http://localhost:8888/login'
+              id='login-button'
+              className='d-flex align-items-center justify-content-center'
             >
               LOG IN WITH SPOTIFY
             </a>
           </div>
-          <div className="subtle-credit-container d-flex align-items-center justify-content-center">
-            <p className="subtle-credit">
-              Made by
-{' '}
-              <a href="https://github.com/MyNameIsJonathan" target="_blank">
+          <div className='subtle-credit-container d-flex align-items-center justify-content-center'>
+            <p className='subtle-credit'>
+              Made by{' '}
+              <a href='https://github.com/MyNameIsJonathan' target='_blank'>
                 Jay Olson
-              </a>
-{' '}
-              through the generosity of the public-facing
-{' '}
+              </a>{' '}
+              through the generosity of the public-facing{' '}
               <a
-                href="https://developer.spotify.com/documentation/web-api/"
-                target="_blank"
+                href='https://developer.spotify.com/documentation/web-api/'
+                target='_blank'
               >
                 Spotify API
               </a>
             </p>
           </div>
         </div>
-        <div id="loggedin">
-          <div id="user-profile" />
-          <div id="oauth" />
+        <div id='loggedin'>
+          <div id='user-profile' />
+          <div id='oauth' />
         </div>
       </div>
     );
