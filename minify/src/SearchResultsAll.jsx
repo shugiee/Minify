@@ -10,7 +10,9 @@ const SearchResultAll = props => {
   const { queryResults, showSearchBar } = props;
   return (
     <div className='search-results-container-outer'>
-      {showSearchBar ? <p className='search-results-group'>Tracks</p> : null}
+      {showSearchBar && queryResults.tracks.items.length ? (
+        <p className='search-results-group'>Tracks</p>
+      ) : null}
       {queryResults.tracks.items.map(song => {
         return (
           <SearchResultTrack
@@ -22,7 +24,9 @@ const SearchResultAll = props => {
           />
         );
       })}
-      {showSearchBar ? <p className='search-results-group'>Albums</p> : null}
+      {showSearchBar && queryResults.albums.items.length ? (
+        <p className='search-results-group'>Albums</p>
+      ) : null}
       {queryResults.albums.items.map(album => {
         return (
           <SearchResultAlbum
@@ -34,7 +38,9 @@ const SearchResultAll = props => {
           />
         );
       })}
-      {showSearchBar ? <p className='search-results-group'>Artists</p> : null}
+      {showSearchBar && queryResults.artists.items.length ? (
+        <p className='search-results-group'>Artists</p>
+      ) : null}
       {queryResults.artists.items.map(artist => {
         return (
           <SearchResultArtist
@@ -46,7 +52,9 @@ const SearchResultAll = props => {
           />
         );
       })}
-      {showSearchBar ? <p className='search-results-group'>Playlists</p> : null}
+      {showSearchBar && queryResults.playlists.items.length ? (
+        <p className='search-results-group'>Playlists</p>
+      ) : null}
       {queryResults.playlists.items.map(playlist => {
         return (
           <SearchResultPlaylist

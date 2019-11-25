@@ -10,16 +10,15 @@ const PlayPause = props => {
         <span id='pause' className='icon'></span>
       </div>
     );
-  } else {
-    return (
-      <div
-        className='resume-container d-flex align-items-center justify-content-center'
-        onClick={props.resume}
-      >
-        <span id='resume' className='icon'></span>
-      </div>
-    );
   }
+  return (
+    <div
+      className='resume-container d-flex align-items-center justify-content-center'
+      onClick={props.resume}
+    >
+      <span id='resume' className='icon'></span>
+    </div>
+  );
 };
 
 export default PlayPause;

@@ -10,6 +10,7 @@ const SearchBar = props => {
           value={props.query}
           onChange={props.handleQueryChange}
           placeholder='Search for a song'
+          autoFocus
         />
       </div>
     );
