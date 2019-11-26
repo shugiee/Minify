@@ -1,11 +1,9 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "es2020": true
     },
-    "extends": [
-        "airbnb"
-    ],
+    "extends": ["airbnb", "prettier", "plugin:node/recommended"],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -14,12 +12,14 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 2018,
+        "ecmaVersion": 9,
         "sourceType": "module"
     },
-    "plugins": [
-        "react"
-    ],
+    "plugins": ["react", "prettier"],
     "rules": {
-    }
+        "prettier/prettier": "error",
+        "no-unused-vars": "warn",
+        "no-process-exit": "off"
+    },
+    "indent": ["error", 2]
 }
