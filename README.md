@@ -1,1 +1,1 @@
-Initial commit
+![Minify Demo](demo/Minify.gif)
