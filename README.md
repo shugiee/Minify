@@ -1,4 +1,4 @@
-## Minify
+# Minify
 
 A mini Spotify controller made with React, and Electron, and the Spotify API.
 
@@ -16,7 +16,6 @@ This application can be downloaded and run via:
 git clone https://github.com/MyNameIsJonathan/Minify.git
 
 cd Minify
-
 ```
 
 Terminal Session #1
