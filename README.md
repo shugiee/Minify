@@ -9,7 +9,7 @@ A mini Spotify controller made with [React](https://reactjs.org/), [Electron](ht
 
 ## Inspiration
 
-This is an application that I've personally wanted to have for a long time -- so I decided to build it. Since I have such a strong personal motivation behind the app, I intend to continue developing the app with the intent of creating a comprehensive stand-in for the official Spotify desktop app.
+This is an application that I've personally wanted to have for a long time -- so I decided to build it. Since I have such a strong personal motivation behind the app, I intend to continue development with the intent of creating a comprehensive stand-in for the official Spotify desktop app.
 
 ## Usage
 
@@ -37,11 +37,11 @@ cd electron
 npm run start-electron
 ```
 
-You will then be promted to login to your personal Spotify account (authentication is done server-side, via the provided express server in conjunction with the Spotify API for token generation). Note that as a Spotify controller, you must have a currently active device playing Spotify in order to successfull toggle playback within Minify.
+You will then be prompted to login to your personal Spotify account (authentication is done server-side, via the provided express server in conjunction with the Spotify API for token generation). Note that as a Spotify controller, you must have a currently active device playing Spotify in order to successfully toggle playback within Minify.
 
 ## General Information
 
-This app is intended to be a complement to an official Spotify app, offering the ability to toggle playback, search Spotify, manipulate library via a smaller-sized application than the official Spotify native desktop app.
+This app is intended to be a complement to an official Spotify app, offering the ability to toggle playback, search Spotify, and manipulate user library via a smaller-sized application.
 
 ## Features
 
