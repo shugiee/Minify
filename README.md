@@ -2,10 +2,13 @@
 
 A mini Spotify controller made with [React](https://reactjs.org/), [Electron](https://electronjs.org/), and [the Spotify API](https://developer.spotify.com/).
 
-
 ## Demo
 
-![Minify Demo](demo/Minify.gif)
+<!-- ![Minify Demo](demo/Minify.gif) -->
+
+<p align="center">
+  <img width="300" height="500" src="demo/Minify.gif">
+</p>
 
 ## Inspiration
 
@@ -47,24 +50,24 @@ This app is intended to be a complement to an official Spotify app, offering the
 
 With this app you can control Spotify playback via:
 
-* Play/pause
-* Seek to previous track
-* Seek to next track
-* Toggle shuffle
-* Toggle repeat mode
-* Scrub song playback
-* Toggle song like status (add to/remove from user's library)
-* Search for and play Spotify tracks, albums, artists, and playlists
+-   Play/pause
+-   Seek to previous track
+-   Seek to next track
+-   Toggle shuffle
+-   Toggle repeat mode
+-   Scrub song playback
+-   Toggle song like status (add to/remove from user's library)
+-   Search for and play Spotify tracks, albums, artists, and playlists
 
-* ...with more to come!
+-   ...with more to come!
 
 ## Future
 
 I plan to continue development on this application. In the works:
 
-* Port the authentication server to AWS
-* Implement comprehensive testing
-* Publish production-ready, packaged application
+-   Port the authentication server to AWS
+-   Implement comprehensive testing
+-   Publish production-ready, packaged application
 
 ## Credits
 
