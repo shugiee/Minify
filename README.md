@@ -12,7 +12,7 @@ A mini Spotify controller made with [React](https://reactjs.org/), [Electron](ht
 
 ## Inspiration
 
-This is an application that I've personally wanted to have for a long time -- so I decided to build it. Since I have such a strong personal motivation behind the app, I intend to continue development with the intent of creating a comprehensive stand-in for the official Spotify desktop app.
+This is an application that I've personally wanted to have for a long time -- so I decided to build it. Since I have such a strong personal motivation behind the app, I intend to continue development with the goal of creating a comprehensive stand-in for the official Spotify desktop app.
 
 ## Usage
 
