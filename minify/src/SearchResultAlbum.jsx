@@ -1,10 +1,9 @@
-import React from "react";
-
-// TODO FINISH
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const SearchResultAlbum = props => {
-  const { album, playAlbum, toggleSearchVisibility, showSearchBar } = props;
-  if (showSearchBar) {
+  const { album, playAlbum, toggleSearchVisibility, isSearchBarVisible } = props;
+  if (isSearchBarVisible) {
     return (
       <div
         className="search-result-container"
@@ -24,7 +23,7 @@ const SearchResultAlbum = props => {
             .map(artist => {
               return artist.name;
             })
-            .join(" & ")}
+            .join(' & ')}
         </p>
       </div>
     );

@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const SearchResultTracks = props => {
-  const { song, playSong, toggleSearchVisibility, showSearchBar } = props;
-  if (showSearchBar) {
+  const { song, playSong, toggleSearchVisibility, isSearchBarVisible } = props;
+  if (isSearchBarVisible) {
     return (
       <div
-        className='search-result-container'
+        className="search-result-container"
         onClick={() => {
           playSong(song, 'searchResult');
           toggleSearchVisibility();
@@ -13,11 +14,11 @@ const SearchResultTracks = props => {
       >
         <img
           src={song.album.images[2].url}
-          className='card-img search-image'
-          alt='Seach result album artwork'
+          className="card-img search-image"
+          alt="Seach result album artwork"
         />
-        <p className='search-information-song-name'>{song.name}</p>
-        <p className='search-information-artist-name'>
+        <p className="search-information-song-name">{song.name}</p>
+        <p className="search-information-artist-name">
           {song.artists
             .map(artist => {
               return artist.name;
@@ -27,7 +28,14 @@ const SearchResultTracks = props => {
       </div>
     );
   }
-  return <div className='hidden' />;
+  return <div className="hidden" />;
+};
+
+SearchResultTracks.propTypes = {
+  song: PropTypes.object.isRequired,
+  playSong: PropTypes.func.isRequired,
+  toggleSearchVisibility: PropTypes.func.isRequired,
+  isSearchBarVisible: PropTypes.bool.isRequired,
 };
 
 export default SearchResultTracks;

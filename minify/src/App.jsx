@@ -31,7 +31,9 @@ class App extends React.Component {
         playlists: { items: [] },
       },
       likesCurrentSong: false,
+      shuffle_state: false,
       timer: 1,
+      isSearchBarVisible: false,
     };
 
     this.setState = this.setState.bind(this);
@@ -152,6 +154,7 @@ class App extends React.Component {
           this.setState(
             {
               playState: data,
+              shuffle_state: data.shuffle_state,
             },
             () => {
               if (!data.is_playing) {
@@ -167,7 +170,6 @@ class App extends React.Component {
       error: err => {
         // if token is expired, get a new one
         if (err.status === 401) {
-          console.log('EEERERERRRORORORORRR');
           this.getNewAccessToken(this.getCurrentlyPlaying);
         }
       },
@@ -553,16 +555,17 @@ class App extends React.Component {
   toggleSearchVisibility() {
     this.setState(state => {
       return {
-        showSearchBar: !state.showSearchBar,
+        isSearchBarVisible: !state.isSearchBarVisible,
       };
     });
   }
 
   toggleShuffle() {
     console.log('toggle shuffle called!!');
+    const {shuffle_state} = this.state;
+    this.setState({ shuffle_state: !shuffle_state });
     $.ajax({
-      url: `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state
-        .playState.shuffle_state}`,
+      url: `https://api.spotify.com/v1/me/player/shuffle?state=${!shuffle_state}`,
       type: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -647,7 +650,7 @@ class App extends React.Component {
     let repeat_state;
     // first, update state; next, ping spotify api to toggle repeat status
     const { playState } = this.state;
-    if (this.state.playState.repeat_state === 'context') {
+    if (playState.repeat_state === 'context') {
       repeat_state = 'off';
     } else {
       repeat_state = 'context';
@@ -810,9 +813,10 @@ class App extends React.Component {
       queryResults,
       likesCurrentSong,
       playState,
-      showSearchBar,
+      isSearchBarVisible,
+      shuffle_state,
     } = this.state;
-    let { is_playing, item, shuffle_state, repeat_state } = playState;
+    let { is_playing, item, repeat_state } = playState;
     const { progress_ms } = playState;
     item = item || { album: { images: ['', ''] }, duration_ms: 0 };
     const artists = item.album.artists || [];
@@ -896,7 +900,7 @@ class App extends React.Component {
                 toggleRepeat={this.toggleRepeat}
               />
               <SearchBar
-                showSearchBar={this.state.showSearchBar}
+                isSearchBarVisible={isSearchBarVisible}
                 query={this.state.query}
                 handleQueryChange={this.handleQueryChange}
               />
@@ -907,7 +911,7 @@ class App extends React.Component {
                 playArtist={this.playArtist}
                 playPlaylist={this.playPlaylist}
                 toggleSearchVisibility={this.toggleSearchVisibility}
-                showSearchBar={showSearchBar}
+                isSearchBarVisible={isSearchBarVisible}
               />
             </div>
           </div>

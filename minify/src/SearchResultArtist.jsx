@@ -1,6 +1,5 @@
-import React from "react";
-
-// TODO FINISH
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function toTitleCase(str) {
   return str.replace(/\w\S*/g, function(txt) {
@@ -9,7 +8,7 @@ function toTitleCase(str) {
 }
 
 const SearchResultArtist = props => {
-  const { artist, playArtist, toggleSearchVisibility, showSearchBar } = props;
+  const { artist, playArtist, toggleSearchVisibility, isSearchBarVisible } = props;
   const imagesLength = artist.images.length;
   let src;
   switch (imagesLength) {
@@ -23,9 +22,9 @@ const SearchResultArtist = props => {
       src = artist.images[2].url;
       break;
     default:
-      src = "";
+      src = '';
   }
-  if (showSearchBar) {
+  if (isSearchBarVisible) {
     return (
       <div
         className="search-result-container"
@@ -41,7 +40,7 @@ const SearchResultArtist = props => {
         />
         <p className="search-information-song-name">{artist.name}</p>
         <p className="search-information-artist-name">
-          {toTitleCase(artist.genres[0] || "")}
+          {toTitleCase(artist.genres[0] || '')}
         </p>
       </div>
     );

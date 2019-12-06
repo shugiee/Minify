@@ -1,74 +1,90 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SearchResultTrack from './SearchResultTrack.jsx';
 import SearchResultAlbum from './SearchResultAlbum.jsx';
 import SearchResultArtist from './SearchResultArtist.jsx';
 import SearchResultPlaylist from './SearchResultPlaylist.jsx';
 
-// TODO FINISH
-
 const SearchResultAll = props => {
-  const { queryResults, showSearchBar } = props;
+  const {
+    queryResults,
+    isSearchBarVisible,
+    toggleSearchVisibility,
+    playSong,
+    playAlbum,
+    playArtist,
+    playPlaylist,
+  } = props;
   return (
-    <div className='search-results-container-outer'>
-      {showSearchBar && queryResults.tracks.items.length ? (
-        <p className='search-results-group'>Tracks</p>
+    <div className="search-results-container-outer">
+      {isSearchBarVisible && queryResults.tracks.items.length ? (
+        <p className="search-results-group">Tracks</p>
       ) : null}
       {queryResults.tracks.items.map(song => {
         return (
           <SearchResultTrack
             song={song}
-            playSong={props.playSong}
-            toggleSearchVisibility={props.toggleSearchVisibility}
-            showSearchBar={showSearchBar}
+            playSong={playSong}
+            toggleSearchVisibility={toggleSearchVisibility}
+            isSearchBarVisible={isSearchBarVisible}
             key={song.id}
           />
         );
       })}
-      {showSearchBar && queryResults.albums.items.length ? (
-        <p className='search-results-group'>Albums</p>
+      {isSearchBarVisible && queryResults.albums.items.length ? (
+        <p className="search-results-group">Albums</p>
       ) : null}
       {queryResults.albums.items.map(album => {
         return (
           <SearchResultAlbum
             album={album}
-            playAlbum={props.playAlbum}
-            toggleSearchVisibility={props.toggleSearchVisibility}
-            showSearchBar={showSearchBar}
+            playAlbum={playAlbum}
+            toggleSearchVisibility={toggleSearchVisibility}
+            isSearchBarVisible={isSearchBarVisible}
             key={album.id}
           />
         );
       })}
-      {showSearchBar && queryResults.artists.items.length ? (
-        <p className='search-results-group'>Artists</p>
+      {isSearchBarVisible && queryResults.artists.items.length ? (
+        <p className="search-results-group">Artists</p>
       ) : null}
       {queryResults.artists.items.map(artist => {
         return (
           <SearchResultArtist
             artist={artist}
-            playArtist={props.playArtist}
-            toggleSearchVisibility={props.toggleSearchVisibility}
-            showSearchBar={showSearchBar}
+            playArtist={playArtist}
+            toggleSearchVisibility={toggleSearchVisibility}
+            isSearchBarVisible={isSearchBarVisible}
             key={artist.id}
           />
         );
       })}
-      {showSearchBar && queryResults.playlists.items.length ? (
-        <p className='search-results-group'>Playlists</p>
+      {isSearchBarVisible && queryResults.playlists.items.length ? (
+        <p className="search-results-group">Playlists</p>
       ) : null}
       {queryResults.playlists.items.map(playlist => {
         return (
           <SearchResultPlaylist
             playlist={playlist}
-            playPlaylist={props.playPlaylist}
-            toggleSearchVisibility={props.toggleSearchVisibility}
-            showSearchBar={showSearchBar}
+            playPlaylist={playPlaylist}
+            toggleSearchVisibility={toggleSearchVisibility}
+            isSearchBarVisible={isSearchBarVisible}
             key={playlist.id}
           />
         );
       })}
     </div>
   );
-  // return <div />;
+};
+
+SearchResultAll.propTypes = {
+  queryResults: PropTypes.object.isRequired,
+  isSearchBarVisible: PropTypes.func.isRequired,
+  toggleSearchVisibility: PropTypes.func.isRequired,
+  playSong: PropTypes.func.isRequired,
+  playAlbum: PropTypes.func.isRequired,
+  playArtist: PropTypes.func.isRequired,
+  playPlaylist: PropTypes.func.isRequired,
 };
 
 export default SearchResultAll;

@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const PlaybackSlider = props => {
   // console.log(props.progress_ms, props.duration_ms);
   return (
-    <div className='playback-slider-container'>
+    <div className="playback-slider-container">
       <input
-        type='range'
+        type="range"
         value={props.progress_ms}
         onChange={event => {
           console.log(props.progress_ms);
@@ -14,14 +15,14 @@ const PlaybackSlider = props => {
         onClick={event => {
           props.handleSliderClick(event);
         }}
-        min='0'
+        min="0"
         max={JSON.stringify(props.duration_ms) || '0'}
-        id='playback-slider'
+        id="playback-slider"
         style={{
           background: `linear-gradient(
                       90deg,
                       #ffffff ${(props.progress_ms / props.duration_ms) * 100}%,
-                      #666666 0%)`
+                      #666666 0%)`,
         }}
       />
     </div>

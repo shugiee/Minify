@@ -1,18 +1,17 @@
 import React from 'react';
-
-// TODO FINISH
+import PropTypes from 'prop-types';
 
 const SearchResultPlaylist = props => {
   const {
     playlist,
     playPlaylist,
     toggleSearchVisibility,
-    showSearchBar,
+    isSearchBarVisible,
   } = props;
-  if (showSearchBar) {
+  if (isSearchBarVisible) {
     return (
       <div
-        className='search-result-container'
+        className="search-result-container"
         onClick={() => {
           playPlaylist(playlist);
           toggleSearchVisibility();
@@ -20,17 +19,17 @@ const SearchResultPlaylist = props => {
       >
         <img
           src={playlist.images[0] ? playlist.images[0].url : ''}
-          className='card-img search-image'
-          alt='Seach result album artwork'
+          className="card-img search-image"
+          alt="Seach result album artwork"
         />
-        <p className='search-information-song-name'>{playlist.name}</p>
-        <p className='search-information-artist-name'>
+        <p className="search-information-song-name">{playlist.name}</p>
+        <p className="search-information-artist-name">
           {playlist.owner.display_name}
         </p>
       </div>
     );
   }
-  return <div className='hidden' />;
+  return <div className="hidden" />;
 };
 
 export default SearchResultPlaylist;

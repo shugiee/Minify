@@ -1,27 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Like = props => {
   if (props.likesCurrentSong) {
     return (
-      <div className='like-container d-flex align-items-center justify-content-center'>
+      <div className="like-container d-flex align-items-center justify-content-center">
         <span
-          id='like-true'
-          className='icon filter-green'
+          id="like-true"
+          className="icon filter-green"
           onClick={props.toggleLike}
-        ></span>
-      </div>
-    );
-  } else {
-    return (
-      <div className='like-container d-flex align-items-center justify-content-center'>
-        <span
-          id='like-false'
-          className='icon'
-          onClick={props.toggleLike}
-        ></span>
+        />
       </div>
     );
   }
+  return (
+    <div className="like-container d-flex align-items-center justify-content-center">
+      <span id="like-false" className="icon" onClick={props.toggleLike} />
+    </div>
+  );
+};
+
+Like.protoTypes = {
+  likesCurrentSong: PropTypes.Boolean,
+  toggleLike: PropTypes.Function,
 };
 
 export default Like;
