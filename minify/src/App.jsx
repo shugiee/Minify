@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
 import React from 'react';
 import $ from 'jquery';
@@ -88,6 +89,28 @@ class App extends React.Component {
     }
   }
 
+  // using the refresh token, get a new access token (I believe they last an hour)
+  getNewAccessToken(cb) {
+    console.log('get new access token called');
+    $.ajax({
+      url: '/refresh_token',
+      type: 'GET',
+      data: {
+        refresh_token: this.state.refresh_token,
+      },
+      success: data => {
+        this.setState({ access_token: data.access_token }, () => {
+          if (cb) {
+            cb();
+          }
+        });
+      },
+      error: err => {
+        console.error(err);
+      },
+    });
+  }
+
   getCurrentUser() {
     console.log('get current user called!');
     $.ajax({
@@ -96,7 +119,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: user => {
@@ -161,7 +184,7 @@ class App extends React.Component {
         beforeSend: xhr => {
           xhr.setRequestHeader(
             'Authorization',
-            'Bearer ' + this.state.access_token
+            `Bearer ${this.state.access_token}`
           );
         },
         success: data => {
@@ -186,7 +209,7 @@ class App extends React.Component {
         beforeSend: xhr => {
           xhr.setRequestHeader(
             'Authorization',
-            'Bearer ' + this.state.access_token
+            `Bearer ${this.state.access_token}`
           );
         },
         success: songs => {
@@ -199,27 +222,6 @@ class App extends React.Component {
       });
     } else {
       console.log('Top track already saved! ');
-    }
-  }
-
-  checkLikeStatus() {
-    console.log('check like status called!');
-    if (this.state.playState.item.id) {
-      $.ajax({
-        url: `https://api.spotify.com/v1/me/tracks/contains?ids=${this.state.playState.item.id}`,
-        type: 'GET',
-        beforeSend: xhr => {
-          xhr.setRequestHeader(
-            'Authorization',
-            'Bearer ' + this.state.access_token
-          );
-        },
-        success: response => {
-          this.setState({
-            likesCurrentSong: response[0],
-          });
-        },
-      });
     }
   }
 
@@ -258,11 +260,11 @@ class App extends React.Component {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          data: data,
+          data,
           beforeSend: xhr => {
             xhr.setRequestHeader(
               'Authorization',
-              'Bearer ' + this.state.access_token
+              `Bearer ${this.state.access_token}`
             );
           },
           success: song => {
@@ -314,7 +316,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: songs => {
@@ -338,7 +340,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: songs => {
@@ -363,7 +365,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: this.getCurrentlyPlaying,
@@ -390,7 +392,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: () => {
@@ -424,7 +426,7 @@ class App extends React.Component {
         beforeSend: xhr => {
           xhr.setRequestHeader(
             'Authorization',
-            'Bearer ' + this.state.access_token
+            `Bearer ${this.state.access_token}`
           );
         },
         success: result => {
@@ -473,7 +475,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       error: err => {
@@ -500,7 +502,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       error: err => {
@@ -530,7 +532,7 @@ class App extends React.Component {
         beforeSend: xhr => {
           xhr.setRequestHeader(
             'Authorization',
-            'Bearer ' + this.state.access_token
+            `Bearer ${this.state.access_token}`
           );
         },
         success: data => {
@@ -569,7 +571,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: this.getCurrentlyPlaying,
@@ -586,7 +588,10 @@ class App extends React.Component {
 
   toggleLike() {
     console.log('toggle like called!!');
-    if (this.state.likesCurrentSong) {
+    // immediate change state, then ping spotify to toggle like
+    const isLiked = this.state.likesCurrentSong;
+    this.setState({ likesCurrentSong: !isLiked });
+    if (isLiked) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks?ids=${this.state.playState.item.id}`,
         type: 'DELETE',
@@ -597,7 +602,7 @@ class App extends React.Component {
         beforeSend: xhr => {
           xhr.setRequestHeader(
             'Authorization',
-            'Bearer ' + this.state.access_token
+            `Bearer ${this.state.access_token}`
           );
         },
         success: this.getCurrentlyPlaying,
@@ -621,7 +626,7 @@ class App extends React.Component {
         beforeSend: xhr => {
           xhr.setRequestHeader(
             'Authorization',
-            'Bearer ' + this.state.access_token
+            `Bearer ${this.state.access_token}`
           );
         },
         success: this.getCurrentlyPlaying,
@@ -640,11 +645,15 @@ class App extends React.Component {
   toggleRepeat() {
     console.log('toggle repeat called!');
     let repeat_state;
+    // first, update state; next, ping spotify api to toggle repeat status
+    const { playState } = this.state;
     if (this.state.playState.repeat_state === 'context') {
       repeat_state = 'off';
     } else {
       repeat_state = 'context';
     }
+    playState.repeat_state = repeat_state;
+    this.setState({ playState });
     console.log('toggling repeat!!');
     $.ajax({
       url: `https://api.spotify.com/v1/me/player/repeat?state=${repeat_state}`,
@@ -656,7 +665,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: this.getCurrentlyPlaying,
@@ -723,26 +732,25 @@ class App extends React.Component {
     });
   }
 
-  // using the refresh token, get a new access token (I believe they last an hour)
-  getNewAccessToken(cb) {
-    console.log('get new access token called');
-    $.ajax({
-      url: '/refresh_token',
-      type: 'GET',
-      data: {
-        refresh_token: this.state.refresh_token,
-      },
-      success: data => {
-        this.setState({ access_token: data.access_token }, () => {
-          if (cb) {
-            cb();
-          }
-        });
-      },
-      error: err => {
-        console.error(err);
-      },
-    });
+  checkLikeStatus() {
+    console.log('check like status called!');
+    if (this.state.playState.item.id) {
+      $.ajax({
+        url: `https://api.spotify.com/v1/me/tracks/contains?ids=${this.state.playState.item.id}`,
+        type: 'GET',
+        beforeSend: xhr => {
+          xhr.setRequestHeader(
+            'Authorization',
+            `Bearer ${this.state.access_token}`
+          );
+        },
+        success: response => {
+          this.setState({
+            likesCurrentSong: response[0],
+          });
+        },
+      });
+    }
   }
 
   login() {
@@ -781,7 +789,7 @@ class App extends React.Component {
       beforeSend: xhr => {
         xhr.setRequestHeader(
           'Authorization',
-          'Bearer ' + this.state.access_token
+          `Bearer ${this.state.access_token}`
         );
       },
       success: this.getCurrentlyPlaying,
@@ -811,33 +819,33 @@ class App extends React.Component {
 
     if (this.state.isAuthenticated) {
       return (
-        <div className='App'>
+        <div className="App">
           <div
-            className='d-inline-flex justify-content-center'
-            id='player-front'
+            className="d-inline-flex justify-content-center"
+            id="player-front"
           >
-            <div className='player-grid'>
+            <div className="player-grid">
               <div
-                className='search-container d-flex align-items-center justify-content-center'
+                className="search-container d-flex align-items-center justify-content-center"
                 onClick={this.toggleSearchVisibility}
               >
-                <span id='search-button' className='icon' />
+                <span id="search-button" className="icon" />
               </div>
 
-              <div className='artwork-container'>
+              <div className="artwork-container">
                 <img
-                  id='artwork'
+                  id="artwork"
                   src={item.album.images[1].url}
-                  alt='Album artwork'
+                  alt="Album artwork"
                 />
               </div>
 
-              <div className='song-name-container'>
-                <span id='song-name'>{item ? item.name : ''}</span>
+              <div className="song-name-container">
+                <span id="song-name">{item ? item.name : ''}</span>
               </div>
 
-              <div className='artist-name-container'>
-                <div id='artist-name'>
+              <div className="artist-name-container">
+                <div id="artist-name">
                   {artists
                     .map(artist => {
                       return artist.name;
@@ -864,10 +872,10 @@ class App extends React.Component {
               />
 
               <div
-                className='previous-container d-flex align-items-center justify-content-center'
+                className="previous-container d-flex align-items-center justify-content-center"
                 onClick={this.seekPrevious}
               >
-                <span id='previous' className='icon' />
+                <span id="previous" className="icon" />
               </div>
 
               <PlayPause
@@ -877,10 +885,10 @@ class App extends React.Component {
               />
 
               <div
-                className='next-container d-flex align-items-center justify-content-center'
+                className="next-container d-flex align-items-center justify-content-center"
                 onClick={this.seekNext}
               >
-                <span id='next' className='icon' />
+                <span id="next" className="icon" />
               </div>
 
               <Repeat
@@ -907,52 +915,55 @@ class App extends React.Component {
       );
     }
     return (
-      <div className='container d-flex align-items-center justify-content-center'>
-        <div id='login'>
-          <div className='spotify-logo-container d-flex align-items-center justify-content-center'>
+      <div className="container d-flex align-items-center justify-content-center">
+        <div id="login">
+          <div className="spotify-logo-container d-flex align-items-center justify-content-center">
             <img
-              src='http://localhost:3000/spotify-icon.png'
-              id='spotify-logo'
+              src="http://localhost:3000/spotify-icon.png"
+              id="spotify-logo"
             />
           </div>
-          <h1 className='intro' id='minify-top'>
+          <h1 className="intro" id="minify-top">
             Welcome to
           </h1>
-          <div className='minify-container'>
-            <h1 className='minify'>Minify</h1>
+          <div className="minify-container">
+            <h1 className="minify">Minify</h1>
           </div>
-          <div className='spotify-logo-container'>
-            <p className='subtle'>A Spotify Mini-Player</p>
+          <div className="spotify-logo-container">
+            <p className="subtle">A Spotify Mini-Player</p>
           </div>
-          <h1 className='intro'>Please login to Spotify below</h1>
-          <div id='login-button-container'>
+          <h1 className="intro">Please login to Spotify below</h1>
+          <div id="login-button-container">
             <a
-              href='http://localhost:8888/login'
-              id='login-button'
-              className='d-flex align-items-center justify-content-center'
+              href="http://localhost:8888/login"
+              id="login-button"
+              className="d-flex align-items-center justify-content-center"
             >
               LOG IN WITH SPOTIFY
             </a>
           </div>
-          <div className='subtle-credit-container d-flex align-items-center justify-content-center'>
-            <p className='subtle-credit'>
-              Made by{' '}
-              <a href='https://github.com/MyNameIsJonathan' target='_blank'>
+          <div className="subtle-credit-container d-flex align-items-center justify-content-center">
+            <p className="subtle-credit">
+              Made by
+{' '}
+              <a href="https://github.com/MyNameIsJonathan" target="_blank">
                 Jay Olson
-              </a>{' '}
-              through the generosity of the public-facing{' '}
+              </a>
+{' '}
+              through the generosity of the public-facing
+{' '}
               <a
-                href='https://developer.spotify.com/documentation/web-api/'
-                target='_blank'
+                href="https://developer.spotify.com/documentation/web-api/"
+                target="_blank"
               >
                 Spotify API
               </a>
             </p>
           </div>
         </div>
-        <div id='loggedin'>
-          <div id='user-profile' />
-          <div id='oauth' />
+        <div id="loggedin">
+          <div id="user-profile" />
+          <div id="oauth" />
         </div>
       </div>
     );
