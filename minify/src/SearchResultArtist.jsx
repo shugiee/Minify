@@ -8,7 +8,12 @@ function toTitleCase(str) {
 }
 
 const SearchResultArtist = props => {
-  const { artist, playArtist, toggleSearchVisibility, isSearchBarVisible } = props;
+  const {
+    artist,
+    playArtist,
+    toggleSearchVisibility,
+    isSearchBarVisible,
+  } = props;
   const imagesLength = artist.images.length;
   let src;
   switch (imagesLength) {
@@ -46,6 +51,13 @@ const SearchResultArtist = props => {
     );
   }
   return <div className="hidden" />;
+};
+
+SearchResultArtist.propTypes = {
+  artist: PropTypes.string.isRequired,
+  playArtist: PropTypes.func.isRequired,
+  toggleSearchVisibility: PropTypes.func.isRequired,
+  isSearchBarVisible: PropTypes.bool.isRequired,
 };
 
 export default SearchResultArtist;

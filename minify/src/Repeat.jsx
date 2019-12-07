@@ -2,23 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Repeat = props => {
-  if (props.repeat_state === 'off' || !props.repeat_state) {
+  const { repeat_state, toggleRepeat } = props;
+  if (repeat_state === 'off' || !repeat_state) {
     return (
       <div className="repeat-container d-flex align-items-center justify-content-center">
-        <span id="repeat" className="icon" onClick={props.toggleRepeat}></span>
+        <span id="repeat" className="icon" onClick={toggleRepeat}></span>
       </div>
     );
-  } else {
+  } 
     return (
       <div className="repeat-container d-flex align-items-center justify-content-center">
         <span
           id="repeat"
           className="icon filter-green"
-          onClick={props.toggleRepeat}
+          onClick={toggleRepeat}
         ></span>
       </div>
     );
-  }
+  
+};
+
+Repeat.propTypes = {
+  repeat_state: PropTypes.string.isRequired,
+  toggleRepeat: PropTypes.func.isRequired,
 };
 
 export default Repeat;

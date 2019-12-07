@@ -1,27 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Shuffle = props => {
-  if (props.shuffle_state) {
+  const { shuffle_state, toggleShuffle } = props;
+
+  if (shuffle_state) {
     return (
       <div className="shuffle-container d-flex align-items-center justify-content-center">
         <span
           id="shuffle"
           className="icon filter-green"
-          onClick={props.toggleShuffle}
+          onClick={toggleShuffle}
         ></span>
       </div>
     );
-  } 
-    return (
-      <div className="shuffle-container d-flex align-items-center justify-content-center">
-        <span
-          id="shuffle"
-          className="icon"
-          onClick={props.toggleShuffle}
-        ></span>
-      </div>
-    );
-  
+  }
+  return (
+    <div className="shuffle-container d-flex align-items-center justify-content-center">
+      <span id="shuffle" className="icon" onClick={toggleShuffle}></span>
+    </div>
+  );
+};
+
+Shuffle.propTypes = {
+  shuffle_state: PropTypes.string.isRequired,
+  toggleShuffle: PropTypes.func.isRequired,
 };
 
 export default Shuffle;

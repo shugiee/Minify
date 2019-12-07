@@ -32,4 +32,11 @@ const SearchResultPlaylist = props => {
   return <div className="hidden" />;
 };
 
+SearchResultPlaylist.propTypes = {
+  playlist: PropTypes.object.isRequired,
+  playPlaylist: PropTypes.func.isRequired,
+  toggleSearchVisibility: PropTypes.func.isRequired,
+  isSearchBarVisible: PropTypes.bool.isRequired,
+};
+
 export default SearchResultPlaylist;

@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SearchResultAlbum = props => {
-  const { album, playAlbum, toggleSearchVisibility, isSearchBarVisible } = props;
+  const {
+    album,
+    playAlbum,
+    toggleSearchVisibility,
+    isSearchBarVisible,
+  } = props;
   if (isSearchBarVisible) {
     return (
       <div
@@ -29,6 +34,13 @@ const SearchResultAlbum = props => {
     );
   }
   return <div className="hidden" />;
+};
+
+SearchResultAlbum.propTypes = {
+  album: PropTypes.object.isRequired,
+  playAlbum: PropTypes.func.isRequired,
+  toggleSearchVisibility: PropTypes.func.isRequired,
+  isSearchBarVisible: PropTypes.bool.isRequired,
 };
 
 export default SearchResultAlbum;
