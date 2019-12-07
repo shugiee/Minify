@@ -16,7 +16,7 @@ let cookieParser = require('cookie-parser');
 let client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 let client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
 // let redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
-let redirect_uri = 'http://localhost:8888/callback';
+let redirect_uri = 'http://52.52.252.234:8888/callback';
 
 /**
  * Generates a random string containing numbers and letters
@@ -57,7 +57,7 @@ app.get('/login', function(req, res) {
         client_id: client_id,
         scope: scope,
         redirect_uri: redirect_uri,
-        state: state
+        state: state,
       })
   );
 });
@@ -74,7 +74,7 @@ app.get('/callback', function(req, res) {
     res.redirect(
       '/#' +
         querystring.stringify({
-          error: 'state_mismatch'
+          error: 'state_mismatch',
         })
     );
   } else {
@@ -84,14 +84,14 @@ app.get('/callback', function(req, res) {
       form: {
         code: code,
         redirect_uri: redirect_uri,
-        grant_type: 'authorization_code'
+        grant_type: 'authorization_code',
       },
       headers: {
         Authorization:
           'Basic ' +
-          new Buffer(client_id + ':' + client_secret).toString('base64')
+          new Buffer(client_id + ':' + client_secret).toString('base64'),
       },
-      json: true
+      json: true,
     };
 
     request.post(authOptions, function(error, response, body) {
@@ -102,7 +102,7 @@ app.get('/callback', function(req, res) {
         let options = {
           url: 'https://api.spotify.com/v1/me',
           headers: { Authorization: 'Bearer ' + access_token },
-          json: true
+          json: true,
         };
 
         // use the access token to access the Spotify Web API
@@ -113,14 +113,14 @@ app.get('/callback', function(req, res) {
           'http://localhost:3000/#' +
             querystring.stringify({
               access_token: access_token,
-              refresh_token: refresh_token
+              refresh_token: refresh_token,
             })
         );
       } else {
         res.redirect(
           '/#' +
             querystring.stringify({
-              error: 'invalid_token'
+              error: 'invalid_token',
             })
         );
       }
@@ -137,20 +137,20 @@ app.get('/refresh_token', cors(), function(req, res) {
     headers: {
       Authorization: `Basic ${new Buffer(
         client_id + ':' + client_secret
-      ).toString('base64')}`
+      ).toString('base64')}`,
     },
     form: {
       grant_type: 'refresh_token',
-      refresh_token
+      refresh_token,
     },
-    json: true
+    json: true,
   };
 
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       let { access_token } = body;
       res.send({
-        access_token
+        access_token,
       });
     }
   });

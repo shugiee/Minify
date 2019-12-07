@@ -562,7 +562,7 @@ class App extends React.Component {
 
   toggleShuffle() {
     console.log('toggle shuffle called!!');
-    const {shuffle_state} = this.state;
+    const { shuffle_state } = this.state;
     this.setState({ shuffle_state: !shuffle_state });
     $.ajax({
       url: `https://api.spotify.com/v1/me/player/shuffle?state=${!shuffle_state}`,
@@ -939,7 +939,7 @@ class App extends React.Component {
           <h1 className="intro">Please login to Spotify below</h1>
           <div id="login-button-container">
             <a
-              href="http://localhost:8888/login"
+              href="http://52.52.252.234:8888/login"
               id="login-button"
               className="d-flex align-items-center justify-content-center"
             >
@@ -948,14 +948,11 @@ class App extends React.Component {
           </div>
           <div className="subtle-credit-container d-flex align-items-center justify-content-center">
             <p className="subtle-credit">
-              Made by
-{' '}
+              Made by{' '}
               <a href="https://github.com/MyNameIsJonathan" target="_blank">
                 Jay Olson
-              </a>
-{' '}
-              through the generosity of the public-facing
-{' '}
+              </a>{' '}
+              through the generosity of the public-facing{' '}
               <a
                 href="https://developer.spotify.com/documentation/web-api/"
                 target="_blank"
