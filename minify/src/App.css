@@ -189,7 +189,6 @@ input:focus {
   width: 13px;
   height: 13px;
   display: block;
-  filter: brightness(0) invert(1);
 }
 
 #like-false {

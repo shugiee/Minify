@@ -2,24 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const PlayPause = props => {
-  if (props.is_playing) {
+  const { is_playing, resume, pause } = props;
+
+  if (is_playing) {
     return (
       <div
         className="pause-container d-flex align-items-center justify-content-center"
-        onClick={props.pause}
+        onClick={pause}
       >
-        <span id="pause" className="icon"></span>
+        <span id="pause" className="icon" />
       </div>
     );
   }
   return (
     <div
       className="resume-container d-flex align-items-center justify-content-center"
-      onClick={props.resume}
+      onClick={resume}
     >
-      <span id="resume" className="icon"></span>
+      <span id="resume" className="icon" />
     </div>
   );
+};
+
+PlayPause.propTypes = {
+  is_playing: PropTypes.bool.isRequired,
+  resume: PropTypes.func.isRequired,
+  pause: PropTypes.func.isRequired,
 };
 
 export default PlayPause;
