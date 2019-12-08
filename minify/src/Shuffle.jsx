@@ -11,13 +11,13 @@ const Shuffle = props => {
           id="shuffle"
           className="icon filter-green"
           onClick={toggleShuffle}
-        ></span>
+         />
       </div>
     );
   }
   return (
     <div className="shuffle-container d-flex align-items-center justify-content-center">
-      <span id="shuffle" className="icon" onClick={toggleShuffle}></span>
+      <span id="shuffle" className="icon" onClick={toggleShuffle} />
     </div>
   );
 };

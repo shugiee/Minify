@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SearchBar = props => {
-  const { query, handleQueryChange } = props;
+  const { query, handleQueryChange, isSearchBarVisible } = props;
 
-  if (props.isSearchBarVisible) {
+  if (isSearchBarVisible) {
     return (
       <div className="search-bar-container">
         <input
@@ -17,14 +17,14 @@ const SearchBar = props => {
         />
       </div>
     );
-  } else {
-    return <div className="hidden"></div>;
   }
+  return <div className="hidden" />;
 };
 
 SearchBar.propTypes = {
   query: PropTypes.string.isRequired,
   handleQueryChange: PropTypes.func.isRequired,
+  isSearchBarVisible: PropTypes.bool.isRequired,
 };
 
 export default SearchBar;

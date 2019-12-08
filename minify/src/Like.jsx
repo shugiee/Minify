@@ -17,9 +17,9 @@ const Like = props => {
   );
 };
 
-Like.protoTypes = {
-  likesCurrentSong: PropTypes.Boolean,
-  toggleLike: PropTypes.Function,
+Like.propTypes = {
+  likesCurrentSong: PropTypes.bool.isRequired,
+  toggleLike: PropTypes.func.isRequired,
 };
 
 export default Like;

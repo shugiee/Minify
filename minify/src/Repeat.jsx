@@ -6,20 +6,15 @@ const Repeat = props => {
   if (repeat_state === 'off' || !repeat_state) {
     return (
       <div className="repeat-container d-flex align-items-center justify-content-center">
-        <span id="repeat" className="icon" onClick={toggleRepeat}></span>
+        <span id="repeat" className="icon" onClick={toggleRepeat} />
       </div>
     );
-  } 
-    return (
-      <div className="repeat-container d-flex align-items-center justify-content-center">
-        <span
-          id="repeat"
-          className="icon filter-green"
-          onClick={toggleRepeat}
-        ></span>
-      </div>
-    );
-  
+  }
+  return (
+    <div className="repeat-container d-flex align-items-center justify-content-center">
+      <span id="repeat" className="icon filter-green" onClick={toggleRepeat} />
+    </div>
+  );
 };
 
 Repeat.propTypes = {
