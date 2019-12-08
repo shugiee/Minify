@@ -1,7 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-require('electron-reload');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -11,9 +10,9 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 230,
-    height: 380,
+    height: 420,
     minWidth: 230,
-    minHeight: 380,
+    minHeight: 420,
     minimizable: false, // TODO KEEP? Removes minimize, maximize buttons
     maximizable: false, // TODO KEEP? Removes minimize, maximize buttons
     // resizable: false, // TODO DEV
@@ -21,7 +20,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
-    icon: path.join(__dirname, '/Icon/Icon.icns'),
+    icon: path.join(__dirname, 'build/icon.icns'),
   });
 
   // and load the index.html of the app.

@@ -110,6 +110,7 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
+          // TODO is this wrong for packaged app??
           'http://localhost:3000/#' +
             querystring.stringify({
               access_token: access_token,
@@ -128,7 +129,6 @@ app.get('/callback', function(req, res) {
   }
 });
 
-// TODO -- allow cors on this! Currently app is getting cors error
 app.get('/refresh_token', cors(), function(req, res) {
   // requesting access token from refresh token
   let { refresh_token } = req.query;
