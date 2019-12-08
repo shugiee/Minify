@@ -40,7 +40,7 @@ PlaybackSlider.propTypes = {
   progress_ms: PropTypes.number.isRequired,
   duration_ms: PropTypes.number.isRequired,
   handleSliderChange: PropTypes.func.isRequired,
-  handleSliderClick: propTypes.func.isRequired,
+  handleSliderClick: PropTypes.func.isRequired,
 };
 
 export default PlaybackSlider;

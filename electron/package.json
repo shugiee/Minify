@@ -5,11 +5,27 @@
   "main": "electron-main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-electron": "electron electron-main.js"
+    "start-electron": "NODE_ENV=dev nodemon --exec \"\"electron .\"\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "electron": "^7.1.1"
+  },
+  "homepage": "./",
+  "build": {
+    "appId": "minify",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "category": "Music Streaming",
+      "iconUrl": "Icon.icns"
+    }
+  },
+  "devDependencies": {
+    "electron-is-dev": "^1.1.0",
+    "electron-reload": "^1.5.0",
+    "nodemon": "^2.0.1"
   }
 }
