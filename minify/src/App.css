@@ -114,7 +114,7 @@ input:focus {
 }
 
 #spotify-logo {
-  /* background-image: url('http://localhost:3000/spotify-icon.png'); */
+  /* background-image: url('http://52.52.252.234:3000/spotify-icon.png'); */
   width: 50px;
   height: 50px;
 }
@@ -165,7 +165,7 @@ input:focus {
 }
 
 #search-button {
-  background-image: url('http://localhost:3000/search-button.svg');
+  background-image: url('http://52.52.252.234:3000/search-button.svg');
   width: 13px;
   height: 13px;
   display: block;
@@ -185,56 +185,56 @@ input:focus {
 }
 
 #like-true {
-  background-image: url('http://localhost:3000/like-button-full.svg');
+  background-image: url('http://52.52.252.234:3000/like-button-full.svg');
   width: 13px;
   height: 13px;
   display: block;
 }
 
 #like-false {
-  background-image: url('http://localhost:3000/like-button-clear.svg');
+  background-image: url('http://52.52.252.234:3000/like-button-clear.svg');
   width: 13px;
   height: 13px;
   display: block;
 }
 
 #resume {
-  background-image: url('http://localhost:3000/play-button.svg');
+  background-image: url('http://52.52.252.234:3000/play-button.svg');
   width: 40px;
   height: 40px;
   display: block;
 }
 
 #pause {
-  background-image: url('http://localhost:3000/pause-button.svg');
+  background-image: url('http://52.52.252.234:3000/pause-button.svg');
   width: 40px;
   height: 40px;
   display: block;
 }
 
 #previous {
-  background-image: url('http://localhost:3000/previous-button.svg');
+  background-image: url('http://52.52.252.234:3000/previous-button.svg');
   width: 25px;
   height: 25px;
   display: block;
 }
 
 #next {
-  background-image: url('http://localhost:3000/next-button.svg');
+  background-image: url('http://52.52.252.234:3000/next-button.svg');
   width: 25px;
   height: 25px;
   display: block;
 }
 
 #shuffle {
-  background-image: url('http://localhost:3000/shuffle-button.svg');
+  background-image: url('http://52.52.252.234:3000/shuffle-button.svg');
   width: 13px;
   height: 13px;
   display: block;
 }
 
 #repeat {
-  background-image: url('http://localhost:3000/repeat-button.svg');
+  background-image: url('http://52.52.252.234:3000/repeat-button.svg');
   width: 13px;
   height: 13px;
   display: block;
