@@ -888,6 +888,7 @@ class App extends React.Component {
             <img
               src="http://52.52.252.234:3000/spotify-icon.png"
               id="spotify-logo"
+              alt="Green Spotify icon"
             />
           </div>
           <h1 className="intro" id="minify-top">
@@ -911,21 +912,19 @@ class App extends React.Component {
           </div>
           <div className="subtle-credit-container d-flex align-items-center justify-content-center">
             <p className="subtle-credit">
-              Made by
-{' '}
+              Made by{' '}
               <a
                 href="https://github.com/MyNameIsJonathan"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Jay Olson
-              </a>
-{' '}
-              through the generosity of the public-facing
-{' '}
+              </a>{' '}
+              through the generosity of the public-facing{' '}
               <a
                 href="https://developer.spotify.com/documentation/web-api/"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Spotify API
               </a>
