@@ -160,9 +160,9 @@ app.get('/refresh_token', cors(), (req, res) => {
 
 // configure https
 
-const key = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/privkey.pem');
-const cert = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/cert.pem');
-const ca = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/chain.pem');
+const key = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/privkey.pem', 'utf8');
+const cert = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/chain.pem', 'utf8');
 
 const options = {
   key,
@@ -170,5 +170,5 @@ const options = {
   ca,
 };
 
-https.createServer(options, app).listen(4443);
-console.log(`Listening on port: ${4443}`);
+https.createServer(options, app).listen(8888);
+console.log(`Listening on port: ${8888}`);
