@@ -13,5 +13,8 @@
   "eslint.autoFixOnSave": true,
   "eslint.options": {
     "configFile": "/Users/jonathanolson/.eslintrc.json"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
   }
 }

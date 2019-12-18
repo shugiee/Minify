@@ -13,6 +13,8 @@ const request = require('request'); // "Request" library
 const cors = require('cors');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
+const https = require('https');
+const fs = require('fs');
 
 const client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
@@ -154,4 +156,18 @@ app.get('/refresh_token', cors(), (req, res) => {
 });
 
 console.log('Listening on 8888');
-app.listen(8888);
+// app.listen(8888);
+
+// configure https
+
+const key = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/privkey.pem');
+const cert = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/cert.pem');
+const ca = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/chain.pem');
+
+const options = {
+  key,
+  cert,
+  ca,
+};
+
+https.createServer(options, app).listen(4443);
