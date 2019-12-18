@@ -155,7 +155,7 @@ app.get('/refresh_token', cors(), (req, res) => {
   });
 });
 
-console.log('Listening on 8888');
+// console.log('Listening on 8888');
 // app.listen(8888);
 
 // configure https
@@ -171,3 +171,4 @@ const options = {
 };
 
 https.createServer(options, app).listen(4443);
+console.log(`Listening on port: ${4443}`);
