@@ -886,7 +886,7 @@ class App extends React.Component {
         <div id="login">
           <div className="spotify-logo-container d-flex align-items-center justify-content-center">
             <img
-              src="http://52.52.252.234:3000/spotify-icon.png"
+              src="https://jaycode.dev:8888/spotify-icon.png"
               id="spotify-logo"
               alt="Green Spotify icon"
             />
