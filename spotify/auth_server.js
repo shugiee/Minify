@@ -19,7 +19,7 @@ const fs = require('fs');
 const client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
 // let redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
-const redirect_uri = 'http://52.52.252.234:8888/callback';
+const redirect_uri = 'https://jaycode.dev:8888/callback';
 
 /**
  * Generates a random string containing numbers and letters
