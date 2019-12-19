@@ -86,7 +86,7 @@ class App extends React.Component {
         }
       );
     } else {
-      this.login();
+      // this.login();
     }
   }
 

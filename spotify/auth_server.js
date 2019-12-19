@@ -20,7 +20,6 @@ const client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
 const redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
 
-
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
@@ -112,7 +111,7 @@ app.get('/callback', (req, res) => {
         // we can also pass the token to the browser to make requests from there
         res.redirect(
           // TODO is this wrong for packaged app??
-          `http://52.52.252.234:3000/#${querystring.stringify({
+          `https://jaycode.dev:8888/#${querystring.stringify({
             access_token,
             refresh_token,
           })}`
@@ -160,9 +159,18 @@ app.get('/refresh_token', cors(), (req, res) => {
 
 // configure https
 
-const key = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/privkey.pem', 'utf8');
-const cert = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/jaycode.dev/chain.pem', 'utf8');
+const key = fs.readFileSync(
+  '/etc/letsencrypt/live/jaycode.dev/privkey.pem',
+  'utf8'
+);
+const cert = fs.readFileSync(
+  '/etc/letsencrypt/live/jaycode.dev/cert.pem',
+  'utf8'
+);
+const ca = fs.readFileSync(
+  '/etc/letsencrypt/live/jaycode.dev/chain.pem',
+  'utf8'
+);
 
 const options = {
   key,
