@@ -716,7 +716,7 @@ class App extends React.Component {
 
   login() {
     // Use an aws-hosted authentication express server that interacts directly with Spotify to authenticate users
-    // Response is to redirect the user to 52.52.252.234:3000/, with the refresh_token and accesss_tokens as params
+    // Response is to redirect the user to the app homepage, with the refresh_token and accesss_tokens as params
     console.log('login called!');
     $.ajax({
       url: 'https://jaycode.dev:8888/login',
