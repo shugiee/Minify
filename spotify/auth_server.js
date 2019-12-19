@@ -13,11 +13,12 @@ const request = require('request'); // "Request" library
 const cors = require('cors');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
+const https = require('https');
+const fs = require('fs');
 
 const client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
-// let redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
-const redirect_uri = 'http://52.52.252.234:8888/callback';
+const redirect_uri = process.env.SPOTIFY_REDIRECT_URL; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -110,7 +111,7 @@ app.get('/callback', (req, res) => {
         // we can also pass the token to the browser to make requests from there
         res.redirect(
           // TODO is this wrong for packaged app??
-          `http://52.52.252.234:3000/#${querystring.stringify({
+          `https://jaycode.dev:8888/#${querystring.stringify({
             access_token,
             refresh_token,
           })}`
@@ -153,5 +154,29 @@ app.get('/refresh_token', cors(), (req, res) => {
   });
 });
 
-console.log('Listening on 8888');
-app.listen(8888);
+// console.log('Listening on 8888');
+// app.listen(8888);
+
+// configure https
+
+const key = fs.readFileSync(
+  '/etc/letsencrypt/live/jaycode.dev/privkey.pem',
+  'utf8'
+);
+const cert = fs.readFileSync(
+  '/etc/letsencrypt/live/jaycode.dev/cert.pem',
+  'utf8'
+);
+const ca = fs.readFileSync(
+  '/etc/letsencrypt/live/jaycode.dev/chain.pem',
+  'utf8'
+);
+
+const options = {
+  key,
+  cert,
+  ca,
+};
+
+https.createServer(options, app).listen(8888);
+console.log(`Listening on port: ${8888}`);

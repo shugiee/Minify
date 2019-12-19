@@ -86,7 +86,7 @@ class App extends React.Component {
         }
       );
     } else {
-      this.login();
+      // this.login();
     }
   }
 
@@ -95,7 +95,7 @@ class App extends React.Component {
     console.log('get new access token called');
     const { refresh_token } = this.state;
     $.ajax({
-      url: 'http://52.52.252.234:8888/refresh_token',
+      url: 'https://jaycode.dev:8888/refresh_token',
       type: 'GET',
       data: {
         refresh_token,
@@ -716,10 +716,10 @@ class App extends React.Component {
 
   login() {
     // Use an aws-hosted authentication express server that interacts directly with Spotify to authenticate users
-    // Response is to redirect the user to 52.52.252.234:3000/, with the refresh_token and accesss_tokens as params
+    // Response is to redirect the user to the app homepage, with the refresh_token and accesss_tokens as params
     console.log('login called!');
     $.ajax({
-      url: 'http://52.52.252.234:8888/login',
+      url: 'https://jaycode.dev:8888/login',
       type: 'GET',
       error: err => {
         console.error(err);
@@ -886,7 +886,7 @@ class App extends React.Component {
         <div id="login">
           <div className="spotify-logo-container d-flex align-items-center justify-content-center">
             <img
-              src="http://52.52.252.234:3000/spotify-icon.png"
+              src="https://jaycode.dev:8888/spotify-icon.png"
               id="spotify-logo"
               alt="Green Spotify icon"
             />
@@ -903,7 +903,7 @@ class App extends React.Component {
           <h1 className="intro">Please login to Spotify below</h1>
           <div id="login-button-container">
             <a
-              href="http://52.52.252.234:8888/login"
+              href="https://jaycode.dev:8888/login"
               id="login-button"
               className="d-flex align-items-center justify-content-center"
             >
