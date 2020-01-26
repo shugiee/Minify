@@ -13,6 +13,9 @@ import SearchBar from './Components/SearchBar';
 import SearchResultAll from './Components/SearchResultsAll';
 import * as helperJS from './helperJS';
 
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -786,6 +789,7 @@ class App extends React.Component {
 
     if (isAuthenticated) {
       return (
+        <Provider store={store}>
         <div className="App">
           <div
             className="d-inline-flex justify-content-center"
@@ -876,63 +880,66 @@ class App extends React.Component {
             </div>
           </div>
         </div>
+              </Provider>
       );
     }
     return (
-      <div className="container d-flex align-items-center justify-content-center">
-        <div id="login">
-          <div className="spotify-logo-container d-flex align-items-center justify-content-center">
-            <img
-              src="https://jaycode.dev:8888/spotify-icon.png"
-              id="spotify-logo"
-              alt="Green Spotify icon"
-            />
-          </div>
-          <h1 className="intro" id="minify-top">
-            Welcome to
-          </h1>
-          <div className="minify-container">
-            <h1 className="minify">Minify</h1>
-          </div>
-          <div className="spotify-logo-container">
-            <p className="subtle">A Spotify Mini-Player</p>
-          </div>
-          <h1 className="intro">Please login to Spotify below</h1>
-          <div id="login-button-container">
-            <a
-              href="https://jaycode.dev:8888/login"
-              id="login-button"
-              className="d-flex align-items-center justify-content-center"
-            >
-              LOG IN WITH SPOTIFY
-            </a>
-          </div>
-          <div className="subtle-credit-container d-flex align-items-center justify-content-center">
-            <p className="subtle-credit">
-              Made by{' '}
+      <Provider store={store}>
+        <div className="container d-flex align-items-center justify-content-center">
+          <div id="login">
+            <div className="spotify-logo-container d-flex align-items-center justify-content-center">
+              <img
+                src="https://jaycode.dev:8888/spotify-icon.png"
+                id="spotify-logo"
+                alt="Green Spotify icon"
+              />
+            </div>
+            <h1 className="intro" id="minify-top">
+              Welcome to
+            </h1>
+            <div className="minify-container">
+              <h1 className="minify">Minify</h1>
+            </div>
+            <div className="spotify-logo-container">
+              <p className="subtle">A Spotify Mini-Player</p>
+            </div>
+            <h1 className="intro">Please login to Spotify below</h1>
+            <div id="login-button-container">
               <a
-                href="https://github.com/MyNameIsJonathan"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="https://jaycode.dev:8888/login"
+                id="login-button"
+                className="d-flex align-items-center justify-content-center"
               >
-                Jay Olson
-              </a>{' '}
-              through the generosity of the public-facing{' '}
-              <a
-                href="https://developer.spotify.com/documentation/web-api/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Spotify API
+                LOG IN WITH SPOTIFY
               </a>
-            </p>
+            </div>
+            <div className="subtle-credit-container d-flex align-items-center justify-content-center">
+              <p className="subtle-credit">
+                Made by{' '}
+                <a
+                  href="https://github.com/MyNameIsJonathan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Jay Olson
+                </a>{' '}
+                through the generosity of the public-facing{' '}
+                <a
+                  href="https://developer.spotify.com/documentation/web-api/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Spotify API
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="loggedin">
+            <div id="user-profile" />
+            <div id="oauth" />
           </div>
         </div>
-        <div id="loggedin">
-          <div id="user-profile" />
-          <div id="oauth" />
-        </div>
-      </div>
+      </Provider>
     );
   }
 }
