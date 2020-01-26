@@ -41,7 +41,7 @@ const stateKey = 'spotify_auth_state';
 const app = express();
 
 app
-  .use(express.static(`${__dirname}/public`))
+  .use(express.static(`${__dirname}/../minify/build`))
   .use(cors())
   .use(cookieParser());
 
