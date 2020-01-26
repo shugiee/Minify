@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { toggleLike } from '../redux/actions/likeActions';
 
 const Like = props => {
   const { likesCurrentSong } = props;
@@ -22,4 +24,12 @@ Like.propTypes = {
   toggleLike: PropTypes.func.isRequired,
 };
 
-export default Like;
+const mapStateToProps = state => ({
+  likesCurrentSong: state.likesCurrentSong,
+});
+
+const mapDispatchToProps = {
+  toggleLike,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Like);

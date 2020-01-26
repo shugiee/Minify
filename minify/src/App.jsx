@@ -4,13 +4,13 @@ import React from 'react';
 import $ from 'jquery';
 import './App.css';
 import _ from 'lodash';
-import PlayPause from './PlayPause';
-import Like from './Like';
-import PlaybackSlider from './PlaybackSlider';
-import Shuffle from './Shuffle';
-import Repeat from './Repeat';
-import SearchBar from './SearchBar';
-import SearchResultAll from './SearchResultsAll';
+import PlayPause from './Components/PlayPause';
+import Like from './Components/Like';
+import PlaybackSlider from './Components/PlaybackSlider';
+import Shuffle from './Components/Shuffle';
+import Repeat from './Components/Repeat';
+import SearchBar from './Components/SearchBar';
+import SearchResultAll from './Components/SearchResultsAll';
 import * as helperJS from './helperJS';
 
 class App extends React.Component {
@@ -821,10 +821,7 @@ class App extends React.Component {
                 </div>
               </div>
 
-              <Like
-                likesCurrentSong={likesCurrentSong}
-                toggleLike={this.toggleLike}
-              />
+              <Like />
 
               <PlaybackSlider
                 handleSliderChange={this.handleSliderChange}
