@@ -11,7 +11,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "electron": "^7.1.1"
+  },
   "homepage": "./",
   "build": {
     "appId": "Minify",
@@ -24,7 +26,6 @@
     }
   },
   "devDependencies": {
-    "electron": "^7.1.1",
     "electron-builder": "^21.2.0",
     "electron-is-dev": "^1.1.0",
     "electron-reload": "^1.5.0",

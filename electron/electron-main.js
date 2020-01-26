@@ -9,13 +9,13 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 230,
+    width: 250,
     height: 420,
     minWidth: 230,
     minHeight: 420,
-    minimizable: false, // TODO KEEP? Removes minimize, maximize buttons
-    maximizable: false, // TODO KEEP? Removes minimize, maximize buttons
-    // resizable: false, // TODO DEV
+    minimizable: false,
+    maximizable: false,
+    resizable: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
