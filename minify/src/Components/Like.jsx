@@ -8,12 +8,14 @@ const Like = props => {
 
   const classes = likesCurrentSong ? 'icon filter-green' : 'icon filter-white';
 
+  console.log(props);
+
   return (
     <div className="like-container d-flex align-items-center justify-content-center">
       <span
         id={`like-${likesCurrentSong}`}
         className={classes}
-        onClick={props.toggleLike}
+	onClick={props.toggleLike}
       />
     </div>
   );
@@ -25,9 +27,9 @@ Like.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  playState: state.playState,
-  access_token: state.access_token,
-  likesCurrentSong: state.likesCurrentSong,
+  playState: state.like.playState,
+  access_token: state.like.access_token,
+  likesCurrentSong: state.like.likesCurrentSong,
 });
 
 const mapDispatchToProps = {

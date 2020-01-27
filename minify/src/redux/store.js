@@ -4,22 +4,9 @@ import rootReducer from './reducers';
 import * as helperJS from '../helperJS';
 
 const initialState = {
-      playState: helperJS.templateCurrentSong,
-      isAuthenticated: false,
-      access_token: '',
-      refresh_token: '',
-      topSong: null,
-      query: '',
-      queryResults: {
-        tracks: { items: [] },
-        albums: { items: [] },
-        artists: { items: [] },
-        playlists: { items: [] },
-      },
-      likesCurrentSong: false,
-      shuffle_state: false,
-      timer: 1,
-      isSearchBarVisible: false,
+  playState: helperJS.templateCurrentSong,
+  access_token: '',
+  likesCurrentSong: false,
 };
 
 
