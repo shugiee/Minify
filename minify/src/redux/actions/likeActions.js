@@ -10,6 +10,7 @@ export const toggleLike = () => dispatch => {
 
 export const getLikeStatus = (playState, access_token) => dispatch => {
   console.log('get like status action!!!');
+  console.log('PLAYSTATE:', playState);
   $.ajax({
     url: `https://api.spotify.com/v1/me/tracks/contains?ids=${playState.item.id}`,
     type: 'GET',

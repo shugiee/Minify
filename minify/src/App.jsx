@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import store from './redux/store';
 
-import { getLikeStatus } from '../redux/actions/likeActions';
+import { getLikeStatus } from './redux/actions/likeActions';
 
 class App extends React.Component {
   constructor(props) {
@@ -795,7 +795,6 @@ class App extends React.Component {
 
     if (isAuthenticated) {
       return (
-        <Provider store={store}>
           <div className="App">
             <div
               className="d-inline-flex justify-content-center"
@@ -886,11 +885,9 @@ class App extends React.Component {
               </div>
             </div>
           </div>
-        </Provider>
       );
     }
     return (
-      <Provider store={store}>
         <div className="container d-flex align-items-center justify-content-center">
           <div id="login">
             <div className="spotify-logo-container d-flex align-items-center justify-content-center">
@@ -945,7 +942,6 @@ class App extends React.Component {
             <div id="oauth" />
           </div>
         </div>
-      </Provider>
     );
   }
 }
