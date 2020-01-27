@@ -25,6 +25,8 @@ Like.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  playState: state.playState,
+  access_token: state.access_token,
   likesCurrentSong: state.likesCurrentSong,
 });
 
