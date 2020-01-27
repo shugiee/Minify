@@ -9,8 +9,11 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case 'TOGGLE_LIKE':
-      console.log(`state during toggle like: ${state}`);
-      return state; // since this component only has access to state.likesCurrentSong, here state = state.likesCurrentSong
+      console.log('HEREHERHERHERH', state);
+      console.log(`state during toggle like: ${JSON.stringify(state)}`);
+      return { ...state }; // since this component only has access to state.likesCurrentSong, here state = state.likesCurrentSong
+    case 'GET_LIKE_STATUS':
+      console.log('getting like status!');
     default:
       return state;
   }
