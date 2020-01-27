@@ -5,17 +5,14 @@ import { toggleLike } from '../redux/actions/likeActions';
 
 const Like = props => {
   const { likesCurrentSong } = props;
-
   const classes = likesCurrentSong ? 'icon filter-green' : 'icon filter-white';
-
-  console.log(props);
 
   return (
     <div className="like-container d-flex align-items-center justify-content-center">
       <span
         id={`like-${likesCurrentSong}`}
         className={classes}
-	onClick={props.toggleLike}
+        onClick={props.toggleLike}
       />
     </div>
   );

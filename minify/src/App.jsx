@@ -14,7 +14,10 @@ import SearchResultAll from './Components/SearchResultsAll';
 import * as helperJS from './helperJS';
 
 import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
 import store from './redux/store';
+
+import { getLikeStatus } from '../redux/actions/likeActions';
 
 class App extends React.Component {
   constructor(props) {
@@ -159,7 +162,10 @@ class App extends React.Component {
               if (!data.is_playing) {
                 this.clearInterval();
               }
-              this.checkLikeStatus();
+              this.props.getLikeStatus(
+                this.props.playState,
+                this.props.access_token
+              );
             }
           );
         } else {
@@ -790,97 +796,97 @@ class App extends React.Component {
     if (isAuthenticated) {
       return (
         <Provider store={store}>
-        <div className="App">
-          <div
-            className="d-inline-flex justify-content-center"
-            id="player-front"
-          >
-            <div className="player-grid">
-              <div
-                className="search-container d-flex align-items-center justify-content-center"
-                onClick={this.toggleSearchVisibility}
-              >
-                <span id="search-button" className="icon" />
-              </div>
+          <div className="App">
+            <div
+              className="d-inline-flex justify-content-center"
+              id="player-front"
+            >
+              <div className="player-grid">
+                <div
+                  className="search-container d-flex align-items-center justify-content-center"
+                  onClick={this.toggleSearchVisibility}
+                >
+                  <span id="search-button" className="icon" />
+                </div>
 
-              <div className="artwork-container">
-                <img
-                  id="artwork"
-                  src={item.album.images[1].url}
-                  alt="Album artwork"
+                <div className="artwork-container">
+                  <img
+                    id="artwork"
+                    src={item.album.images[1].url}
+                    alt="Album artwork"
+                  />
+                </div>
+
+                <div className="song-name-container">
+                  <span id="song-name">{item ? item.name : ''}</span>
+                </div>
+
+                <div className="artist-name-container">
+                  <div id="artist-name">
+                    {artists
+                      .map(artist => {
+                        return artist.name;
+                      })
+                      .join(' & ')}
+                  </div>
+                </div>
+
+                <Like />
+
+                <PlaybackSlider
+                  handleSliderChange={this.handleSliderChange}
+                  progress_ms={progress_ms}
+                  duration_ms={item.duration_ms}
+                  handleSliderClick={this.handleSliderClick}
+                />
+
+                <Shuffle
+                  shuffle_state={shuffle_state}
+                  toggleShuffle={this.toggleShuffle}
+                />
+
+                <div
+                  className="previous-container d-flex align-items-center justify-content-center"
+                  onClick={this.seekPrevious}
+                >
+                  <span id="previous" className="icon" />
+                </div>
+
+                <PlayPause
+                  is_playing={is_playing}
+                  resume={this.resume}
+                  pause={this.pause}
+                />
+
+                <div
+                  className="next-container d-flex align-items-center justify-content-center"
+                  onClick={this.seekNext}
+                >
+                  <span id="next" className="icon" />
+                </div>
+
+                <Repeat
+                  repeat_state={repeat_state}
+                  toggleRepeat={this.toggleRepeat}
+                />
+                <SearchBar
+                  isSearchBarVisible={isSearchBarVisible}
+                  query={query}
+                  handleQueryChange={this.handleQueryChange}
+                />
+                <SearchResultAll
+                  queryResults={queryResults}
+                  playSong={this.playSong}
+                  playAlbum={this.playAlbum}
+                  playArtist={this.playArtist}
+                  playPlaylist={this.playPlaylist}
+                  toggleSearchVisibility={this.toggleSearchVisibility}
+                  isSearchBarVisible={isSearchBarVisible}
                 />
               </div>
-
-              <div className="song-name-container">
-                <span id="song-name">{item ? item.name : ''}</span>
-              </div>
-
-              <div className="artist-name-container">
-                <div id="artist-name">
-                  {artists
-                    .map(artist => {
-                      return artist.name;
-                    })
-                    .join(' & ')}
-                </div>
-              </div>
-
-              <Like />
-
-              <PlaybackSlider
-                handleSliderChange={this.handleSliderChange}
-                progress_ms={progress_ms}
-                duration_ms={item.duration_ms}
-                handleSliderClick={this.handleSliderClick}
-              />
-
-              <Shuffle
-                shuffle_state={shuffle_state}
-                toggleShuffle={this.toggleShuffle}
-              />
-
-              <div
-                className="previous-container d-flex align-items-center justify-content-center"
-                onClick={this.seekPrevious}
-              >
-                <span id="previous" className="icon" />
-              </div>
-
-              <PlayPause
-                is_playing={is_playing}
-                resume={this.resume}
-                pause={this.pause}
-              />
-
-              <div
-                className="next-container d-flex align-items-center justify-content-center"
-                onClick={this.seekNext}
-              >
-                <span id="next" className="icon" />
-              </div>
-
-              <Repeat
-                repeat_state={repeat_state}
-                toggleRepeat={this.toggleRepeat}
-              />
-              <SearchBar
-                isSearchBarVisible={isSearchBarVisible}
-                query={query}
-                handleQueryChange={this.handleQueryChange}
-              />
-              <SearchResultAll
-                queryResults={queryResults}
-                playSong={this.playSong}
-                playAlbum={this.playAlbum}
-                playArtist={this.playArtist}
-                playPlaylist={this.playPlaylist}
-                toggleSearchVisibility={this.toggleSearchVisibility}
-                isSearchBarVisible={isSearchBarVisible}
-              />
             </div>
           </div>
-        </div>
-              </Provider>
+        </Provider>
       );
     }
     return (
@@ -944,4 +950,14 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  playState: state.like.playState,
+  access_token: state.like.access_token,
+  likesCurrentSong: state.like.likesCurrentSong,
+});
+
+const mapDispatchToProps = {
+  getLikeStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
