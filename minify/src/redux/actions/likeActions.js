@@ -26,3 +26,5 @@ export const getLikeStatus = (playState, access_token) => dispatch => {
     },
   });
 };
+
+// TODO next: incorporate other parts to redux so that queries for getLikeStatus have a song id to query with!!

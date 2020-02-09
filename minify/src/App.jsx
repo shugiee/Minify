@@ -101,7 +101,7 @@ class App extends React.Component {
     console.log('get new access token called');
     const { refresh_token } = this.state;
     $.ajax({
-      url: 'https://jaycode.dev:8888/refresh_token',
+      url: 'http://localhost:8888/refresh_token',
       type: 'GET',
       data: {
         refresh_token,
@@ -728,7 +728,7 @@ class App extends React.Component {
     // Response is to redirect the user to the app homepage, with the refresh_token and accesss_tokens as params
     console.log('login called!');
     $.ajax({
-      url: 'https://jaycode.dev:8888/login',
+      url: 'http://localhost:8888/login',
       type: 'GET',
       error: err => {
         console.error(err);
@@ -795,153 +795,153 @@ class App extends React.Component {
 
     if (isAuthenticated) {
       return (
-          <div className="App">
-            <div
-              className="d-inline-flex justify-content-center"
-              id="player-front"
-            >
-              <div className="player-grid">
-                <div
-                  className="search-container d-flex align-items-center justify-content-center"
-                  onClick={this.toggleSearchVisibility}
-                >
-                  <span id="search-button" className="icon" />
-                </div>
+        <div className="App">
+          <div
+            className="d-inline-flex justify-content-center"
+            id="player-front"
+          >
+            <div className="player-grid">
+              <div
+                className="search-container d-flex align-items-center justify-content-center"
+                onClick={this.toggleSearchVisibility}
+              >
+                <span id="search-button" className="icon" />
+              </div>
 
-                <div className="artwork-container">
-                  <img
-                    id="artwork"
-                    src={item.album.images[1].url}
-                    alt="Album artwork"
-                  />
-                </div>
-
-                <div className="song-name-container">
-                  <span id="song-name">{item ? item.name : ''}</span>
-                </div>
-
-                <div className="artist-name-container">
-                  <div id="artist-name">
-                    {artists
-                      .map(artist => {
-                        return artist.name;
-                      })
-                      .join(' & ')}
-                  </div>
-                </div>
-
-                <Like />
-
-                <PlaybackSlider
-                  handleSliderChange={this.handleSliderChange}
-                  progress_ms={progress_ms}
-                  duration_ms={item.duration_ms}
-                  handleSliderClick={this.handleSliderClick}
-                />
-
-                <Shuffle
-                  shuffle_state={shuffle_state}
-                  toggleShuffle={this.toggleShuffle}
-                />
-
-                <div
-                  className="previous-container d-flex align-items-center justify-content-center"
-                  onClick={this.seekPrevious}
-                >
-                  <span id="previous" className="icon" />
-                </div>
-
-                <PlayPause
-                  is_playing={is_playing}
-                  resume={this.resume}
-                  pause={this.pause}
-                />
-
-                <div
-                  className="next-container d-flex align-items-center justify-content-center"
-                  onClick={this.seekNext}
-                >
-                  <span id="next" className="icon" />
-                </div>
-
-                <Repeat
-                  repeat_state={repeat_state}
-                  toggleRepeat={this.toggleRepeat}
-                />
-                <SearchBar
-                  isSearchBarVisible={isSearchBarVisible}
-                  query={query}
-                  handleQueryChange={this.handleQueryChange}
-                />
-                <SearchResultAll
-                  queryResults={queryResults}
-                  playSong={this.playSong}
-                  playAlbum={this.playAlbum}
-                  playArtist={this.playArtist}
-                  playPlaylist={this.playPlaylist}
-                  toggleSearchVisibility={this.toggleSearchVisibility}
-                  isSearchBarVisible={isSearchBarVisible}
+              <div className="artwork-container">
+                <img
+                  id="artwork"
+                  src={item.album.images[1].url}
+                  alt="Album artwork"
                 />
               </div>
+
+              <div className="song-name-container">
+                <span id="song-name">{item ? item.name : ''}</span>
+              </div>
+
+              <div className="artist-name-container">
+                <div id="artist-name">
+                  {artists
+                    .map(artist => {
+                      return artist.name;
+                    })
+                    .join(' & ')}
+                </div>
+              </div>
+
+              <Like />
+
+              <PlaybackSlider
+                handleSliderChange={this.handleSliderChange}
+                progress_ms={progress_ms}
+                duration_ms={item.duration_ms}
+                handleSliderClick={this.handleSliderClick}
+              />
+
+              <Shuffle
+                shuffle_state={shuffle_state}
+                toggleShuffle={this.toggleShuffle}
+              />
+
+              <div
+                className="previous-container d-flex align-items-center justify-content-center"
+                onClick={this.seekPrevious}
+              >
+                <span id="previous" className="icon" />
+              </div>
+
+              <PlayPause
+                is_playing={is_playing}
+                resume={this.resume}
+                pause={this.pause}
+              />
+
+              <div
+                className="next-container d-flex align-items-center justify-content-center"
+                onClick={this.seekNext}
+              >
+                <span id="next" className="icon" />
+              </div>
+
+              <Repeat
+                repeat_state={repeat_state}
+                toggleRepeat={this.toggleRepeat}
+              />
+              <SearchBar
+                isSearchBarVisible={isSearchBarVisible}
+                query={query}
+                handleQueryChange={this.handleQueryChange}
+              />
+              <SearchResultAll
+                queryResults={queryResults}
+                playSong={this.playSong}
+                playAlbum={this.playAlbum}
+                playArtist={this.playArtist}
+                playPlaylist={this.playPlaylist}
+                toggleSearchVisibility={this.toggleSearchVisibility}
+                isSearchBarVisible={isSearchBarVisible}
+              />
             </div>
           </div>
+        </div>
       );
     }
     return (
-        <div className="container d-flex align-items-center justify-content-center">
-          <div id="login">
-            <div className="spotify-logo-container d-flex align-items-center justify-content-center">
-              <img
-                src="https://jaycode.dev:8888/spotify-icon.png"
-                id="spotify-logo"
-                alt="Green Spotify icon"
-              />
-            </div>
-            <h1 className="intro" id="minify-top">
-              Welcome to
-            </h1>
-            <div className="minify-container">
-              <h1 className="minify">Minify</h1>
-            </div>
-            <div className="spotify-logo-container">
-              <p className="subtle">A Spotify Mini-Player</p>
-            </div>
-            <h1 className="intro">Please login to Spotify below</h1>
-            <div id="login-button-container">
-              <a
-                href="https://jaycode.dev:8888/login"
-                id="login-button"
-                className="d-flex align-items-center justify-content-center"
-              >
-                LOG IN WITH SPOTIFY
-              </a>
-            </div>
-            <div className="subtle-credit-container d-flex align-items-center justify-content-center">
-              <p className="subtle-credit">
-                Made by{' '}
-                <a
-                  href="https://github.com/MyNameIsJonathan"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Jay Olson
-                </a>{' '}
-                through the generosity of the public-facing{' '}
-                <a
-                  href="https://developer.spotify.com/documentation/web-api/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Spotify API
-                </a>
-              </p>
-            </div>
+      <div className="container d-flex align-items-center justify-content-center">
+        <div id="login">
+          <div className="spotify-logo-container d-flex align-items-center justify-content-center">
+            <img
+              src="http://localhost:8888/spotify-icon.png"
+              id="spotify-logo"
+              alt="Green Spotify icon"
+            />
           </div>
-          <div id="loggedin">
-            <div id="user-profile" />
-            <div id="oauth" />
+          <h1 className="intro" id="minify-top">
+            Welcome to
+          </h1>
+          <div className="minify-container">
+            <h1 className="minify">Minify</h1>
+          </div>
+          <div className="spotify-logo-container">
+            <p className="subtle">A Spotify Mini-Player</p>
+          </div>
+          <h1 className="intro">Please login to Spotify below</h1>
+          <div id="login-button-container">
+            <a
+              href="http://localhost:8888/login"
+              id="login-button"
+              className="d-flex align-items-center justify-content-center"
+            >
+              LOG IN WITH SPOTIFY
+            </a>
+          </div>
+          <div className="subtle-credit-container d-flex align-items-center justify-content-center">
+            <p className="subtle-credit">
+              Made by{' '}
+              <a
+                href="https://github.com/MyNameIsJonathan"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Jay Olson
+              </a>{' '}
+              through the generosity of the public-facing{' '}
+              <a
+                href="https://developer.spotify.com/documentation/web-api/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Spotify API
+              </a>
+            </p>
           </div>
         </div>
+        <div id="loggedin">
+          <div id="user-profile" />
+          <div id="oauth" />
+        </div>
+      </div>
     );
   }
 }

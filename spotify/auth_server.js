@@ -111,7 +111,7 @@ app.get('/callback', (req, res) => {
         // we can also pass the token to the browser to make requests from there
         res.redirect(
           // TODO is this wrong for packaged app??
-          `https://jaycode.dev:8888/#${querystring.stringify({
+          `http://localhost:8888/#${querystring.stringify({
             access_token,
             refresh_token,
           })}`

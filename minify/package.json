@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "author": "Jonathan Olson",
   "private": true,
-  "proxy": "https://jaycode.dev:8888",
+  "proxy": "http://localhost:8888",
   "homepage": "./",
   "dependencies": {
     "awesome-debounce-promise": "^2.1.0",
