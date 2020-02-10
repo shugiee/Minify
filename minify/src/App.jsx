@@ -140,7 +140,8 @@ class App extends React.Component {
 
   getCurrentlyPlaying() {
     // console.log('get currently playing called!');
-    const { access_token, playState } = this.state;
+    const { playState } = this.props;
+    const { access_token } = this.state;
     // Make a call using the token
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player',
@@ -164,12 +165,7 @@ class App extends React.Component {
               if (!data.is_playing) {
                 this.clearInterval();
               }
-              getLikeStatus(
-                // this.props.playState,
-                // this.props.access_token
-                this.state.playState,
-                this.state.access_token
-              );
+              getLikeStatus(this.props.playState, this.state.access_token);
             }
           );
         } else {
@@ -236,6 +232,9 @@ class App extends React.Component {
     // console.log(`play song called from origin: ${origin}`);
     const { access_token } = this.state;
     // Save this new song as playState.item, to immediately render song data
+    const { playState } = this.props;
+    playState.item = song;
+    this.props.savePlayState(playState);
     this.setState(
       state => {
         state.playState.item = song;
@@ -406,8 +405,9 @@ class App extends React.Component {
   }
 
   seek(cb = null) {
-    // console.log('seek called!');
-    const { playState, access_token } = this.state;
+    console.log('seek called!');
+    const { playState } = this.props;
+    const { access_token } = this.state;
     // seek/scrub to part of song
     if (playState.progress_ms) {
       $.ajax({
@@ -951,7 +951,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  // playState: state.playState,
+  playState: state.playState,
   // access_token: state.like.access_token,
   // likesCurrentSong: state.like.likesCurrentSong,
 });
