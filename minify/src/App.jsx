@@ -163,8 +163,10 @@ class App extends React.Component {
                 this.clearInterval();
               }
               this.props.getLikeStatus(
-                this.props.playState,
-                this.props.access_token
+                // this.props.playState,
+                // this.props.access_token
+                this.state.playState,
+                this.state.access_token
               );
             }
           );
@@ -947,13 +949,13 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  playState: state.like.playState,
-  access_token: state.like.access_token,
-  likesCurrentSong: state.like.likesCurrentSong,
+  // playState: state.playState,
+  // access_token: state.like.access_token,
+  // likesCurrentSong: state.like.likesCurrentSong,
 });
 
 const mapDispatchToProps = {
-  getLikeStatus,
+  // getLikeStatus,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

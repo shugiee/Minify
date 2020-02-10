@@ -9,7 +9,6 @@ const initialState = {
   likesCurrentSong: false,
 };
 
-
 const middleware = [thunk];
 
 const store = createStore(
