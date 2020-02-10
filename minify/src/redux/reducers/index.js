@@ -5,7 +5,7 @@ import accessTokenReducer from './accessTokenReducer';
 import refreshTokenReducer from './refreshTokenReducer';
 
 export default combineReducers({
-  like: likeReducer,
+  likesCurrentSong: likeReducer,
   playState: playStateReducer,
   access_token: accessTokenReducer,
   refresh_token: refreshTokenReducer,

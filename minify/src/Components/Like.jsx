@@ -32,7 +32,7 @@ Like.propTypes = {
 
 const mapStateToProps = state => ({
   playState: state.playState,
-  likesCurrentSong: state.like.likesCurrentSong,
+  likesCurrentSong: state.likesCurrentSong,
   access_token: state.access_token,
   refresh_token: state.refresh_token,
 });

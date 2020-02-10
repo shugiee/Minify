@@ -1,13 +1,12 @@
-const initialState = {
-  likesCurrentSong: false,
-};
+const initialState = false;
 
 export default function(state = initialState, action) {
+  const likesCurrentSong = state;
   switch (action.type) {
     case 'TOGGLE_LIKE':
-      return { ...state, likesCurrentSong: !state.likesCurrentSong };
+      return !likesCurrentSong;
     case 'GET_LIKE_STATUS':
-      return { ...state, likesCurrentSong: action.payload };
+      return likesCurrentSong;
     default:
       return state;
   }

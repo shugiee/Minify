@@ -8,7 +8,6 @@ export const toggleLike = (
   access_token,
   refresh_token
 ) => dispatch => {
-  console.log('like toggled!!');
   const reqType = likesCurrentSong ? 'DELETE' : 'PUT';
   $.ajax({
     url: `https://api.spotify.com/v1/me/tracks?ids=${playState.item.id}`,
@@ -60,5 +59,3 @@ export const getLikeStatus = (playState, access_token) => dispatch => {
     },
   });
 };
-
-// TODO next: incorporate other parts to redux so that queries for getLikeStatus have a song id to query with!!

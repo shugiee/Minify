@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
 export const saveAccessToken = access_token => dispatch => {
-  console.log('Saving access token action');
   dispatch({
     type: 'SAVE_ACCESS_TOKEN',
     payload: access_token,
