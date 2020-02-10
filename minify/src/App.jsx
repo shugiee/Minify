@@ -16,6 +16,7 @@ import * as helperJS from './helperJS';
 import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import store from './redux/store';
+import { savePlayState } from './redux/actions/playStateActions';
 
 import { getLikeStatus } from './redux/actions/likeActions';
 
@@ -98,7 +99,7 @@ class App extends React.Component {
 
   // using the refresh token, get a new access token (I believe they last an hour)
   getNewAccessToken(cb) {
-    console.log('get new access token called');
+    // console.log('get new access token called');
     const { refresh_token } = this.state;
     $.ajax({
       url: 'http://localhost:8888/refresh_token',
@@ -120,7 +121,7 @@ class App extends React.Component {
   }
 
   getCurrentUser() {
-    console.log('get current user called!');
+    // console.log('get current user called!');
     const { access_token } = this.state;
     $.ajax({
       url: 'https://api.spotify.com/v1/me',
@@ -138,7 +139,7 @@ class App extends React.Component {
   }
 
   getCurrentlyPlaying() {
-    console.log('get currently playing called!');
+    // console.log('get currently playing called!');
     const { access_token, playState } = this.state;
     // Make a call using the token
     $.ajax({
@@ -153,6 +154,7 @@ class App extends React.Component {
           // data.item is null if a search reasult was just played, which causes downstream errors
           // to combat this, use old item; it will be wiped in subsequent API calls anyway
           data.item = data.item ? data.item : playState.item;
+          this.props.savePlayState(data);
           this.setState(
             {
               playState: data,
@@ -162,7 +164,7 @@ class App extends React.Component {
               if (!data.is_playing) {
                 this.clearInterval();
               }
-              this.props.getLikeStatus(
+              getLikeStatus(
                 // this.props.playState,
                 // this.props.access_token
                 this.state.playState,
@@ -184,7 +186,7 @@ class App extends React.Component {
   }
 
   getDevices() {
-    console.log('get devices called!');
+    // console.log('get devices called!');
     const { topSong, access_token } = this.state;
     if (!topSong) {
       console.log('getting new top song!!');
@@ -207,7 +209,7 @@ class App extends React.Component {
   }
 
   getTopSong() {
-    console.log('get top song called!');
+    // console.log('get top song called!');
     const { topSong, access_token } = this.state;
     if (!topSong) {
       console.log('getting new top song!!');
@@ -231,7 +233,7 @@ class App extends React.Component {
   }
 
   playSong(song, origin, device_id) {
-    console.log(`play song called from origin: ${origin}`);
+    // console.log(`play song called from origin: ${origin}`);
     const { access_token } = this.state;
     // Save this new song as playState.item, to immediately render song data
     this.setState(
@@ -282,7 +284,7 @@ class App extends React.Component {
   }
 
   playAlbum(album) {
-    console.log(`play album called`);
+    // console.log(`play album called`);
     const { access_token } = this.state;
     $.ajax({
       url: `https://api.spotify.com/v1/albums/${album.id}/tracks?limit=1&offset=0`,
@@ -305,7 +307,7 @@ class App extends React.Component {
   }
 
   playArtist(artist) {
-    console.log(`play artist called`);
+    // console.log(`play artist called`);
     const { access_token } = this.state;
     $.ajax({
       url: `https://api.spotify.com/v1/artists/${artist.id}/top-tracks?country=ES`,
@@ -327,7 +329,7 @@ class App extends React.Component {
   }
 
   playPlaylist(playlist) {
-    console.log(`play playlist called`);
+    // console.log(`play playlist called`);
     const { access_token } = this.state;
     $.ajax({
       url: `https://api.spotify.com/v1/playlists/${playlist.id}/tracks?limit=1&offset=0`,
@@ -350,7 +352,7 @@ class App extends React.Component {
   }
 
   resume() {
-    console.log('resume called!');
+    // console.log('resume called!');
     const { access_token } = this.state;
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/play',
@@ -375,7 +377,7 @@ class App extends React.Component {
   }
 
   pause() {
-    console.log('pause called!');
+    // console.log('pause called!');
     const { access_token } = this.state;
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/pause',
@@ -404,7 +406,7 @@ class App extends React.Component {
   }
 
   seek(cb = null) {
-    console.log('seek called!');
+    // console.log('seek called!');
     const { playState, access_token } = this.state;
     // seek/scrub to part of song
     if (playState.progress_ms) {
@@ -437,14 +439,14 @@ class App extends React.Component {
   }
 
   handleSliderChange(event) {
-    console.log('handle slider change called!');
+    // console.log('handle slider change called!');
     const { playState } = this.state;
     playState.progress_ms = event.target.value || 0;
     this.setState({ playState });
   }
 
   handleSliderClick(event) {
-    console.log('handle slider click called!');
+    // console.log('handle slider click called!');
     const { playState } = this.state;
     playState.progress_ms = event.target.value || 0;
     this.setState({ playState }, () => {
@@ -453,7 +455,7 @@ class App extends React.Component {
   }
 
   seekNext() {
-    console.log('seek next called!');
+    // console.log('seek next called!');
     const { access_token } = this.state;
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/next',
@@ -478,7 +480,7 @@ class App extends React.Component {
   }
 
   seekPrevious() {
-    console.log('seek previous called!');
+    // console.log('seek previous called!');
     const { access_token } = this.state;
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/previous',
@@ -503,7 +505,7 @@ class App extends React.Component {
   }
 
   searchSpotify() {
-    console.log('search spotify called!');
+    // console.log('search spotify called!');
     const { query, access_token } = this.state;
     const joinedQuery = query.replace(' ', '%20');
     if (query.length) {
@@ -528,7 +530,7 @@ class App extends React.Component {
   }
 
   handleQueryChange(event) {
-    console.log('handle query change called!');
+    // console.log('handle query change called!');
     this.setState({ query: event.target.value }, this.searchSpotifyThrottle);
   }
 
@@ -541,7 +543,7 @@ class App extends React.Component {
   }
 
   toggleShuffle() {
-    console.log('toggle shuffle called!!');
+    // console.log('toggle shuffle called!!');
     const { shuffle_state, access_token } = this.state;
     this.setState({ shuffle_state: !shuffle_state });
     $.ajax({
@@ -567,7 +569,7 @@ class App extends React.Component {
   }
 
   toggleLike() {
-    console.log('toggle like called!!');
+    // console.log('toggle like called!!');
     const { likesCurrentSong, playState, access_token } = this.state;
     // immediate change state, then ping spotify to toggle like
     const isLiked = likesCurrentSong;
@@ -618,7 +620,7 @@ class App extends React.Component {
   }
 
   toggleRepeat() {
-    console.log('toggle repeat called!');
+    // console.log('toggle repeat called!');
     const { access_token, playState } = this.state;
     let repeat_state;
     // first, update state; next, ping spotify api to toggle repeat status
@@ -654,7 +656,7 @@ class App extends React.Component {
 
   incrementProgress() {
     const { timer } = this.state;
-    console.log('increment progress called');
+    // console.log('increment progress called');
     this.setState(
       state => {
         state.playState.progress_ms += 1000;
@@ -680,20 +682,20 @@ class App extends React.Component {
 
   startInterval() {
     this.clearInterval();
-    console.log('start interval called!');
+    // console.log('start interval called!');
     const intervalID = setInterval(this.incrementProgress, 1000);
     this.setState({ intervalID });
   }
 
   clearInterval() {
     const { intervalID } = this.state;
-    console.log('clear interval called');
+    // console.log('clear interval called');
     clearInterval(intervalID);
     this.setState({ intervalID: null });
   }
 
   clearInput() {
-    console.log('clear input called');
+    // console.log('clear input called');
     this.setState({
       query: '',
       queryResults: {
@@ -708,7 +710,7 @@ class App extends React.Component {
   checkLikeStatus() {
     // Query spotify to see if the  current song is liked by the current user
     const { playState, access_token } = this.state;
-    console.log('check like status called!');
+    // console.log('check like status called!');
     if (playState.item.id) {
       $.ajax({
         url: `https://api.spotify.com/v1/me/tracks/contains?ids=${playState.item.id}`,
@@ -728,7 +730,7 @@ class App extends React.Component {
   login() {
     // Use an aws-hosted authentication express server that interacts directly with Spotify to authenticate users
     // Response is to redirect the user to the app homepage, with the refresh_token and accesss_tokens as params
-    console.log('login called!');
+    // console.log('login called!');
     $.ajax({
       url: 'http://localhost:8888/login',
       type: 'GET',
@@ -955,7 +957,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  // getLikeStatus,
+  getLikeStatus,
+  savePlayState,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
