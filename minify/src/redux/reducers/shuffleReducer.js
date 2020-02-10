@@ -1,5 +1,3 @@
-import * as helperJS from '../../helperJS';
-
 const initialState = {};
 
 export default function(state = initialState, action) {

@@ -19,6 +19,11 @@ import store from './redux/store';
 import { savePlayState } from './redux/actions/playStateActions';
 
 import { getLikeStatus } from './redux/actions/likeActions';
+import { saveRefreshToken } from './redux/actions/refreshTokenActions';
+import {
+  saveAccessToken,
+  getNewAccessToken,
+} from './redux/actions/accessTokenActions';
 
 class App extends React.Component {
   constructor(props) {
@@ -81,6 +86,8 @@ class App extends React.Component {
     // if user just logged in, get their access_token from the url
     const tokens = helperJS.getUrlVars();
     if (tokens.access_token && tokens.refresh_token) {
+      this.props.saveRefreshToken(tokens.refresh_token);
+      this.props.saveAccessToken(tokens.access_token);
       this.setState(
         {
           isAuthenticated: true,
@@ -108,6 +115,7 @@ class App extends React.Component {
         refresh_token,
       },
       success: data => {
+        saveAccessToken(data.access_token);
         this.setState({ access_token: data.access_token }, () => {
           if (cb) {
             cb();
@@ -952,13 +960,17 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   playState: state.playState,
-  // access_token: state.like.access_token,
+  access_token: state.access_token,
+  refresh_token: state.refresh_token,
   // likesCurrentSong: state.like.likesCurrentSong,
 });
 
 const mapDispatchToProps = {
   getLikeStatus,
   savePlayState,
+  saveAccessToken,
+  getNewAccessToken,
+  saveRefreshToken,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

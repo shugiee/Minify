@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { toggleLike } from '../redux/actions/likeActions';
 
 const Like = props => {
-  const { likesCurrentSong } = props;
+  const { likesCurrentSong, playState, access_token, refresh_token } = props;
   const classes = likesCurrentSong ? 'icon filter-green' : 'icon filter-white';
 
   return (
@@ -12,7 +12,14 @@ const Like = props => {
       <span
         id={`like-${likesCurrentSong}`}
         className={classes}
-        onClick={props.toggleLike}
+        onClick={() => {
+          props.toggleLike(
+            playState,
+            likesCurrentSong,
+            access_token,
+            refresh_token
+          );
+        }}
       />
     </div>
   );
@@ -25,8 +32,9 @@ Like.propTypes = {
 
 const mapStateToProps = state => ({
   playState: state.playState,
-  access_token: state.like.access_token,
   likesCurrentSong: state.like.likesCurrentSong,
+  access_token: state.access_token,
+  refresh_token: state.refresh_token,
 });
 
 const mapDispatchToProps = {

@@ -1,9 +1,4 @@
-import * as helperJS from '../../helperJS';
-
 const initialState = {
-  // playState: helperJS.templateCurrentSong,
-  // access_token: '',
-  // TEST: 'TEST',
   likesCurrentSong: false,
 };
 
