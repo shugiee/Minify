@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const SearchResultPlaylist = props => {
   const {
@@ -39,4 +40,11 @@ SearchResultPlaylist.propTypes = {
   isSearchBarVisible: PropTypes.bool.isRequired,
 };
 
-export default SearchResultPlaylist;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchResultPlaylist);

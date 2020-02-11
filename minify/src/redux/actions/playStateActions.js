@@ -1,6 +1,6 @@
 export const savePlayState = playState => dispatch => {
   dispatch({
-    type: 'GET_PLAY_STATE',
+    type: 'SAVE_PLAY_STATE',
     payload: playState,
   });
 };

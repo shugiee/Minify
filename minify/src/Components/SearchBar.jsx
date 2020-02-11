@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const SearchBar = props => {
   const { query, handleQueryChange, isSearchBarVisible } = props;
@@ -27,4 +28,8 @@ SearchBar.propTypes = {
   isSearchBarVisible: PropTypes.bool.isRequired,
 };
 
-export default SearchBar;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

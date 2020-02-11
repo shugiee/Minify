@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const PlayPause = props => {
   const { is_playing, resume, pause } = props;
@@ -30,4 +31,8 @@ PlayPause.propTypes = {
   pause: PropTypes.func.isRequired,
 };
 
-export default PlayPause;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayPause);

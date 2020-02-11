@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const PlaybackSlider = props => {
   const {
@@ -43,4 +44,8 @@ PlaybackSlider.propTypes = {
   handleSliderClick: PropTypes.func.isRequired,
 };
 
-export default PlaybackSlider;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlaybackSlider);

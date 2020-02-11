@@ -69,7 +69,6 @@ class App extends React.Component {
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.toggleSearchVisibility = this.toggleSearchVisibility.bind(this);
     this.toggleShuffle = this.toggleShuffle.bind(this);
-    this.toggleLike = this.toggleLike.bind(this);
     this.toggleRepeat = this.toggleRepeat.bind(this);
     this.incrementProgress = this.incrementProgress.bind(this);
     this.startInterval = this.startInterval.bind(this);
@@ -574,57 +573,6 @@ class App extends React.Component {
         console.error(err);
       },
     });
-  }
-
-  toggleLike() {
-    // console.log('toggle like called!!');
-    const { likesCurrentSong, playState, access_token } = this.state;
-    // immediate change state, then ping spotify to toggle like
-    const isLiked = likesCurrentSong;
-    this.setState({ likesCurrentSong: !isLiked });
-    if (isLiked) {
-      $.ajax({
-        url: `https://api.spotify.com/v1/me/tracks?ids=${playState.item.id}`,
-        type: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        beforeSend: xhr => {
-          xhr.setRequestHeader('Authorization', `Bearer ${access_token}`);
-        },
-        success: this.getCurrentlyPlaying,
-        error: err => {
-          if (err.status === 403 || err.status === 404) {
-            this.getCurrentlyPlaying();
-          } else if (err.status === 401) {
-            this.getNewAccessToken();
-          }
-          console.error(err);
-        },
-      });
-    } else {
-      $.ajax({
-        url: `https://api.spotify.com/v1/me/tracks?ids=${playState.item.id}`,
-        type: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        beforeSend: xhr => {
-          xhr.setRequestHeader('Authorization', `Bearer ${access_token}`);
-        },
-        success: this.getCurrentlyPlaying,
-        error: err => {
-          if (err.status === 403 || err.status === 404) {
-            this.getCurrentlyPlaying();
-          } else if (err.status === 401) {
-            this.getNewAccessToken();
-          }
-          console.error(err);
-        },
-      });
-    }
   }
 
   toggleRepeat() {

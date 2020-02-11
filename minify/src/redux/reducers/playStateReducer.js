@@ -6,7 +6,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case 'GET_PLAY_STATE':
+    case 'SAVE_PLAY_STATE':
       return { ...action.payload };
     default:
       return { ...state };

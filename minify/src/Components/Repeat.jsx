@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const Repeat = props => {
   const { repeat_state, toggleRepeat } = props;
@@ -22,4 +23,8 @@ Repeat.propTypes = {
   toggleRepeat: PropTypes.func.isRequired,
 };
 
-export default Repeat;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Repeat);

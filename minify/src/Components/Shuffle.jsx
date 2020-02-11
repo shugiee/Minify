@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const Shuffle = props => {
   const { shuffle_state, toggleShuffle } = props;
@@ -11,7 +12,7 @@ const Shuffle = props => {
           id="shuffle"
           className="icon filter-green"
           onClick={toggleShuffle}
-         />
+        />
       </div>
     );
   }
@@ -27,4 +28,8 @@ Shuffle.propTypes = {
   toggleShuffle: PropTypes.func.isRequired,
 };
 
-export default Shuffle;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Shuffle);
