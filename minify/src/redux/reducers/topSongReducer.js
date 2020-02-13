@@ -1,10 +1,9 @@
-const initialState = false;
+const initialState = null;
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case 'TOGGLE_SHUFFLE':
-      console.log(state);
-      return !state;
+    case 'SET_TOP_SONG':
+      return action.payload;
     default:
       return state;
   }

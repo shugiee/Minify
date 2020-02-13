@@ -1,4 +1,4 @@
-export const savePlayState = playState => dispatch => {
+export const setPlayState = playState => dispatch => {
   dispatch({
     type: 'SAVE_PLAY_STATE',
     payload: playState,

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { toggleShuffle } from '../redux/actions/shuffleAction';
 
 const Shuffle = props => {
-  const { shuffle_state, toggleShuffle } = props;
+  const { shuffle_state, toggleShuffle, access_token, refresh_token } = props;
 
   if (shuffle_state) {
     return (
@@ -11,7 +12,9 @@ const Shuffle = props => {
         <span
           id="shuffle"
           className="icon filter-green"
-          onClick={toggleShuffle}
+          onClick={() =>
+            toggleShuffle(shuffle_state, access_token, refresh_token)
+          }
         />
       </div>
     );
@@ -28,8 +31,12 @@ Shuffle.propTypes = {
   toggleShuffle: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  shuffle_state: state.shuffle_state,
+  access_token: state.access_token,
+  refresh_token: state.refresh_token,
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { toggleShuffle };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Shuffle);
